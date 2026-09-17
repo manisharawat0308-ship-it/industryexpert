@@ -1,0 +1,2 @@
+[32mG�� built in 9.66s[39m
+DONE_EXITCODE=0

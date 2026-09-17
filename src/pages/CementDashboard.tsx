@@ -5,7 +5,7 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2
+  CloudRain, Zap, Calendar, Tag, Building2, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -14,13 +14,20 @@ import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { CEMENT_GAME } from '../components/process-game/data/cementGame'
+import BusinessModel from '../components/BusinessModel'
+import { CEMENT_BUSINESS } from '../data/businessModels/cementBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import LiveTicker from '../components/LiveTicker'
 import HealthGauge from '../components/HealthGauge'
+import DashboardHeader from '../components/DashboardHeader'
+import CementRiskAnalysis from '../components/risk-analysis/CementRiskAnalysis'
 
 const COLORS = ['#B02A30', '#005B75', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722']
 
-type CementTab = 'overview' | 'production' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type CementTab = 'overview' | 'business' | 'production' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== CEMENT DATA (embedded) =====
 const overviewData = {
@@ -97,15 +104,17 @@ const productionData = {
 }
 
 
+// Manufacturer/insurer lens: capacity (MTPA), utilisation %, cost/tonne, EBITDA margin,
+// integrated-plant count, target capacity + year, and single-location concentration risk.
 const playersData = [
-  { rank: 1, name: 'UltraTech Cement', capacity: 130, revenue: 72582, type: 'Private', products: 'OPC, PPC, RMC, White' },
-  { rank: 2, name: 'Ambuja Cements (Adani)', capacity: 89, revenue: 35200, type: 'Private', products: 'OPC, PPC, Composite' },
-  { rank: 3, name: 'Shree Cement', capacity: 56, revenue: 20150, type: 'Private', products: 'OPC, PPC, RMC' },
-  { rank: 4, name: 'Dalmia Bharat', capacity: 46, revenue: 14800, type: 'Private', products: 'OPC, PPC, Slag Cement' },
-  { rank: 5, name: 'JSW Cement', capacity: 20, revenue: 8500, type: 'Private', products: 'PSC, OPC, Ground Slag' },
-  { rank: 6, name: 'JK Cement', capacity: 24, revenue: 11200, type: 'Private', products: 'OPC, PPC, White Cement' },
-  { rank: 7, name: 'Ramco Cements', capacity: 24.5, revenue: 9800, type: 'Private', products: 'OPC, PPC, RMC, Dry-Mix' },
-  { rank: 8, name: 'Nuvoco Vistas', capacity: 25, revenue: 10500, type: 'Private', products: 'OPC, PPC, RMC' },
+  { rank: 1, name: 'UltraTech Cement', capacity: 130, revenue: 72582, type: 'Private', products: 'OPC, PPC, RMC, White', utilization: 72, costPerT: 4400, ebitdaMargin: 18, plants: 23, targetCapacity: 200, targetYear: 'FY28', concentration: 'Low' },
+  { rank: 2, name: 'Ambuja Cements (Adani)', capacity: 89, revenue: 35200, type: 'Private', products: 'OPC, PPC, Composite', utilization: 70, costPerT: 4100, ebitdaMargin: 20, plants: 21, targetCapacity: 140, targetYear: '2028', concentration: 'Low' },
+  { rank: 3, name: 'Shree Cement', capacity: 56, revenue: 20150, type: 'Private', products: 'OPC, PPC, RMC', utilization: 68, costPerT: 3800, ebitdaMargin: 25, plants: 12, targetCapacity: 66, targetYear: 'FY27', concentration: 'Medium' },
+  { rank: 4, name: 'Dalmia Bharat', capacity: 46, revenue: 14800, type: 'Private', products: 'OPC, PPC, Slag Cement', utilization: 66, costPerT: 4200, ebitdaMargin: 19, plants: 14, targetCapacity: 75, targetYear: 'FY28', concentration: 'Medium' },
+  { rank: 5, name: 'JSW Cement', capacity: 20, revenue: 8500, type: 'Private', products: 'PSC, OPC, Ground Slag', utilization: 65, costPerT: 3900, ebitdaMargin: 17, plants: 6, targetCapacity: 50, targetYear: '2030', concentration: 'Medium' },
+  { rank: 6, name: 'JK Cement', capacity: 24, revenue: 11200, type: 'Private', products: 'OPC, PPC, White Cement', utilization: 71, costPerT: 4300, ebitdaMargin: 18, plants: 8, targetCapacity: 30, targetYear: 'FY27', concentration: 'Medium' },
+  { rank: 7, name: 'Ramco Cements', capacity: 24.5, revenue: 9800, type: 'Private', products: 'OPC, PPC, RMC, Dry-Mix', utilization: 64, costPerT: 4350, ebitdaMargin: 17, plants: 9, targetCapacity: 30, targetYear: 'FY27', concentration: 'Medium' },
+  { rank: 8, name: 'Nuvoco Vistas', capacity: 25, revenue: 10500, type: 'Private', products: 'OPC, PPC, RMC', utilization: 69, costPerT: 4250, ebitdaMargin: 16, plants: 11, targetCapacity: 32, targetYear: 'FY27', concentration: 'High' },
 ]
 
 const geographyData = [
@@ -122,14 +131,14 @@ const geographyData = [
 ]
 
 const newsData = [
-  { id: 1, title: 'UltraTech crosses 150 MTPA capacity with Kesoram acquisition', date: '2025-06-15', region: 'National', category: 'Business Wins' },
-  { id: 2, title: 'Adani Group completes Ambuja-ACC integration, targets 140 MTPA by 2028', date: '2025-04-29', region: 'West', category: 'Business Wins' },
-  { id: 3, title: 'Coal mill explosion at Shree Cement Beawar plant injures 4 workers', date: '2025-03-18', region: 'North', category: 'Accidents' },
-  { id: 4, title: 'Govt mandates 10% blended cement in all central government projects', date: '2025-01-05', region: 'National', category: 'Policy' },
-  { id: 5, title: 'Dalmia Bharat commissions 3.3 MTPA greenfield clinker unit in Odisha', date: '2025-02-22', region: 'East', category: 'Business Wins' },
-  { id: 6, title: 'JSW Cement acquires Bandra Cement for Rs 450 Cr, adds 2 MTPA', date: '2025-05-12', region: 'South', category: 'Business Wins' },
-  { id: 7, title: 'BIS tightens quality norms for OPC 53 grade — 3 brands fail tests', date: '2025-04-08', region: 'National', category: 'Policy' },
-  { id: 8, title: 'Kiln refractory collapse at ACC Wadi plant, 45-day shutdown expected', date: '2025-03-25', region: 'South', category: 'Accidents' },
+  { id: 1, title: 'UltraTech crosses 150 MTPA capacity with Kesoram acquisition', date: '2026-08-14', region: 'National', category: 'Business Wins', source: 'Economic Times', summary: 'The Kesoram cement assets push UltraTech past 150 MTPA, cementing its position as India\'s largest producer by a wide margin. The deal strengthens the company\'s footprint in southern and central markets. Analysts see limited overlap and quick synergy realisation on logistics.' },
+  { id: 2, title: 'Adani Group completes Ambuja-ACC integration, targets 140 MTPA by 2028', date: '2026-07-22', region: 'West', category: 'Business Wins', source: 'Business Standard', summary: 'Adani has consolidated Ambuja and ACC operations under a unified structure to unlock procurement and freight savings. The group has laid out an aggressive organic and inorganic path to 140 MTPA. Cost-per-tonne reduction is a central plank of the roadmap.' },
+  { id: 3, title: 'Coal mill explosion at Shree Cement Beawar plant injures 4 workers', date: '2026-06-18', region: 'North', category: 'Accidents', source: 'PTI', summary: 'An explosion in the coal mill circuit at the Beawar plant injured four workers, who were shifted to hospital. The affected section was shut for inspection while operations elsewhere continued. The incident highlights dust and combustion risks in coal-fired kiln systems.' },
+  { id: 4, title: 'Govt mandates 10% blended cement in all central government projects', date: '2026-05-30', region: 'National', category: 'Policy', source: 'Ministry of Housing & Urban Affairs', summary: 'The directive aims to cut clinker use and lower the carbon footprint of public construction. Blended cement adoption is expected to boost demand for fly ash and slag-based products. Producers with PPC and PSC portfolios stand to benefit.' },
+  { id: 5, title: 'Dalmia Bharat commissions 3.3 MTPA greenfield clinker unit in Odisha', date: '2026-04-18', region: 'East', category: 'Business Wins', source: 'Mint', summary: 'The new clinker line supports Dalmia\'s grinding capacity across eastern India and improves regional supply reliability. It draws on nearby limestone reserves to secure long-term raw material. The unit advances the company\'s eastern expansion strategy.' },
+  { id: 6, title: 'JSW Cement acquires Bandra Cement for Rs 450 Cr, adds 2 MTPA', date: '2026-03-25', region: 'South', category: 'Business Wins', source: 'Economic Times', summary: 'The bolt-on acquisition adds grinding capacity and market access in the southern belt. JSW Cement continues to scale ahead of a planned public listing. The deal is funded through a mix of internal accruals and debt.' },
+  { id: 7, title: 'BIS tightens quality norms for OPC 53 grade — 3 brands fail tests', date: '2026-03-05', region: 'National', category: 'Policy', source: 'Bureau of Indian Standards', summary: 'Revised strength and consistency norms triggered failures in random market samples from three brands. The regulator has ordered corrective action and stepped-up surveillance. The move is intended to protect end-users and standardise quality nationwide.' },
+  { id: 8, title: 'Kiln refractory collapse at ACC Wadi plant, 45-day shutdown expected', date: '2026-02-14', region: 'South', category: 'Accidents', source: 'Business Standard', summary: 'A refractory lining failure in the kiln forced an unplanned shutdown at the Wadi facility. Repairs are estimated to take around 45 days, denting quarterly output. The company is rerouting supply from nearby units to protect customer commitments.' },
 ]
 
 export default function CementDashboard() {
@@ -140,12 +149,14 @@ export default function CementDashboard() {
 
   const tabs: { id: CementTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'production', label: 'Production', icon: Factory },
     { id: 'players', label: 'Players', icon: TrendingUp },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
 
   const tickerItems = [
@@ -163,39 +174,10 @@ export default function CementDashboard() {
 
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      {/* Header */}
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/hub')}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition">
-              <ArrowLeft size={16} /> Back to Hub
-            </button>
-            <div className="h-8 w-px bg-gray-200"></div>
-            <div className="flex items-center gap-2">
-              <img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" />
-              <div>
-                <h1 className="text-lg font-bold text-navy">Cement Industry Dashboard</h1>
-                <p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {isAdmin && (
-              <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-semibold">
-                <Settings size={14} /> Admin
-              </button>
-            )}
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">
-              {isAdmin ? <Shield size={14} className="text-maroon" /> : <User size={14} className="text-navy" />}
-              <span className="text-xs font-semibold">{username}</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader title="Cement Industry Dashboard" />
 
       {/* Tab Navigation */}
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm">
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm">
         <div className="max-w-[1920px] mx-auto px-6">
           <div className="flex items-center gap-1 py-2 overflow-x-auto">
             {tabs.map((tab) => (
@@ -213,12 +195,14 @@ export default function CementDashboard() {
       {/* Content */}
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={CEMENT_BUSINESS} />}
         {activeTab === 'production' && <ProductionTab />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab isAdmin={isAdmin} />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
         {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="cement" />}
+        {activeTab === 'game' && <ProcessGame data={CEMENT_GAME} />}
       </main>
 
       {/* Footer */}
@@ -786,36 +770,82 @@ function PlayersTab() {
   ]
 
   const selected = selectedPlayer ? playerDetails[selectedPlayer] : null
+  const selectedStats = selectedPlayer ? playersData.find((p) => p.name === selectedPlayer) : null
 
   return (
     <div className="space-y-6">
       {/* Player Detail Popup */}
-      {selectedPlayer && selected && (
+      {selectedPlayer && selected && selectedStats && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setSelectedPlayer(null)}>
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-navy">{selectedPlayer}</h3>
-              <button onClick={() => setSelectedPlayer(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold">×</button>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full max-h-[88vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            {/* header */}
+            <div className="p-5 text-white rounded-t-2xl" style={{ background: 'linear-gradient(135deg, #B02A30, #1e3a5f)' }}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-extrabold">{selectedPlayer}</h3>
+                  <span className="text-xs text-white/80">{selected.type}</span>
+                </div>
+                <button onClick={() => setSelectedPlayer(null)} className="text-white/80 hover:text-white text-2xl font-bold leading-none">×</button>
+              </div>
             </div>
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              <div className="p-2.5 bg-gray-50 rounded-lg"><span className="text-[9px] text-gray-500 block">HQ</span><span className="text-xs font-bold text-navy">{selected.hq}</span></div>
-              <div className="p-2.5 bg-gray-50 rounded-lg"><span className="text-[9px] text-gray-500 block">CEO</span><span className="text-xs font-bold text-navy">{selected.ceo}</span></div>
-              <div className="p-2.5 bg-gray-50 rounded-lg"><span className="text-[9px] text-gray-500 block">Founded</span><span className="text-xs font-bold text-navy">{selected.founded}</span></div>
-              <div className="p-2.5 bg-gray-50 rounded-lg"><span className="text-[9px] text-gray-500 block">Type</span><span className="text-xs font-bold text-navy">{selected.type}</span></div>
-            </div>
-            <div className="space-y-3">
-              <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
-                <span className="text-[9px] font-bold text-blue-700 uppercase">Plants</span>
-                <p className="text-xs text-blue-800 mt-0.5">{selected.plants}</p>
+
+            <div className="p-5">
+              {/* Manufacturer KPI grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-4">
+                <div className="p-2.5 bg-gray-50 rounded-lg text-center"><div className="text-sm font-black text-maroon">{selectedStats.capacity} MTPA</div><div className="text-[9px] text-gray-500">Capacity</div></div>
+                <div className="p-2.5 bg-gray-50 rounded-lg text-center"><div className="text-sm font-black text-navy">{selectedStats.utilization}%</div><div className="text-[9px] text-gray-500">Utilisation</div></div>
+                <div className="p-2.5 bg-gray-50 rounded-lg text-center"><div className="text-sm font-black text-green-600">{selectedStats.ebitdaMargin}%</div><div className="text-[9px] text-gray-500">EBITDA Margin</div></div>
+                <div className="p-2.5 bg-gray-50 rounded-lg text-center"><div className="text-sm font-black text-orange-600">₹{selectedStats.costPerT.toLocaleString('en-IN')}</div><div className="text-[9px] text-gray-500">Cost / Tonne</div></div>
               </div>
-              <div className="p-3 bg-green-50 rounded-xl border border-green-100">
-                <span className="text-[9px] font-bold text-green-700 uppercase">Expansion Plans</span>
-                <p className="text-xs text-green-800 mt-0.5">{selected.expansion}</p>
+
+              {/* Utilisation gauge bar */}
+              <div className="mb-4">
+                <div className="flex items-center justify-between text-[10px] font-semibold text-gray-500 mb-1"><span>Capacity Utilisation</span><span>{selectedStats.utilization}% of {selectedStats.capacity} MTPA</span></div>
+                <div className="h-3 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full" style={{ width: `${selectedStats.utilization}%`, background: selectedStats.utilization >= 70 ? '#16a34a' : selectedStats.utilization >= 60 ? '#F99D27' : '#ef4444' }} /></div>
               </div>
-              <div className="p-3 bg-orange-50 rounded-xl border border-orange-100">
-                <span className="text-[9px] font-bold text-orange-700 uppercase">Competitive Moat</span>
-                <p className="text-xs text-orange-800 mt-0.5">{selected.moat}</p>
+
+              {/* Meta grid */}
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="p-2.5 bg-gray-50 rounded-lg"><span className="text-[9px] text-gray-500 block">HQ</span><span className="text-xs font-bold text-navy">{selected.hq}</span></div>
+                <div className="p-2.5 bg-gray-50 rounded-lg"><span className="text-[9px] text-gray-500 block">CEO</span><span className="text-xs font-bold text-navy">{selected.ceo}</span></div>
+                <div className="p-2.5 bg-gray-50 rounded-lg"><span className="text-[9px] text-gray-500 block">Integrated Plants</span><span className="text-xs font-bold text-navy">{selectedStats.plants} plants</span></div>
+                <div className="p-2.5 bg-gray-50 rounded-lg"><span className="text-[9px] text-gray-500 block">Concentration Risk</span><span className={`text-xs font-bold ${selectedStats.concentration === 'Low' ? 'text-green-700' : selectedStats.concentration === 'Medium' ? 'text-amber-700' : 'text-red-700'}`}>{selectedStats.concentration} {selectedStats.concentration === 'Low' ? '(spread)' : selectedStats.concentration === 'High' ? '(concentrated)' : ''}</span></div>
               </div>
+
+              {/* Future capacity expansion chart */}
+              <div className="rounded-xl border border-gray-100 p-4 bg-gradient-to-br from-gray-50 to-white mb-4">
+                <h4 className="text-sm font-bold text-navy flex items-center gap-2 mb-1"><Factory size={15} className="text-maroon" /> Capacity Expansion Path (MTPA)</h4>
+                <p className="text-[11px] text-gray-500 mb-2">Current → target by {selectedStats.targetYear}</p>
+                <ResponsiveContainer width="100%" height={150}>
+                  <BarChart data={[{ label: 'Current', mtpa: selectedStats.capacity }, { label: selectedStats.targetYear, mtpa: selectedStats.targetCapacity }]} margin={{ top: 15, right: 10, left: -15, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+                    <XAxis dataKey="label" fontSize={11} />
+                    <YAxis fontSize={9} unit=" MT" />
+                    <Tooltip formatter={(v: number) => [`${v} MTPA`, 'Capacity']} />
+                    <Bar dataKey="mtpa" radius={[4, 4, 0, 0]}>
+                      <Cell fill="#94a3b8" /><Cell fill="#B02A30" />
+                      <LabelList dataKey="mtpa" position="top" fontSize={10} formatter={(v: number) => `${v}`} />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+                <p className="text-[11px] text-center text-gray-600 mt-1">Adding <span className="font-bold text-maroon">{(selectedStats.targetCapacity - selectedStats.capacity).toFixed(0)} MTPA</span> ({(((selectedStats.targetCapacity / selectedStats.capacity) - 1) * 100).toFixed(0)}% growth) by {selectedStats.targetYear}</p>
+              </div>
+
+              <div className="space-y-3">
+                <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                  <span className="text-[9px] font-bold text-blue-700 uppercase">Plant Footprint</span>
+                  <p className="text-xs text-blue-800 mt-0.5">{selected.plants}</p>
+                </div>
+                <div className="p-3 bg-green-50 rounded-xl border border-green-100">
+                  <span className="text-[9px] font-bold text-green-700 uppercase">Expansion Plans</span>
+                  <p className="text-xs text-green-800 mt-0.5">{selected.expansion}</p>
+                </div>
+                <div className="p-3 bg-orange-50 rounded-xl border border-orange-100">
+                  <span className="text-[9px] font-bold text-orange-700 uppercase">Competitive Moat</span>
+                  <p className="text-xs text-orange-800 mt-0.5">{selected.moat}</p>
+                </div>
+              </div>
+              <p className="text-[10px] text-gray-400 mt-4">Operational metrics are indicative estimates. Open Company Snapshot and search "{selectedPlayer}" for full financials.</p>
             </div>
           </div>
         </div>
@@ -899,10 +929,56 @@ function PlayersTab() {
         </div>
       </div>
 
+      {/* Manufacturer lens: Capacity & Utilisation + Cost Position */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Capacity vs Utilisation */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3 className="text-lg font-bold text-navy mb-1">Capacity &amp; Utilisation</h3>
+          <p className="text-xs text-gray-500 mb-4">Installed capacity (bars) vs plant utilisation % (line). Click a player for details.</p>
+          <ResponsiveContainer width="100%" height={300}>
+            <ComposedChart data={playersData} margin={{ top: 10, right: 10, left: -10, bottom: 40 }} onClick={(d: any) => { if (d && d.activePayload) setSelectedPlayer(d.activePayload[0]?.payload?.name) }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="name" fontSize={8} angle={-25} textAnchor="end" height={60} interval={0} />
+              <YAxis yAxisId="l" fontSize={9} unit=" MT" />
+              <YAxis yAxisId="r" orientation="right" fontSize={9} unit="%" domain={[0, 100]} />
+              <Tooltip />
+              <Bar yAxisId="l" dataKey="capacity" name="Capacity (MTPA)" radius={[4, 4, 0, 0]} cursor="pointer">
+                {playersData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+              </Bar>
+              <Line yAxisId="r" type="monotone" dataKey="utilization" name="Utilisation %" stroke="#1e3a5f" strokeWidth={2.5} dot={{ r: 3 }} />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Cost position ranking */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3 className="text-lg font-bold text-navy mb-1">Cost Position (₹ / Tonne)</h3>
+          <p className="text-xs text-gray-500 mb-4">Lower cost = stronger manufacturer. The cost leader survives downturns best.</p>
+          <div className="space-y-2.5">
+            {[...playersData].sort((a, b) => a.costPerT - b.costPerT).map((p, i) => {
+              const min = Math.min(...playersData.map((x) => x.costPerT))
+              const max = Math.max(...playersData.map((x) => x.costPerT))
+              const pct = 100 - ((p.costPerT - min) / (max - min)) * 60 // lower cost = fuller bar
+              return (
+                <button key={p.name} onClick={() => setSelectedPlayer(p.name)} className="w-full flex items-center gap-3 group">
+                  <span className="w-32 text-left text-[11px] font-semibold text-navy truncate">{p.name}</span>
+                  <div className="flex-1 h-4 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full transition-all group-hover:opacity-80" style={{ width: `${pct}%`, background: i === 0 ? '#16a34a' : COLORS[i % COLORS.length] }} />
+                  </div>
+                  <span className="w-16 text-right text-[11px] font-bold text-maroon">₹{p.costPerT.toLocaleString('en-IN')}</span>
+                  {i === 0 && <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full bg-green-100 text-green-700 shrink-0">LEADER</span>}
+                </button>
+              )
+            })}
+          </div>
+          <p className="text-[9px] text-gray-400 mt-4">Indicative cash cost per tonne. Shree Cement is the global cost leader (WHRS + renewables).</p>
+        </div>
+      </div>
+
       {/* Detailed Company Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 overflow-x-auto">
         <h3 className="text-lg font-bold text-navy mb-2">Detailed Company Profiles</h3>
-        <p className="text-xs text-gray-500 mb-4">👆 Click any row for expansion plans, plants, and competitive moat</p>
+        <p className="text-xs text-gray-500 mb-4">👆 Click any row for capacity, utilisation, cost, plants, expansion path &amp; risk</p>
         <table className="w-full text-xs">
           <thead>
             <tr className="border-b-2 border-navy/20">
@@ -937,6 +1013,10 @@ function PlayersTab() {
 }
 
 function RiskTab({ isAdmin }: { isAdmin: boolean }) {
+  return <CementRiskAnalysis />
+}
+
+function RiskTabLegacy({ isAdmin }: { isAdmin: boolean }) {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'emerging' | 'casestudies' | 'glossary'>('insurable')
 
   const probColor = (p: string) => p === 'High' ? 'bg-red-100 text-red-700' : p === 'Medium-High' ? 'bg-orange-100 text-orange-700' : p === 'Medium' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'
@@ -1306,42 +1386,5 @@ function GeographyTab() {
 }
 
 function NewsTab() {
-  const [regionFilter, setRegionFilter] = useState('All')
-  const regions = ['All', 'North', 'South', 'East', 'West', 'National']
-
-  const filtered = regionFilter === 'All' ? newsData : newsData.filter(n => n.region === regionFilter)
-
-  const getCatColor = (c: string) => c === 'Business Wins' ? 'bg-green-100 text-green-800' : c === 'Accidents' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
-
-  return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-        <div className="flex gap-2">
-          {regions.map((r) => (
-            <button key={r} onClick={() => setRegionFilter(r)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
-                regionFilter === r ? 'bg-navy text-white border-navy' : 'bg-white text-gray-600 border-gray-300 hover:border-navy'
-              }`}>{r}</button>
-          ))}
-        </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filtered.map((item) => (
-          <div key={item.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition">
-            <div className="flex items-start justify-between mb-2">
-              <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getCatColor(item.category)}`}>{item.category}</span>
-              <div className="flex items-center gap-1 text-xs text-gray-400">
-                <Calendar size={12} />
-                {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-              </div>
-            </div>
-            <h4 className="font-bold text-navy text-sm">{item.title}</h4>
-            <div className="mt-2 flex items-center gap-1 text-xs text-gray-400">
-              <MapPin size={10} /> {item.region}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+  return <NewsFeed title="Cement Industry News & Developments" items={newsData} />
 }

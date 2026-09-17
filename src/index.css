@@ -32,6 +32,12 @@ main { animation: fadeIn 0.35s ease-out; }
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Confetti fall (used by the Cement game completion celebration) */
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(240px) rotate(360deg); opacity: 0; }
+}
+
 /* Animated gradient background for login */
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }

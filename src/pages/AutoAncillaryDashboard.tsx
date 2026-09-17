@@ -5,21 +5,29 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2, Wrench
+  CloudRain, Zap, Calendar, Tag, Building2, Wrench, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer,
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, LabelList
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { AUTO_ANCILLARY_GAME } from '../components/process-game/data/autoAncillaryGame'
+import BusinessModel from '../components/BusinessModel'
+import { AUTO_ANCILLARY_BUSINESS } from '../data/businessModels/autoAncillaryBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import LiveTicker from '../components/LiveTicker'
 import HealthGauge from '../components/HealthGauge'
+import AutoAncillaryRiskAnalysis from '../components/risk-analysis/AutoAncillaryRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#0369a1', '#B02A30', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722', '#00BCD4', '#795548']
 
-type AncTab = 'overview' | 'production' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type AncTab = 'overview' | 'business' | 'production' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== OVERVIEW DATA =====
 const segmentData = [
@@ -191,12 +199,14 @@ export default function AutoAncillaryDashboard() {
 
   const tabs: { id: AncTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'production', label: 'Production', icon: Factory },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
 
   const tickerItems = [
@@ -216,48 +226,73 @@ export default function AutoAncillaryDashboard() {
 
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/hub')} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition"><ArrowLeft size={14} /> Back to Hub</button>
-            <div className="h-6 w-px bg-gray-200"></div>
-            <div className="flex items-center gap-3">
-              <img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" />
-              <div><h1 className="text-sm font-extrabold text-navy">Auto Ancillaries & Components</h1><p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p></div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {isAdmin && <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-bold"><Settings size={13} /> Admin</button>}
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">
-              {isAdmin ? <Shield size={13} className="text-maroon" /> : <User size={13} className="text-navy" />}
-              <span className="text-xs font-bold">{username}</span>
-            </div>
-          </div>
-        </div>
-      </header>
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm">
+      <DashboardHeader title="Auto Ancillaries & Components" />
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm">
         <div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">
           {tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}
         </div></div>
       </nav>
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={AUTO_ANCILLARY_BUSINESS} />}
         {activeTab === 'production' && <ProductionTab />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab isAdmin={isAdmin} />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
         {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="automobile" />}
+        {activeTab === 'game' && <ProcessGame data={AUTO_ANCILLARY_GAME} />}
       </main>
       <footer className="bg-navy text-white py-3 fixed bottom-0 left-0 right-0 z-30"><div className="max-w-[1920px] mx-auto px-6 flex items-center justify-between"><p className="text-xs opacity-80">ICICI Lombard General Insurance Company Ltd.</p><p className="text-xs text-amber-300 font-semibold">For Internal Use Only</p><p className="text-xs opacity-80">Designed by <span className="font-bold">Deepak Arora</span></p></div></footer>
     </div>
   )
 }
 
+// Detail shown when a "content per vehicle" bar is clicked
+const contentInfo: Record<string, { value: string; desc: string; note: string }> = {
+  'Japan': {
+    value: '$680 / vehicle',
+    desc: 'Japan has the world\'s highest auto-component content per vehicle, reflecting deep electronics integration, advanced safety systems, and hybrid/EV powertrains built by Toyota, Honda, and Nissan.',
+    note: 'Mature market with premium, tech-heavy vehicles and a dense Tier-1/Tier-2 supplier ecosystem (Denso, Aisin).',
+  },
+  'Germany': {
+    value: '$620 / vehicle',
+    desc: 'Germany\'s premium/luxury mix (Mercedes, BMW, Audi, VW) drives very high content per vehicle — advanced electronics, ADAS, high-end interiors, and performance drivetrains.',
+    note: 'Home to global Tier-1 giants (Bosch, Continental, ZF) supplying sophisticated, high-value components.',
+  },
+  'USA': {
+    value: '$550 / vehicle',
+    desc: 'The US skews toward large SUVs and pickup trucks with rich feature content — infotainment, comfort, and safety systems all lift per-vehicle component value.',
+    note: 'Large-vehicle preference and premiumisation keep content per vehicle well above the global average.',
+  },
+  'South Korea': {
+    value: '$480 / vehicle',
+    desc: 'Korea (Hyundai, Kia) has rapidly moved up the value chain — strong electronics, EV platforms, and in-house component supply through group affiliates.',
+    note: 'Vertically integrated model (Hyundai Mobis) and fast EV adoption boost content per vehicle.',
+  },
+  'China': {
+    value: '$380 / vehicle',
+    desc: 'China\'s content per vehicle is rising fast on the back of the world\'s largest EV market — batteries, power electronics, and connected-car features add value.',
+    note: 'EV leadership and scale are pushing Chinese content per vehicle above the global average.',
+  },
+  'India': {
+    value: '$120 / vehicle',
+    desc: 'India\'s content per vehicle is the lowest here — reflecting a value/entry-level vehicle mix, cost-sensitive buyers, and lower penetration of advanced electronics and safety systems.',
+    note: 'This is the opportunity: premiumisation, mandatory safety norms (6 airbags, ABS), and EV adoption give the sector large growth headroom to close the gap.',
+  },
+  'Global Avg': {
+    value: '$300 / vehicle',
+    desc: 'The global average blends mature high-content markets (Japan, Germany, US) with fast-growing lower-content markets (India). India at $120 sits well below this benchmark.',
+    note: 'India catching up toward the global average is the core structural growth thesis for the auto-components sector.',
+  },
+}
+
 // ===== OVERVIEW TAB =====
 function OverviewTab() {
   const [selectedSegment, setSelectedSegment] = useState<string | null>(null)
   const [selectedCustomer, setSelectedCustomer] = useState<string | null>(null)
+  const [selectedContent, setSelectedContent] = useState<string | null>(null)
+  const contentSel = selectedContent ? contentInfo[selectedContent] : null
   return (
     <div className="space-y-6">
       <div className="relative bg-gradient-to-r from-[#0369a1] to-[#075985] rounded-2xl p-6 text-white overflow-hidden">
@@ -317,11 +352,30 @@ function OverviewTab() {
       </div>
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h3 className="text-lg font-bold text-navy mb-2">Auto Component Industry Size — $ per Vehicle (Content per Vehicle)</h3>
-        <p className="text-xs text-gray-500 mb-3">India's component content/vehicle is low — huge growth headroom with premiumisation + EV</p>
+        <p className="text-xs text-gray-500 mb-3">India's component content/vehicle is low — huge growth headroom with premiumisation + EV. Click any bar for details.</p>
         <ResponsiveContainer width="100%" height={280}>
-          <BarChart data={perCapitaData} layout="vertical"><CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" /><XAxis type="number" fontSize={10} unit="$" /><YAxis dataKey="country" type="category" fontSize={10} width={90} /><Tooltip formatter={(v: number) => `$${v}/vehicle`} /><Bar dataKey="value" radius={[0, 4, 4, 0]}>{perCapitaData.map((e, i) => <Cell key={i} fill={e.country === 'India' ? '#f37021' : e.country === 'Global Avg' ? '#B02A30' : '#0369a1'} />)}<LabelList dataKey="value" position="right" fontSize={9} formatter={(v: number) => `$${v}`} /></Bar></BarChart>
+          <BarChart data={perCapitaData} layout="vertical" onClick={(d: any) => { if (d && d.activePayload) setSelectedContent(d.activePayload[0]?.payload?.country) }}><CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" /><XAxis type="number" fontSize={10} unit="$" /><YAxis dataKey="country" type="category" fontSize={10} width={90} /><Tooltip formatter={(v: number) => `$${v}/vehicle`} cursor={{ fill: 'rgba(0,0,0,0.03)' }} /><Bar dataKey="value" radius={[0, 4, 4, 0]} cursor="pointer">{perCapitaData.map((e, i) => <Cell key={i} fill={e.country === 'India' ? '#f37021' : e.country === 'Global Avg' ? '#B02A30' : '#0369a1'} />)}<LabelList dataKey="value" position="right" fontSize={9} formatter={(v: number) => `$${v}`} /></Bar></BarChart>
         </ResponsiveContainer>
       </div>
+
+      {/* Content-per-vehicle detail popup */}
+      {contentSel && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setSelectedContent(null)}>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-start justify-between gap-4 mb-3">
+              <div>
+                <h3 className="text-lg font-bold text-navy">{selectedContent}</h3>
+                <span className="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-maroon/10 text-maroon">{contentSel.value}</span>
+              </div>
+              <button onClick={() => setSelectedContent(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold shrink-0">×</button>
+            </div>
+            <div className="space-y-4">
+              <div><span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Content per vehicle</span><p className="text-sm text-gray-700 leading-relaxed mt-1">{contentSel.desc}</p></div>
+              <div className="p-3 bg-gray-50 rounded-lg border border-gray-100"><span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Why it matters</span><p className="text-sm text-gray-700 mt-1 leading-relaxed">{contentSel.note}</p></div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -357,6 +411,36 @@ function ProductionTab() {
 
 // ===== PLAYERS TAB =====
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => {
+    const d = playerDetails[p.name]
+    return {
+      rank: p.rank,
+      name: p.name,
+      revenue: p.revenue,
+      type: d?.type || 'Auto Component',
+      segment: p.segment,
+      hq: d?.hq,
+      founded: d?.founded,
+      target: d?.expansion,
+      highlight: d?.moat,
+      extra: [
+        { label: 'Exports %', value: `${p.exports}%` },
+        { label: 'Employees', value: p.employees.toLocaleString('en-IN') },
+      ],
+    }
+  })
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Auto Components',
+        donutTitle: 'Ownership Type Split',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const selected = selectedPlayer ? playerDetails[selectedPlayer] : null
   return (
@@ -388,6 +472,10 @@ function PlayersTab() {
 
 // ===== RISK TAB =====
 function RiskTab({ isAdmin }: { isAdmin: boolean }) {
+  return <AutoAncillaryRiskAnalysis />
+}
+
+function RiskTabLegacy({ isAdmin }: { isAdmin: boolean }) {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'framework' | 'emerging' | 'bestpractices'>('insurable')
   const aogRisks = [
     { name: 'Earthquake', probability: 'Low', impact: 'Very High', emv: '₹50-300 Cr', mitigation: 'Seismic anchoring of CNC machines, die racks. BCP for alternate site production.' },
@@ -466,22 +554,19 @@ function GeographyTab() {
   )
 }
 
+// ===== NEWS DATA =====
+const newsData = [
+  { title: 'ACMA Reports Record $21.2B Component Exports in FY26', source: 'ACMA Press Release', date: '2026-08-11', summary: 'Europe and the USA remain the top export destinations for Indian auto components. EV-related components are the fastest-growing category, aided by global sourcing shifts. The record exports underline India\'s rising role in the global supply chain.', sentiment: 'Positive' },
+  { title: 'PLI for Auto Components — 68 Companies Get Rs 26,058 Cr Approval', source: 'Ministry of Heavy Industries', date: '2026-07-22', summary: 'The advanced automotive technology PLI covers EV components, hydrogen fuel cells, and ADAS sensors. Five-year incentives aim to deepen localisation of high-value parts. The scheme is drawing fresh investment into cutting-edge manufacturing.', sentiment: 'Positive' },
+  { title: 'Motherson Group Acquires Cockpit-Module Maker in Europe', source: 'Economic Times', date: '2026-06-16', summary: 'The acquisition strengthens Motherson\'s leadership in automotive interiors and modules. It expands the group\'s global customer base and technology portfolio. The deal supports its long-term revenue growth ambitions.', sentiment: 'Positive' },
+  { title: 'Sona BLW Wins $500M EV Motor Order from European OEM', source: 'Business Standard', date: '2026-05-28', summary: 'The traction-motor supply contract is for a premium European EV platform. It validates India as a credible global sourcing hub for EV drivetrains. The win boosts Sona\'s order book and EV revenue mix.', sentiment: 'Positive' },
+  { title: 'China Tariff Fears Push US OEMs to Accelerate India Sourcing', source: 'Reuters', date: '2026-04-18', summary: 'Trade tensions are reinforcing the China+1 sourcing strategy among global automakers. Indian forging, casting, and machining units are receiving new requests for quotes. The shift offers a structural growth opportunity for Tier-1 suppliers.', sentiment: 'Positive' },
+  { title: 'Pune MIDC Flooding Disrupts 200+ Component Units', source: 'Times of India', date: '2026-03-24', summary: 'Heavy rainfall caused multi-day shutdowns across the Chakan and Ranjangaon belt. OEMs including Tata, M&M, and VW faced supply disruption. The event highlights climate-related risk in key manufacturing clusters.', sentiment: 'Negative' },
+  { title: 'Semiconductor Supply Stabilises but EV Chip Demand Rising', source: 'ACMA Journal', date: '2026-03-05', summary: 'The traditional microcontroller shortage has largely eased for the industry. New demand for SiC and GaN power electronics and ADAS chips is emerging as the next bottleneck. Suppliers are securing long-term chip agreements to de-risk.', sentiment: 'Neutral' },
+  { title: 'Bharat Forge Deepens Defence Push with Large Army Order', source: 'Mint', date: '2026-02-14', summary: 'The order spans artillery systems and armoured-vehicle components. The auto-to-defence diversification reduces dependence on cyclical OEM demand. It strengthens Bharat Forge\'s presence in the strategic manufacturing space.', sentiment: 'Positive' },
+]
+
 // ===== NEWS TAB =====
 function NewsTab() {
-  const news = [
-    { title: 'ACMA Reports Record $21.2B Component Exports in FY25', source: 'ACMA Press Release', date: 'Apr 2025', summary: 'Europe (30%) and USA (27%) remain top destinations. EV components fastest growing category at 45% YoY growth.', sentiment: 'Positive' },
-    { title: 'PLI for Auto Components — 68 Companies Get ₹26,058 Cr Approval', source: 'Ministry of Heavy Industries', date: 'Mar 2025', summary: 'Advanced automotive tech (AAT) PLI covers EV components, hydrogen fuel cells, ADAS sensors. 5-year incentives.', sentiment: 'Positive' },
-    { title: 'Motherson Group Acquires SAS Automotive (Germany) for €1.4B', source: 'Economic Times', date: 'Jan 2025', summary: 'Cockpit module company acquisition makes Motherson world\'s #1 in automotive interiors. Revenue target $45B by FY27.', sentiment: 'Positive' },
-    { title: 'Sona BLW Wins $500M EV Motor Order from European OEM', source: 'Business Standard', date: 'May 2025', summary: 'Traction motor supply for premium European EV platform. Validates India as global EV component sourcing hub.', sentiment: 'Positive' },
-    { title: 'China Tariff Fears — US OEMs Accelerate India Sourcing', source: 'Reuters', date: 'Feb 2025', summary: 'US-China trade war driving "China+1" strategy. Indian forging, casting, machining units getting new RFQs from GM, Ford, Stellantis Tier-1s.', sentiment: 'Positive' },
-    { title: 'Pune MIDC Flooding Disrupts 200+ Component Units', source: 'Times of India', date: 'Jul 2024', summary: 'Heavy rainfall causes 5-7 day shutdown in Chakan/Ranjangaon belt. OEMs (Tata, M&M, VW) affected. ₹800 Cr industry loss estimated.', sentiment: 'Negative' },
-    { title: 'Semiconductor Shortage Eases — But EV Chip Demand Rising', source: 'ACMA Journal', date: 'Jun 2025', summary: 'Traditional MCU shortage resolved. But new demand for SiC/GaN power electronics (EV) and AI chips (ADAS) creating next bottleneck.', sentiment: 'Neutral' },
-    { title: 'Bharat Forge Enters Defense — ₹8,000 Cr Order from Indian Army', source: 'Mint', date: 'Apr 2025', summary: 'Artillery guns, armored vehicle components. Auto-to-defense diversification strategy. Reduces OEM cyclicality dependence.', sentiment: 'Positive' },
-  ]
-  return (
-    <div className="space-y-4">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"><h3 className="text-sm font-bold text-navy">Latest Auto Component Industry News</h3><p className="text-xs text-gray-500">Sources: ACMA, MHI, IBEF, Industry publications</p></div>
-      {news.map((n, i) => (<div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition"><div className="flex items-center justify-between mb-2"><h4 className="text-sm font-bold text-navy flex-1">{n.title}</h4><span className={`text-[9px] px-2 py-0.5 rounded-full font-semibold ml-2 ${n.sentiment === 'Positive' ? 'bg-green-100 text-green-700' : n.sentiment === 'Negative' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}`}>{n.sentiment}</span></div><p className="text-xs text-gray-600 mb-2">{n.summary}</p><div className="flex items-center gap-3 text-[10px] text-gray-400"><span className="font-semibold">{n.source}</span><span>•</span><span>{n.date}</span></div></div>))}
-    </div>
-  )
+  return <NewsFeed title="Auto Components Industry News & Developments" items={newsData} />
 }

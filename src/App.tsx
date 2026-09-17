@@ -21,12 +21,25 @@ const BFSIDashboard = lazy(() => import('./pages/BFSIDashboard'))
 const AviationDashboard = lazy(() => import('./pages/AviationDashboard'))
 const StartupsDashboard = lazy(() => import('./pages/StartupsDashboard'))
 const HospitalityDashboard = lazy(() => import('./pages/HospitalityDashboard'))
+const ChemicalDashboard = lazy(() => import('./pages/ChemicalDashboard'))
+const InfrastructureDashboard = lazy(() => import('./pages/InfrastructureDashboard'))
+const FertilizerDashboard = lazy(() => import('./pages/FertilizerDashboard'))
 const PaperQuiz = lazy(() => import('./pages/PaperQuiz'))
 const IndustryQuiz = lazy(() => import('./pages/IndustryQuiz'))
+const LibraryPage = lazy(() => import('./pages/LibraryPage'))
+const AdminPage = lazy(() => import('./pages/AdminPage'))
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   if (!isAuthenticated) return <Navigate to="/login" replace />
+  return <>{children}</>
+}
+
+function AdminRoute({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const role = useAuthStore((s) => s.role)
+  if (!isAuthenticated) return <Navigate to="/login" replace />
+  if (role !== 'admin') return <Navigate to="/hub" replace />
   return <>{children}</>
 }
 
@@ -47,6 +60,8 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/hub" element={<ProtectedRoute><IndustryHub /></ProtectedRoute>} />
+        <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
+        <Route path="/library" element={<ProtectedRoute><LibraryPage /></ProtectedRoute>} />
         <Route path="/steel/*" element={<ProtectedRoute><SteelDashboard /></ProtectedRoute>} />
         <Route path="/cement/*" element={<ProtectedRoute><CementDashboard /></ProtectedRoute>} />
         <Route path="/quiz" element={<ProtectedRoute><IndustryQuiz /></ProtectedRoute>} />
@@ -64,6 +79,9 @@ export default function App() {
         <Route path="/aviation/*" element={<ProtectedRoute><AviationDashboard /></ProtectedRoute>} />
         <Route path="/startups/*" element={<ProtectedRoute><StartupsDashboard /></ProtectedRoute>} />
         <Route path="/hospitality/*" element={<ProtectedRoute><HospitalityDashboard /></ProtectedRoute>} />
+        <Route path="/chemical/*" element={<ProtectedRoute><ChemicalDashboard /></ProtectedRoute>} />
+        <Route path="/infrastructure/*" element={<ProtectedRoute><InfrastructureDashboard /></ProtectedRoute>} />
+        <Route path="/fertilizer/*" element={<ProtectedRoute><FertilizerDashboard /></ProtectedRoute>} />
         <Route path="/dashboard/:industryId" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

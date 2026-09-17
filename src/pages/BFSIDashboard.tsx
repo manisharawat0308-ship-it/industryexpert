@@ -5,20 +5,26 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2, Landmark
+  CloudRain, Zap, Calendar, Tag, Building2, Landmark, Gamepad2
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer,
   AreaChart, Area, LabelList
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { BFSI_GAME } from '../components/process-game/data/bfsiGame'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import HealthGauge from '../components/HealthGauge'
+import BFSIRiskAnalysis from '../components/risk-analysis/BFSIRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#4338ca', '#B02A30', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722', '#0369a1', '#795548']
 
-type BFSITab = 'overview' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type BFSITab = 'overview' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== OVERVIEW DATA =====
 const segmentData = [
@@ -137,31 +143,13 @@ export default function BFSIDashboard() {
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
 
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/hub')} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition"><ArrowLeft size={14} /> Back to Hub</button>
-            <div className="h-6 w-px bg-gray-200"></div>
-            <div className="flex items-center gap-3">
-              <img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" />
-              <div><h1 className="text-sm font-extrabold text-navy">BFSI & Financial Services</h1><p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p></div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {isAdmin && <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-bold"><Settings size={13} /> Admin</button>}
-            <button onClick={() => window.print()} className="flex items-center gap-1 px-3 py-1.5 bg-navy/5 text-navy rounded-lg text-xs font-semibold hover:bg-navy/10 transition"><Download size={13} /> Export</button>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">
-              {isAdmin ? <Shield size={13} className="text-maroon" /> : <User size={13} className="text-navy" />}
-              <span className="text-xs font-bold">{username}</span>
-            </div>
-          </div>
-        </div>
-      </header>
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm">
+      <DashboardHeader title="BFSI & Financial Services" />
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm">
         <div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">
           {tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}
         </div></div>
@@ -172,7 +160,8 @@ export default function BFSIDashboard() {
         {activeTab === 'risk' && <RiskTab />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
-        {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="fmcg" />}
+        {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="bfsi" />}
+        {activeTab === 'game' && <ProcessGame data={BFSI_GAME} />}
       </main>
       <footer className="bg-navy text-white py-3 fixed bottom-0 left-0 right-0 z-30"><div className="max-w-[1920px] mx-auto px-6 flex items-center justify-between"><p className="text-xs opacity-80">ICICI Lombard General Insurance Company Ltd.</p><p className="text-xs text-amber-300 font-semibold">For Internal Use Only</p><p className="text-xs opacity-80">Designed by <span className="font-bold">Deepak Arora</span></p></div></footer>
     </div>
@@ -258,7 +247,57 @@ function OverviewTab() {
 }
 
 // ===== PLAYERS TAB =====
+function parseAssetsToCr(text: string): number {
+  const t = text.replace(/,/g, '')
+  const num = parseFloat(t.replace(/[^0-9.]/g, '')) || 0
+  if (/\$/.test(t) && /B/i.test(t)) return Math.round(num * 8300) // $B -> ₹ Cr (approx)
+  if (/lakh\s*cr/i.test(t)) return Math.round(num * 100000)
+  return Math.round(num) // already in ₹ Cr
+}
+
+function parseNpa(text: string): number | undefined {
+  if (!text || /n\/a/i.test(text)) return undefined
+  const n = parseFloat(text.replace(/[^0-9.]/g, ''))
+  return isNaN(n) ? undefined : n
+}
+
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => {
+    const d = playerDetails[p.name]
+    return {
+      rank: p.rank,
+      name: p.name,
+      revenue: parseAssetsToCr(p.assets),
+      type: p.type,
+      segment: p.segment,
+      compete: parseNpa(p.npa),
+      hq: d?.hq,
+      founded: d?.founded,
+      target: d?.expansion,
+      highlight: d?.moat,
+      extra: [
+        { label: 'Assets / Size', value: p.assets },
+        { label: 'NPA', value: p.npa },
+      ],
+    }
+  })
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'BFSI',
+        revenueUnit: '₹ Cr',
+        competeLabel: 'Asset Quality (NPA %)',
+        competeLowerIsBetter: true,
+        competeSuffix: '%',
+        donutTitle: 'PSU vs Private',
+        marketShareNote: 'Share of tracked players by total assets / balance-sheet size.',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const selected = selectedPlayer ? playerDetails[selectedPlayer] : null
   return (
@@ -280,6 +319,10 @@ function PlayersTab() {
 
 // ===== RISK TAB =====
 function RiskTab() {
+  return <BFSIRiskAnalysis />
+}
+
+function RiskTabLegacy() {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'bestpractices'>('insurable')
   const [selectedCase, setSelectedCase] = useState<number | null>(null)
   const caseStudies = [
@@ -372,22 +415,19 @@ function GeographyTab() {
   )
 }
 
+// ===== NEWS DATA =====
+const newsData = [
+  { title: 'RBI Holds Repo Rate Steady as Inflation Stays Within Target', source: 'RBI MPC', date: '2026-08-13', summary: 'The Monetary Policy Committee opted to keep the policy rate unchanged amid a balanced growth-inflation outlook. GDP growth projections remain firm for FY26. Any easing is contingent on evolving global and domestic conditions.', sentiment: 'Neutral' },
+  { title: 'UPI Crosses New Monthly Transaction Record', source: 'NPCI', date: '2026-07-22', summary: 'PhonePe and Google Pay continue to dominate transaction volumes. The system processed a record value during the month. UPI\'s international footprint keeps expanding across partner countries.', sentiment: 'Positive' },
+  { title: 'SBI Reports Highest-Ever Quarterly Profit', source: 'Economic Times', date: '2026-06-17', summary: 'Asset quality improved with NPAs at multi-year lows and healthy credit growth. Digital banking adoption via YONO continued to rise. Return ratios strengthened on the back of strong operating performance.', sentiment: 'Positive' },
+  { title: 'SEBI Tightens F&O Rules — New Position Limits Take Effect', source: 'SEBI Circular', date: '2026-05-28', summary: 'Regulators are curbing excessive retail participation in derivatives after large aggregate losses. Revised lot sizes and higher upfront margins are now in force. Discount brokers face pressure on derivatives-linked revenue.', sentiment: 'Negative' },
+  { title: 'HDFC Bank Market Cap Crosses $200 Billion — Among Asia\'s Top Banks', source: 'Bloomberg', date: '2026-04-18', summary: 'Post-merger integration is complete with an expanded branch network. The home-loan book has scaled significantly following the HDFC merger. Strong foreign inflows have supported the valuation.', sentiment: 'Positive' },
+  { title: 'Digital Personal Data Protection Act — BFSI Compliance in Focus', source: 'MeitY', date: '2026-03-24', summary: 'Financial firms must implement consent management, data localisation, and breach notification. Non-compliance carries significant penalties under the Act. Institutions are investing in governance and security controls.', sentiment: 'Neutral' },
+  { title: 'RBI Tightens Oversight of Payments Banks after KYC Lapses', source: 'RBI', date: '2026-03-05', summary: 'The regulator has stepped up scrutiny of KYC and data-sharing practices at payments banks. Affected wallet users were migrated to compliant partners. The action signals a firm stance on governance in digital finance.', sentiment: 'Negative' },
+  { title: 'Insurance Penetration Improves but Stays Below Global Average', source: 'IRDAI', date: '2026-02-14', summary: 'Both life and non-life segments recorded gradual gains in penetration. IRDAI is pushing initiatives like Bima Sugam and composite licences to broaden reach. Micro-insurance is seen as key to closing the protection gap.', sentiment: 'Positive' },
+]
+
 // ===== NEWS TAB =====
 function NewsTab() {
-  const news = [
-    { title: 'RBI Keeps Repo Rate Unchanged at 6.5% — 8th Consecutive Pause', source: 'RBI MPC', date: 'Jun 2025', summary: 'MPC votes 4-2 to hold rates. GDP growth projected 6.5% for FY26. Inflation within 4% target band. Rate cut expected only if global conditions ease.', sentiment: 'Neutral' },
-    { title: 'UPI Crosses 16 Billion Transactions in Single Month — New Record', source: 'NPCI', date: 'May 2025', summary: 'PhonePe (48%) and Google Pay (35%) dominate. Rs 22 Lakh Cr value processed. UPI now available in 7 countries including France, Sri Lanka.', sentiment: 'Positive' },
-    { title: 'SBI Reports Highest-Ever Quarterly Profit — Rs 21,000 Cr in Q4 FY25', source: 'Economic Times', date: 'May 2025', summary: 'NPA at 2.1% (lowest in 15 years). Credit growth at 15%. YONO app crosses 7 Cr users. ROE improves to 21%.', sentiment: 'Positive' },
-    { title: 'SEBI Tightens F&O Rules — New Position Limits from July 2025', source: 'SEBI Circular', date: 'Apr 2025', summary: 'Retail F&O losses estimated at Rs 75,000 Cr/year. New lot sizes, upfront margins increased. Impact on broker revenues (Angel One, Zerodha).', sentiment: 'Negative' },
-    { title: 'HDFC Bank Market Cap Crosses $200 Billion — Asia Top 5', source: 'Bloomberg', date: 'Mar 2025', summary: 'Post HDFC merger integration complete. Branch count reaches 9,500. Home loan book crosses Rs 7 Lakh Cr. Global fund inflows.', sentiment: 'Positive' },
-    { title: 'Digital Personal Data Protection Act — Compliance Deadline August 2025', source: 'MeitY', date: 'Feb 2025', summary: 'All BFSI entities must comply with DPDP Act. Data localization, consent management, breach notification within 72 hours. Rs 250 Cr penalty for non-compliance.', sentiment: 'Neutral' },
-    { title: 'Paytm Payments Bank License Revoked — Operations Wound Down', source: 'RBI', date: 'Jan 2025', summary: 'RBI found persistent KYC violations and data sharing concerns. 30 Cr+ wallets migrated to other banks. Paytm app continues with third-party bank partnerships.', sentiment: 'Negative' },
-    { title: 'Insurance Penetration Improves to 4.2% — Still Below Global Average', source: 'IRDAI', date: 'Mar 2025', summary: 'Life: 3.0%, Non-life: 1.2%. IRDAI targeting 5% by 2027 via Bima Sugam (insurance marketplace), composite licenses, and micro-insurance push.', sentiment: 'Positive' },
-  ]
-  return (
-    <div className="space-y-4">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"><h3 className="text-sm font-bold text-navy">Latest BFSI News & Regulatory Updates</h3><p className="text-xs text-gray-500">Sources: RBI, SEBI, IRDAI, NPCI, Company Filings</p></div>
-      {news.map((n, i) => (<div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition"><div className="flex items-center justify-between mb-2"><h4 className="text-sm font-bold text-navy flex-1">{n.title}</h4><span className={`text-[9px] px-2 py-0.5 rounded-full font-semibold ml-2 ${n.sentiment === 'Positive' ? 'bg-green-100 text-green-700' : n.sentiment === 'Negative' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}`}>{n.sentiment}</span></div><p className="text-xs text-gray-600 mb-2">{n.summary}</p><div className="flex items-center gap-3 text-[10px] text-gray-400"><span className="font-semibold">{n.source}</span><span>•</span><span>{n.date}</span></div></div>))}
-    </div>
-  )
+  return <NewsFeed title="Financial Services Industry News & Developments" items={newsData} />
 }

@@ -5,20 +5,28 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2, Pill
+  CloudRain, Zap, Calendar, Tag, Building2, Pill, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer,
   AreaChart, Area, LabelList
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { PHARMA_GAME } from '../components/process-game/data/pharmaGame'
+import BusinessModel from '../components/BusinessModel'
+import { PHARMA_BUSINESS } from '../data/businessModels/pharmaBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import HealthGauge from '../components/HealthGauge'
+import PharmaRiskAnalysis from '../components/risk-analysis/PharmaRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#0891b2', '#B02A30', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722', '#1e3a5f', '#795548']
 
-type PharmaTab = 'overview' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type PharmaTab = 'overview' | 'business' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== DATA =====
 const segmentData = [
@@ -106,6 +114,17 @@ const playerDetails: Record<string, { hq: string; ceo: string; founded: string; 
   'Cipla': { hq: 'Mumbai', ceo: 'Umang Vohra', founded: '1935', type: 'Private (Promoter 34%)', plants: '35+ manufacturing facilities globally', expansion: 'US inhaler launches (Advair generic — $600M opportunity). Respiratory + peptides focus. Digital health investments.', moat: 'Respiratory therapy leader (India + Africa). Made ARV affordable for Africa ($350/year vs $12,000). Brand trust across 80+ countries. R&D spend 6%+ of revenue.' },
   'Serum Institute': { hq: 'Pune', ceo: 'Adar Poonawalla', founded: '1966', type: 'Private (Unlisted)', plants: 'Pune (3 campuses), Netherlands', expansion: 'mRNA platform (with Novavax). Dengue vaccine. New biologics campus. $1B+ revenue target. IPO speculation.', moat: 'World largest vaccine producer by doses (1.5B/year). Covishield maker. Lowest cost vaccines globally. WHO prequalified. Supplies 170+ countries.' },
   'Biocon': { hq: 'Bangalore', ceo: 'Kiran Mazumdar-Shaw (Chairperson), Siddharth Mittal (CEO)', founded: '1978', type: 'Private', plants: 'Bangalore, Hyderabad, Malaysia', expansion: 'Biosimilar insulin (Semglee in US). Humira biosimilar launch. Viatris JV for global markets. Biologics park in Bangalore.', moat: 'India #1 biosimilar company. Only Indian firm with insulin biosimilar in US market. Kiran Mazumdar = most respected woman entrepreneur in Indian pharma.' },
+  "Dr Reddy's": { hq: 'Hyderabad', ceo: 'Erez Israeli', founded: '1984', type: 'Private (Promoter 27%)', plants: '20+ facilities across India, USA, UK, Mexico', expansion: 'Biosimilars (rituximab, trastuzumab), complex generics, and nutraceuticals. Nicotine replacement therapy in US. Digital therapeutics ventures.', moat: 'Among India\'s top-3 generic exporters. Strong US ANDA pipeline (30+ FDA plants). Vertical integration from API to formulation. Early biosimilar mover.' },
+  'Mankind Pharma': { hq: 'New Delhi', ceo: 'Rajeev Juneja', founded: '1991', type: 'Private (Listed 2023)', plants: '25+ manufacturing facilities in India', expansion: 'Consumer healthcare (Prega News, Manforce), chronic therapy expansion, and acquisitions (Panacea Biotec formulations). ₹4,200 Cr IPO in 2023.', moat: 'India\'s domestic-market powerhouse (95%+ India revenue). #1 in condoms & pregnancy tests. Deep rural distribution. Low regulatory (US-FDA) exposure = lower compliance risk.' },
+  'Lupin': { hq: 'Mumbai', ceo: 'Vinita Gupta (CEO), Nilesh Gupta (MD)', founded: '1968', type: 'Private (Promoter 47%)', plants: '15+ facilities in India, USA, Brazil, Mexico', expansion: 'Complex generics, inhalation (respiratory), biosimilars, and specialty (CNS, women\'s health). Digital health (Lupin Digital Health).', moat: 'Global respiratory & complex-generic leader. Strong US presence. Diabetes and cardiovascular franchise in India. TB drug legacy.' },
+  'Zydus Lifesciences': { hq: 'Ahmedabad', ceo: 'Sharvil Patel', founded: '1952', type: 'Private (Promoter 75%)', plants: '25+ facilities in India, USA', expansion: 'NCE research (Saroglitazar - world\'s first for NASH), vaccines (ZyCoV-D DNA vaccine), biosimilars, and consumer wellness.', moat: 'Only Indian firm with an approved DNA vaccine. Strong NCE/innovation pipeline (rare among generics). Vertically integrated. Consumer brands (Nycil, Everyuth).' },
+  "Divi's Labs": { hq: 'Hyderabad', ceo: 'Kiran S. Divi', founded: '1990', type: 'Private (Promoter 52%)', plants: 'Hyderabad, Visakhapatnam (2 large API campuses)', expansion: 'Custom synthesis (CDMO) for global innovators, contrast media, and nutraceuticals. Capacity expansion for high-value generic APIs.', moat: 'World\'s largest API/intermediate manufacturer for many molecules. Preferred CDMO partner for Big Pharma. Highest margins in Indian pharma (~30% EBITDA). 80%+ exports.' },
+  'Aurobindo Pharma': { hq: 'Hyderabad', ceo: 'K. Nithyananda Reddy (Vice Chairman)', founded: '1986', type: 'Private (Promoter 52%)', plants: '30+ facilities, largest FDA-approved plant count in India (45)', expansion: 'Biosimilars, injectables, specialty, and vaccines (via Auro Vaccines). US injectables and Europe expansion.', moat: 'India\'s largest generic exporter by volume. Most US-FDA approved plants (45). Vertically integrated (own API). Broad therapeutic coverage.' },
+  'Torrent Pharma': { hq: 'Ahmedabad', ceo: 'Aman Mehta', founded: '1959', type: 'Private (Promoter 71%)', plants: '8+ facilities in India, plus US/Europe', expansion: 'Branded generics (India + Brazil), acquisitions (Curatio dermatology, Unichem brands), and chronic therapy focus.', moat: 'Strong branded-generic model with high margins. #1/#2 in cardiovascular & CNS in India. Consistent acquisition-led growth. Lower US price-erosion exposure.' },
+  'Glenmark': { hq: 'Mumbai', ceo: 'Glenn Saldanha', founded: '1977', type: 'Private (Promoter 47%)', plants: '11+ facilities in India, USA, Argentina, Czech Republic', expansion: 'Dermatology & respiratory globally, innovative R&D (Glenmark Pharmaceuticals + Ichnos Sciences for novel biologics), and Glenmark Life Sciences (API arm).', moat: 'Strong derma & respiratory franchise. Novel drug R&D ambition (rare for Indian generics). Emerging-market presence. API arm de-merged for value.' },
+  'Alkem Labs': { hq: 'Mumbai', ceo: 'Sandeep Singh (MD)', founded: '1973', type: 'Private (Promoter 55%)', plants: '20+ facilities in India, USA', expansion: 'Acute-therapy dominance (anti-infectives, gastro), chronic therapy expansion, and US generics scale-up. Consumer & nutraceutical brands.', moat: 'India\'s #1 in anti-infectives & acute therapy. Top-5 domestic pharma. Strong brand portfolio (Clavam, Pan). Deep distribution reach.' },
+  'Laurus Labs': { hq: 'Hyderabad', ceo: 'Satyanarayana Chava', founded: '2005', type: 'Private (Promoter 27%)', plants: 'Visakhapatnam, Hyderabad (API + FDF + CDMO)', expansion: 'ARV (anti-retroviral) API leadership, growing CDMO/synthesis business, biologics (Laurus Bio), and formulations scale-up.', moat: 'World\'s largest ARV API producer. Fast-growing CDMO franchise with Big Pharma contracts. Backward-integrated. High-growth biologics entry.' },
+  'Syngene Intl': { hq: 'Bangalore', ceo: 'Peter Bains', founded: '1993', type: 'Private (Biocon subsidiary)', plants: 'Bangalore, Hyderabad, Mangalore (research + manufacturing)', expansion: 'Integrated discovery-to-manufacturing CRO/CDMO, dedicated R&D centres for global clients (BMS, Amgen), and biologics manufacturing.', moat: 'India\'s premier contract research organization (CRO). Long-term dedicated centres with Big Pharma. End-to-end discovery + development + manufacturing. 85%+ exports.' },
 }
 
 const geographyData = [
@@ -127,36 +146,27 @@ export default function PharmaDashboard() {
   const isAdmin = role === 'admin'
   const tabs: { id: PharmaTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Industry Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/hub')} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition"><ArrowLeft size={14} /> Back to Hub</button>
-            <div className="h-6 w-px bg-gray-200"></div>
-            <div className="flex items-center gap-3"><img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" /><div><h1 className="text-sm font-extrabold text-navy">Pharma & Healthcare</h1><p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p></div></div>
-          </div>
-          <div className="flex items-center gap-3">
-            {isAdmin && <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-bold"><Settings size={13} /> Admin</button>}
-            <button onClick={() => window.print()} className="flex items-center gap-1 px-3 py-1.5 bg-navy/5 text-navy rounded-lg text-xs font-semibold hover:bg-navy/10 transition"><Download size={13} /> Export</button>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">{isAdmin ? <Shield size={13} className="text-maroon" /> : <User size={13} className="text-navy" />}<span className="text-xs font-bold">{username}</span></div>
-          </div>
-        </div>
-      </header>
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
+      <DashboardHeader title="Pharma & Healthcare" />
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={PHARMA_BUSINESS} />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
-        {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="fmcg" />}
+        {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="pharma" />}
+        {activeTab === 'game' && <ProcessGame data={PHARMA_GAME} />}
       </main>
       <footer className="bg-navy text-white py-3 fixed bottom-0 left-0 right-0 z-30"><div className="max-w-[1920px] mx-auto px-6 flex items-center justify-between"><p className="text-xs opacity-80">ICICI Lombard General Insurance Company Ltd.</p><p className="text-xs text-amber-300 font-semibold">For Internal Use Only</p><p className="text-xs opacity-80">Designed by <span className="font-bold">Deepak Arora</span></p></div></footer>
     </div>
@@ -230,6 +240,36 @@ function OverviewTab() {
 
 // ===== PLAYERS TAB =====
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => {
+    const d = playerDetails[p.name]
+    return {
+      rank: p.rank,
+      name: p.name,
+      revenue: p.revenue,
+      type: d?.type || 'Pharma',
+      segment: p.segment,
+      hq: d?.hq,
+      founded: d?.founded,
+      target: d?.expansion,
+      highlight: d?.moat,
+      extra: [
+        { label: 'Exports %', value: `${p.exports}%` },
+        { label: 'USFDA Sites', value: String(p.usFDA) },
+      ],
+    }
+  })
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Pharma',
+        donutTitle: 'Ownership Type Split',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const selected = selectedPlayer ? playerDetails[selectedPlayer] : null
   return (
@@ -254,6 +294,10 @@ function PlayersTab() {
 
 // ===== RISK TAB =====
 function RiskTab() {
+  return <PharmaRiskAnalysis />
+}
+
+function RiskTabLegacy() {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'bestpractices'>('insurable')
   const [selectedCase, setSelectedCase] = useState<number | null>(null)
   const caseStudies = [
@@ -331,22 +375,19 @@ function GeographyTab() {
   )
 }
 
+// ===== NEWS DATA =====
+const newsData = [
+  { title: 'India Pharma Exports Hit Record $27.9B in FY26', source: 'Pharmexcil', date: '2026-08-12', summary: 'The USA, Europe, and Africa remain the top destinations for Indian drug exports. Generics and vaccines continue to drive growth as India targets $50B by 2030. Rising formulation and biosimilar shipments are broadening the export base.', sentiment: 'Positive' },
+  { title: 'PLI Scheme for Bulk Drugs — 35 Projects Commissioned', source: 'Ministry of Chemicals', date: '2026-07-21', summary: 'The Rs 15,000 Cr PLI for API manufacturing is reducing dependency on imports for critical molecules. Hyderabad and Gujarat clusters are the primary beneficiaries. The scheme strengthens supply-chain resilience for essential drugs.', sentiment: 'Positive' },
+  { title: 'US FDA Inspections Resume Full Pace — 150+ Indian Plants Inspected in FY26', source: 'CDSCO', date: '2026-06-17', summary: 'The post-pandemic inspection backlog has been cleared with a fresh wave of audits. Data integrity remains the leading compliance concern for regulators. Companies are adopting digital and AI-based tools to strengthen quality systems.', sentiment: 'Neutral' },
+  { title: 'Biocon Insulin Biosimilar Gets Expanded EU Approval — $2B Market Access', source: 'Economic Times', date: '2026-05-28', summary: 'The insulin glargine biosimilar has secured approval across EU markets. Biocon strengthens its position as a leading Indian biosimilars player globally. The approval unlocks a large addressable market in diabetes care.', sentiment: 'Positive' },
+  { title: 'Drug Price Control Order Expanded — 128 New Drugs Under NLEM', source: 'NPPA', date: '2026-04-18', summary: 'Cancer, diabetes, and cardiac drugs have been added to the essential medicines list. Price caps are expected to compress margins on affected products. Industry bodies have raised concerns over the impact on innovation.', sentiment: 'Negative' },
+  { title: 'India CDMO Market to Reach $25B by 2030 — McKinsey', source: 'McKinsey Report', date: '2026-03-24', summary: 'Global pharma outsourcing is accelerating on cost and capacity considerations. India offers a significant cost advantage over Western manufacturing. Syngene, Divi\'s, Laurus, and Piramal Pharma are among the key beneficiaries.', sentiment: 'Positive' },
+  { title: 'Mankind Pharma Acquires BSV Group for Rs 13,600 Cr', source: 'Business Standard', date: '2026-03-05', summary: 'The deal ranks among the largest domestic pharma acquisitions. BSV brings leadership in gynaecology and fertility therapies. Mankind is expanding its specialty portfolio beyond OTC and mass generics.', sentiment: 'Positive' },
+  { title: 'Generic Drug Shortage in USA — Indian Companies Rush to Fill Gap', source: 'Reuters', date: '2026-02-14', summary: 'Hundreds of drugs remain in shortage across the US market. Cipla, Dr Reddy\'s, and Aurobindo are securing expedited approvals to supply. The situation presents a multi-billion-dollar opportunity for Indian generics makers.', sentiment: 'Positive' },
+]
+
 // ===== NEWS TAB =====
 function NewsTab() {
-  const news = [
-    { title: 'India Pharma Exports Hit Record $27.9B in FY25', source: 'Pharmexcil', date: 'Apr 2025', summary: 'USA (29%), Europe (20%), Africa (16%) top destinations. Generics + vaccines drive growth. Target $50B by 2030.', sentiment: 'Positive' },
-    { title: 'PLI Scheme for Bulk Drugs - 35 Projects Commissioned', source: 'Ministry of Chemicals', date: 'Mar 2025', summary: 'Rs 15,000 Cr PLI for API manufacturing. India reducing China dependency for 53 critical APIs. Hyderabad, Gujarat clusters benefiting.', sentiment: 'Positive' },
-    { title: 'US FDA Inspections Resume Full Pace - 150+ Indian Plants Inspected in FY25', source: 'CDSCO', date: 'May 2025', summary: 'Post-COVID backlog cleared. 12 Warning Letters issued. Data integrity remains #1 concern. AI-based compliance tools gaining adoption.', sentiment: 'Neutral' },
-    { title: 'Biocon Insulin Biosimilar Gets EU Approval - $2B Market Access', source: 'Economic Times', date: 'Feb 2025', summary: 'Semglee (insulin glargine) approved across 27 EU countries. Biocon becomes only Indian company with insulin biosimilar in US + EU + Japan.', sentiment: 'Positive' },
-    { title: 'Drug Price Control Order Expanded - 128 New Drugs Under NLEM', source: 'NPPA', date: 'Jan 2025', summary: 'Government adds cancer, diabetes, cardiac drugs to essential list. Price caps reduce margins 5-15% for affected products. Industry opposes.', sentiment: 'Negative' },
-    { title: 'India CDMO Market to Reach $25B by 2030 - McKinsey', source: 'McKinsey Report', date: 'Mar 2025', summary: 'Global pharma outsourcing accelerating. India offers 30-40% cost advantage over US/EU. Syngene, Divis, Laurus, Piramal Pharma are top beneficiaries.', sentiment: 'Positive' },
-    { title: 'Mankind Pharma Acquires BSV Group for Rs 13,600 Cr', source: 'Business Standard', date: 'Jun 2025', summary: 'Largest domestic pharma M&A. BSV is leader in gynecology/fertility. Mankind strengthening specialty portfolio beyond OTC.', sentiment: 'Positive' },
-    { title: 'Generic Drug Shortage in USA - Indian Companies Rush to Fill Gap', source: 'Reuters', date: 'May 2025', summary: '300+ drugs in shortage in US market. Cipla, Dr Reddys, Aurobindo getting emergency approvals. Opportunity worth $5B+ for Indian generics.', sentiment: 'Positive' },
-  ]
-  return (
-    <div className="space-y-4">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"><h3 className="text-sm font-bold text-navy">Latest Pharma & Healthcare News</h3><p className="text-xs text-gray-500">Sources: Pharmexcil, CDSCO, FDA, IQVIA, Company Filings</p></div>
-      {news.map((n, i) => (<div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition"><div className="flex items-center justify-between mb-2"><h4 className="text-sm font-bold text-navy flex-1">{n.title}</h4><span className={`text-[9px] px-2 py-0.5 rounded-full font-semibold ml-2 ${n.sentiment === 'Positive' ? 'bg-green-100 text-green-700' : n.sentiment === 'Negative' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}`}>{n.sentiment}</span></div><p className="text-xs text-gray-600 mb-2">{n.summary}</p><div className="flex items-center gap-3 text-[10px] text-gray-400"><span className="font-semibold">{n.source}</span><span>•</span><span>{n.date}</span></div></div>))}
-    </div>
-  )
+  return <NewsFeed title="Pharma & Healthcare Industry News & Developments" items={newsData} />
 }

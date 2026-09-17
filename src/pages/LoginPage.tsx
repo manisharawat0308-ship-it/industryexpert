@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/useAuthStore'
+import { useUserStore } from '../store/useUserStore'
 import { Shield, User, Lock, Eye, EyeOff, BarChart3, TrendingUp, Activity, Zap } from 'lucide-react'
 
 export default function LoginPage() {
@@ -11,6 +12,8 @@ export default function LoginPage() {
   const login = useAuthStore((s) => s.login)
   const navigate = useNavigate()
 
+  const authenticate = useUserStore((s) => s.authenticate)
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -18,17 +21,17 @@ export default function LoginPage() {
     if (!username.trim()) { setError('Please enter a username'); return }
     if (!password.trim()) { setError('Please enter a password'); return }
 
-    const user = username.trim()
-    const pass = password.trim()
-
-    if (user === 'DeepakArora' && pass === 'deepak123') {
-      login('DeepakArora', 'admin')
-      navigate('/hub')
-    } else if (user === 'csg2' && pass === 'csg123') {
-      login('csg2', 'user')
+    const res = authenticate(username.trim(), password.trim())
+    if (res.ok && res.user) {
+      login({
+        username: res.user.username,
+        role: res.user.role,
+        token: 'local-session',
+        expiresAt: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(),
+      })
       navigate('/hub')
     } else {
-      setError('Invalid username or password. Contact admin for access.')
+      setError(res.error || 'Invalid username or password. Contact admin for access.')
     }
   }
 
@@ -129,14 +132,14 @@ export default function LoginPage() {
           <div className="bg-white rounded-2xl shadow-lg p-7 border border-gray-100">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Username</label>
+                <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Username or Email</label>
                 <div className="relative">
                   <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Enter username"
+                    placeholder="e.g. Deepak or deepak.beniwal@icicilombard.com"
                     className="input-field pl-10"
                     autoFocus
                   />

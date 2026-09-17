@@ -5,19 +5,27 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2, ShoppingCart
+  CloudRain, Zap, Calendar, Tag, Building2, ShoppingCart, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, LabelList
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { FMCG_GAME } from '../components/process-game/data/fmcgGame'
+import BusinessModel from '../components/BusinessModel'
+import { FMCG_BUSINESS } from '../data/businessModels/fmcgBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import HealthGauge from '../components/HealthGauge'
+import FMCGRiskAnalysis from '../components/risk-analysis/FMCGRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#d97706', '#B02A30', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722', '#0369a1']
 
-type FMCGTab = 'overview' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type FMCGTab = 'overview' | 'business' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== DATA =====
 const segmentData = [
@@ -88,14 +96,14 @@ const geographyData = [
 ]
 
 const newsData = [
-  { title: 'HUL announces 5-8% price hikes across soaps, detergents on palm oil surge', date: '2025-01-18', sentiment: 'negative', source: 'Economic Times' },
-  { title: 'ITC completes hotel business demerger; FMCG now 45% of revenue', date: '2025-01-12', sentiment: 'positive', source: 'Mint' },
-  { title: 'D2C brands Mamaearth, Wow cross Rs 1,000 Cr revenue milestone', date: '2024-12-28', sentiment: 'positive', source: 'Inc42' },
-  { title: 'Rural FMCG demand recovers: volume growth turns positive after 6 quarters', date: '2024-12-20', sentiment: 'positive', source: 'Nielsen IQ' },
-  { title: 'Quick commerce (Blinkit, Zepto) disrupts general trade; FMCG companies restructure', date: '2024-12-15', sentiment: 'neutral', source: 'Business Standard' },
-  { title: 'FSSAI tightens labeling norms: all packaged food to show sugar/salt front-of-pack', date: '2024-12-10', sentiment: 'negative', source: 'FSSAI Gazette' },
-  { title: 'Reliance Consumer Products crosses Rs 10,000 Cr in 2 years; disrupts pricing', date: '2024-12-05', sentiment: 'neutral', source: 'Moneycontrol' },
-  { title: 'India FMCG e-commerce crosses 10% share for first time; Amazon, Flipkart lead', date: '2024-11-28', sentiment: 'positive', source: 'Kantar Worldpanel' },
+  { title: 'HUL announces 5-8% price hikes across soaps, detergents on palm oil surge', date: '2026-08-12', sentiment: 'negative', source: 'Economic Times', summary: 'Rising palm oil and crude-linked input costs have prompted price increases across personal wash and home care. The hikes risk denting volume growth in price-sensitive rural markets. Analysts expect a temporary squeeze until commodity prices normalise.' },
+  { title: 'ITC completes hotel business demerger; FMCG now leading growth engine', date: '2026-07-20', sentiment: 'positive', source: 'Mint', summary: 'The demerger sharpens ITC\'s focus on its fast-growing packaged foods and personal care portfolio. Investors have welcomed the clearer capital allocation across segments. FMCG is now positioned as a core driver of future earnings.' },
+  { title: 'D2C brands Mamaearth, Wow cross Rs 1,000 Cr revenue milestone', date: '2026-06-16', sentiment: 'positive', source: 'Inc42', summary: 'Direct-to-consumer beauty and personal care brands continue to scale rapidly on digital-first distribution. Omnichannel expansion into general trade is broadening their reach. The growth underscores structural change in Indian consumer buying habits.' },
+  { title: 'Rural FMCG demand strengthens; volume growth outpaces urban for third quarter', date: '2026-05-29', sentiment: 'positive', source: 'NielsenIQ', summary: 'Improved monsoon and higher farm incomes have revived rural consumption. Volume-led recovery is easing pressure on companies dependent on hinterland demand. The trend is supporting a broad-based uptick across categories.' },
+  { title: 'Quick commerce (Blinkit, Zepto) reshapes distribution; FMCG firms restructure go-to-market', date: '2026-04-18', sentiment: 'neutral', source: 'Business Standard', summary: 'Rapid delivery platforms are capturing a growing share of urban FMCG sales. Brands are creating dedicated packs and pricing for the channel. Traditional distributors face disruption as demand shifts online.' },
+  { title: 'FSSAI tightens labeling norms; packaged food to show sugar and salt front-of-pack', date: '2026-03-25', sentiment: 'negative', source: 'FSSAI Gazette', summary: 'Front-of-pack nutrition labelling aims to help consumers make healthier choices. Manufacturers must reformulate or redesign packaging to comply. Categories high in sugar and salt may see near-term demand pressure.' },
+  { title: 'Reliance Consumer Products scales past Rs 10,000 Cr; aggressive pricing reshapes market', date: '2026-03-06', sentiment: 'neutral', source: 'Moneycontrol', summary: 'RCPL\'s rapid ramp-up is intensifying competition across staples and beverages. Sharp entry-level pricing is pressuring incumbents on mass-segment margins. The scale-up signals a new large competitor in Indian FMCG.' },
+  { title: 'India FMCG e-commerce crosses 12% share; Amazon and Flipkart lead online grocery', date: '2026-02-14', sentiment: 'positive', source: 'Kantar Worldpanel', summary: 'Online channels now account for a rising share of packaged goods sales. Higher digital penetration and quick commerce are expanding the addressable market. Brands are investing in e-commerce-specific assortments and analytics.' },
 ]
 
 const riskData = {
@@ -125,23 +133,27 @@ export default function FMCGDashboard() {
   const isAdmin = role === 'admin'
   const tabs: { id: FMCGTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Industry Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50"><div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between"><div className="flex items-center gap-4"><button onClick={() => navigate('/hub')} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition"><ArrowLeft size={14} /> Back to Hub</button><div className="h-6 w-px bg-gray-200"></div><div className="flex items-center gap-3"><img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" /><div><h1 className="text-sm font-extrabold text-navy">FMCG Industry</h1><p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p></div></div></div><div className="flex items-center gap-3">{isAdmin && <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-bold"><Settings size={13} /> Admin</button>}<button onClick={() => window.print()} className="flex items-center gap-1 px-3 py-1.5 bg-navy/5 text-navy rounded-lg text-xs font-semibold hover:bg-navy/10 transition"><Download size={13} /> Export</button><div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">{isAdmin ? <Shield size={13} className="text-maroon" /> : <User size={13} className="text-navy" />}<span className="text-xs font-bold">{username}</span></div></div></div></header>
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
+      <DashboardHeader title="FMCG Industry" />
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={FMCG_BUSINESS} />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
         {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="fmcg" />}
+        {activeTab === 'game' && <ProcessGame data={FMCG_GAME} />}
       </main>
       <footer className="bg-navy text-white py-3 fixed bottom-0 left-0 right-0 z-30"><div className="max-w-[1920px] mx-auto px-6 flex items-center justify-between"><p className="text-xs opacity-80">ICICI Lombard General Insurance Company Ltd.</p><p className="text-xs text-amber-300 font-semibold">For Internal Use Only</p><p className="text-xs opacity-80">Designed by <span className="font-bold">Deepak Arora</span></p></div></footer>
     </div>
@@ -206,6 +218,36 @@ function OverviewTab() {
 
 // ===== PLAYERS TAB =====
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => {
+    const d = playerDetails[p.name]
+    return {
+      rank: p.rank,
+      name: p.name,
+      revenue: p.revenue,
+      type: d?.type || 'FMCG',
+      segment: p.brands,
+      hq: d?.hq,
+      founded: d?.founded,
+      target: d?.expansion,
+      highlight: d?.moat,
+      extra: [
+        { label: 'Retail Reach', value: p.reach },
+        ...(p.marketCap > 0 ? [{ label: 'Market Cap', value: `₹${p.marketCap.toLocaleString('en-IN')} Cr` }] : []),
+      ],
+    }
+  })
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'FMCG',
+        donutTitle: 'Ownership Type Split',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const selected = selectedPlayer ? playerDetails[selectedPlayer] : null
   return (
@@ -223,6 +265,10 @@ function PlayersTab() {
 
 // ===== RISK TAB =====
 function RiskTab() {
+  return <FMCGRiskAnalysis />
+}
+
+function RiskTabLegacy() {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'cases'>('insurable')
   const [selectedCase, setSelectedCase] = useState<number | null>(null)
   return (
@@ -290,12 +336,5 @@ function GeographyTab() {
 
 // ===== NEWS TAB =====
 function NewsTab() {
-  return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-bold text-navy mb-4">Latest FMCG Industry News</h3>
-        <div className="space-y-3">{newsData.map((n, i) => (<div key={i} className="flex items-start gap-4 p-4 border border-gray-100 rounded-xl hover:shadow-sm transition"><div className={`w-2 h-2 rounded-full mt-2 shrink-0 ${n.sentiment === 'positive' ? 'bg-green-500' : n.sentiment === 'negative' ? 'bg-red-500' : 'bg-amber-500'}`}></div><div className="flex-1"><h4 className="text-sm font-bold text-navy">{n.title}</h4><div className="flex items-center gap-3 mt-1"><span className="text-[10px] text-gray-400">{n.date}</span><span className="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full font-medium">{n.source}</span><span className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${n.sentiment === 'positive' ? 'bg-green-50 text-green-700' : n.sentiment === 'negative' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700'}`}>{n.sentiment}</span></div></div></div>))}</div>
-      </div>
-    </div>
-  )
+  return <NewsFeed title="FMCG Industry News & Developments" items={newsData} />
 }

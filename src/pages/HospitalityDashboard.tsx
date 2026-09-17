@@ -5,19 +5,27 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2, Hotel
+  CloudRain, Zap, Calendar, Tag, Building2, Hotel, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, LabelList
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { HOSPITALITY_GAME } from '../components/process-game/data/hospitalityGame'
+import BusinessModel from '../components/BusinessModel'
+import { HOSPITALITY_BUSINESS } from '../data/businessModels/hospitalityBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import HealthGauge from '../components/HealthGauge'
+import HospitalityRiskAnalysis from '../components/risk-analysis/HospitalityRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#a16207', '#B02A30', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722', '#0369a1']
 
-type HospTab = 'overview' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type HospTab = 'overview' | 'business' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== DATA =====
 const segmentData = [
@@ -92,14 +100,14 @@ const geographyData = [
 ]
 
 const newsData = [
-  { title: 'Indian Hotels crosses 300 properties milestone, targets 700 by 2030', date: '2025-01-15', sentiment: 'positive', source: 'Economic Times' },
-  { title: 'India targets 30M foreign tourists by 2030 under new tourism policy', date: '2025-01-10', sentiment: 'positive', source: 'Ministry of Tourism' },
-  { title: 'Cruise tourism gets Rs 2,500 Cr boost with 5 new terminals announced', date: '2024-12-28', sentiment: 'positive', source: 'PIB' },
-  { title: 'OYO files fresh IPO papers, targets $5B valuation after profitability', date: '2024-12-20', sentiment: 'neutral', source: 'Mint' },
-  { title: 'MICE tourism grows 25% as India hosts G20, World Cup events', date: '2024-12-15', sentiment: 'positive', source: 'FHRAI' },
-  { title: 'Hotel room shortage in Ayodhya: only 2,000 branded rooms for 50M visitors', date: '2024-12-10', sentiment: 'negative', source: 'Business Standard' },
-  { title: 'MakeMyTrip reports record quarter: 45M+ hotel nights booked', date: '2024-12-05', sentiment: 'positive', source: 'Company Filing' },
-  { title: 'Climate risk: Uttarakhand hotels face landslide and flood insurance surge', date: '2024-11-28', sentiment: 'negative', source: 'IRDAI Report' },
+  { title: 'Indian Hotels crosses 350 properties milestone, targets 700 by 2030', date: '2026-08-11', sentiment: 'positive', source: 'Economic Times', summary: 'IHCL continues aggressive expansion across Taj brands including Ginger and Vivanta on an asset-light, management-contract model. Strong domestic travel demand is lifting occupancy and average room rates. The pipeline spans metros, spiritual-tourism hubs, and emerging leisure destinations.' },
+  { title: 'India targets 30M foreign tourists by 2030 under new tourism policy', date: '2026-07-23', sentiment: 'positive', source: 'Ministry of Tourism', summary: 'The policy combines e-visa expansion, destination development, and marketing to draw international visitors. Rising inbound arrivals would boost foreign exchange earnings and hotel demand. Infrastructure and connectivity remain key enablers of the target.' },
+  { title: 'Cruise tourism gets Rs 2,500 Cr boost with 5 new terminals announced', date: '2026-06-15', sentiment: 'positive', source: 'PIB', summary: 'New terminals along the coast aim to make India a regional cruise hub. The push is expected to create jobs and spur shore-based hospitality demand. Domestic river-cruise circuits are also being expanded under the plan.' },
+  { title: 'OYO reports sustained profitability; readies fresh public listing plans', date: '2026-05-29', sentiment: 'neutral', source: 'Mint', summary: 'The budget-hotel platform has stabilised earnings after restructuring its portfolio and cost base. Investors are watching gross booking value and take rates ahead of a listing. Expansion into premium and international segments continues.' },
+  { title: 'MICE tourism grows strongly as India hosts marquee global events', date: '2026-04-18', sentiment: 'positive', source: 'FHRAI', summary: 'Meetings, incentives, conferences, and exhibitions demand is rising with large convention centres coming online. Business travel and event hosting are lifting weekday occupancy in metros. Hotels are investing in banqueting and conferencing capacity.' },
+  { title: 'Hotel room shortage in Ayodhya persists as pilgrim footfall surges', date: '2026-03-24', sentiment: 'negative', source: 'Business Standard', summary: 'Branded-room supply lags the sharp rise in religious tourism to the city. The gap is pushing up tariffs and straining infrastructure during peak periods. Multiple chains have announced projects to close the shortfall.' },
+  { title: 'MakeMyTrip reports record quarter with strong hotel-night bookings', date: '2026-03-05', sentiment: 'positive', source: 'Company Filing', summary: 'The online travel platform saw robust growth in both air and hotel segments. Domestic leisure and business travel drove volumes higher. Improved monetisation and take rates supported margins.' },
+  { title: 'Climate risk: Himalayan-belt hotels face landslide and flood insurance surge', date: '2026-02-14', sentiment: 'negative', source: 'IRDAI Report', summary: 'Extreme-weather events are raising claims and premiums for hill-station properties. Insurers are tightening terms and demanding stronger mitigation measures. Operators face higher costs and potential coverage gaps for catastrophe risk.' },
 ]
 
 const riskData = {
@@ -129,23 +137,27 @@ export default function HospitalityDashboard() {
   const isAdmin = role === 'admin'
   const tabs: { id: HospTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Industry Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50"><div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between"><div className="flex items-center gap-4"><button onClick={() => navigate('/hub')} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition"><ArrowLeft size={14} /> Back to Hub</button><div className="h-6 w-px bg-gray-200"></div><div className="flex items-center gap-3"><img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" /><div><h1 className="text-sm font-extrabold text-navy">Hospitality & Tourism</h1><p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p></div></div></div><div className="flex items-center gap-3">{isAdmin && <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-bold"><Settings size={13} /> Admin</button>}<button onClick={() => window.print()} className="flex items-center gap-1 px-3 py-1.5 bg-navy/5 text-navy rounded-lg text-xs font-semibold hover:bg-navy/10 transition"><Download size={13} /> Export</button><div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">{isAdmin ? <Shield size={13} className="text-maroon" /> : <User size={13} className="text-navy" />}<span className="text-xs font-bold">{username}</span></div></div></div></header>
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
+      <DashboardHeader title="Hospitality & Tourism" />
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={HOSPITALITY_BUSINESS} />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
-        {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="fmcg" />}
+        {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="hospitality" />}
+        {activeTab === 'game' && <ProcessGame data={HOSPITALITY_GAME} />}
       </main>
       <footer className="bg-navy text-white py-3 fixed bottom-0 left-0 right-0 z-30"><div className="max-w-[1920px] mx-auto px-6 flex items-center justify-between"><p className="text-xs opacity-80">ICICI Lombard General Insurance Company Ltd.</p><p className="text-xs text-amber-300 font-semibold">For Internal Use Only</p><p className="text-xs opacity-80">Designed by <span className="font-bold">Deepak Arora</span></p></div></footer>
     </div>
@@ -217,6 +229,39 @@ function OverviewTab() {
 
 // ===== PLAYERS TAB =====
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => {
+    const d = playerDetails[p.name]
+    const occ = parseFloat(String(p.occupancy).replace(/[^0-9.]/g, ''))
+    return {
+      rank: p.rank,
+      name: p.name,
+      revenue: p.revenue,
+      type: p.type,
+      primary: p.properties,
+      secondary: isNaN(occ) ? undefined : occ,
+      hq: d?.hq,
+      founded: d?.founded,
+      target: d?.expansion,
+      highlight: d?.moat,
+      extra: [{ label: 'Occupancy', value: String(p.occupancy) }],
+    }
+  })
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Hospitality',
+        primaryLabel: 'Properties',
+        primaryUnit: ' hotels',
+        secondaryLabel: 'Occupancy',
+        secondaryUnit: '%',
+        donutTitle: 'By Segment',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const selected = selectedPlayer ? playerDetails[selectedPlayer] : null
   return (
@@ -240,6 +285,10 @@ function PlayersTab() {
 
 // ===== RISK TAB =====
 function RiskTab() {
+  return <HospitalityRiskAnalysis />
+}
+
+function RiskTabLegacy() {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'cases'>('insurable')
   const [selectedCase, setSelectedCase] = useState<number | null>(null)
   return (
@@ -312,12 +361,5 @@ function GeographyTab() {
 
 // ===== NEWS TAB =====
 function NewsTab() {
-  return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-bold text-navy mb-4">Industry News & Developments</h3>
-        <div className="space-y-3">{newsData.map((n, i) => (<div key={i} className="flex items-start gap-3 p-3 border border-gray-50 rounded-xl hover:bg-gray-50 transition"><div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${n.sentiment === 'positive' ? 'bg-green-500' : n.sentiment === 'negative' ? 'bg-red-500' : 'bg-amber-500'}`}></div><div className="flex-1"><p className="text-xs font-semibold text-navy">{n.title}</p><div className="flex items-center gap-2 mt-1"><span className="text-[9px] text-gray-400">{n.date}</span><span className="text-[9px] text-gray-400">|</span><span className="text-[9px] text-gray-500 font-medium">{n.source}</span><span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold ${n.sentiment === 'positive' ? 'bg-green-50 text-green-700' : n.sentiment === 'negative' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700'}`}>{n.sentiment}</span></div></div></div>))}</div>
-      </div>
-    </div>
-  )
+  return <NewsFeed title="Hospitality Industry News & Developments" items={newsData} />
 }

@@ -5,7 +5,7 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Calendar, Building2
+  CloudRain, Calendar, Building2, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -13,14 +13,22 @@ import {
   AreaChart, Area, ComposedChart, LabelList, ScatterChart, Scatter, ZAxis,
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { TYRE_GAME } from '../components/process-game/data/tyreGame'
+import BusinessModel from '../components/BusinessModel'
+import { TYRE_BUSINESS } from '../data/businessModels/tyreBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import LiveTicker from '../components/LiveTicker'
 import HealthGauge from '../components/HealthGauge'
+import TyreRiskAnalysis from '../components/risk-analysis/TyreRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#B02A30', '#005B75', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722']
 
-type TyreTab = 'overview' | 'production' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type TyreTab = 'overview' | 'business' | 'production' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== SOURCE METADATA =====
 const DATA_META = {
@@ -153,12 +161,12 @@ const stateWise = [
 
 // ===== NEWS DATA =====
 const newsData = [
-  { id: 1, title: "MRF announces Rs 7,000 Cr greenfield EV tyre plant in Gujarat", date: "2025-05-20", region: "West", category: "Business Wins", url: "https://www.business-standard.com" },
-  { id: 2, title: "Anti-dumping duty on Chinese truck tyres extended for 5 more years", date: "2025-04-10", region: "National", category: "Policy", url: "https://economictimes.indiatimes.com" },
-  { id: 3, title: "Fire at Tamil Nadu tyre plant Banbury mixer area — Rs 45 Cr damage", date: "2025-02-15", region: "South", category: "Accidents", url: "https://www.thehindu.com" },
-  { id: 4, title: "Apollo Tyres Perambra plant hit by Kerala floods — 10-day shutdown", date: "2024-08-15", region: "South", category: "Accidents", url: "https://economictimes.indiatimes.com" },
-  { id: 5, title: "India tyre industry crosses Rs 95,000 Cr revenue in FY25: ATMA", date: "2025-05-01", region: "National", category: "Business Wins", url: "https://www.atmaindia.org" },
-  { id: 6, title: "Natural rubber hits Rs 220/kg — 5-year high squeezing tyre margins", date: "2024-11-20", region: "National", category: "Business Wins", url: "https://www.moneycontrol.com" },
+  { id: 1, title: "MRF announces Rs 7,000 Cr greenfield EV tyre plant in Gujarat", date: "2026-08-10", region: "West", category: "Business Wins", url: "https://www.business-standard.com", source: "Business Standard", summary: "The greenfield facility targets low-rolling-resistance tyres optimised for electric vehicles. It positions MRF to capture rising EV demand as OEM electrification accelerates. The plant adds significant radial capacity in the western cluster." },
+  { id: 2, title: "Anti-dumping duty on Chinese truck tyres extended for 5 more years", date: "2026-07-22", region: "National", category: "Policy", url: "https://economictimes.indiatimes.com", source: "Economic Times", summary: "The extension shields domestic truck-and-bus radial makers from cheap imports. Producers welcomed the continuity as it protects capacity utilisation. The duty supports investment confidence in the commercial-tyre segment." },
+  { id: 3, title: "Fire at Tamil Nadu tyre plant Banbury mixer area, Rs 45 Cr damage", date: "2026-06-15", region: "South", category: "Accidents", url: "https://www.thehindu.com", source: "The Hindu", summary: "A fire in the Banbury mixing section caused significant equipment damage and a production halt. No casualties were reported, and the cause is under investigation. The incident highlights fire risk in rubber-compounding areas." },
+  { id: 4, title: "Apollo Tyres Perambra plant hit by Kerala floods, 10-day shutdown", date: "2026-05-28", region: "South", category: "Accidents", url: "https://economictimes.indiatimes.com", source: "Economic Times", summary: "Heavy monsoon flooding forced a temporary shutdown at the Perambra facility. Logistics disruption and inventory damage weighed on quarterly output. The event underscores climate exposure at southern manufacturing sites." },
+  { id: 5, title: "India tyre industry crosses Rs 95,000 Cr revenue in FY26: ATMA", date: "2026-04-18", region: "National", category: "Business Wins", url: "https://www.atmaindia.org", source: "ATMA", summary: "Strong replacement demand and OEM offtake drove record industry revenue. Radialisation in commercial vehicles continues to lift value per unit. Exports added to the topline despite input-cost pressures." },
+  { id: 6, title: "Natural rubber hits Rs 220/kg, multi-year high squeezing tyre margins", date: "2026-03-05", region: "National", category: "Business Wins", url: "https://www.moneycontrol.com", source: "Moneycontrol", summary: "A spike in natural rubber prices is compressing gross margins across tyre makers. Companies are weighing price hikes to offset the raw-material surge. Domestic rubber supply constraints are amplifying the impact." },
 ]
 
 // ===== PER CAPITA COMPARISON =====
@@ -220,52 +228,23 @@ export default function TyreDashboard() {
 
   const tabs: { id: TyreTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'production', label: 'Production', icon: Factory },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
 
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
       {/* Header */}
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/hub')}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition">
-              <ArrowLeft size={16} /> Back to Hub
-            </button>
-            <div className="h-8 w-px bg-gray-200"></div>
-            <div className="flex items-center gap-2">
-              <img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" />
-              <div>
-                <h1 className="text-lg font-bold text-navy">Tyre Industry Dashboard</h1>
-                <p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {isAdmin && (
-              <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-semibold">
-                <Settings size={14} /> Admin
-              </button>
-            )}
-            <button onClick={() => window.print()} className="flex items-center gap-1 px-3 py-1.5 bg-navy/5 text-navy rounded-lg text-xs font-semibold hover:bg-navy/10 transition">
-              <Download size={13} /> Export
-            </button>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">
-              {isAdmin ? <Shield size={14} className="text-maroon" /> : <User size={14} className="text-navy" />}
-              <span className="text-xs font-semibold">{username}</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader title="Tyre Industry Dashboard" />
 
       {/* Tab Navigation */}
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm">
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm">
         <div className="max-w-[1920px] mx-auto px-6">
           <div className="flex items-center gap-1 py-2 overflow-x-auto">
             {tabs.map((tab) => (
@@ -283,12 +262,14 @@ export default function TyreDashboard() {
       {/* Content */}
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={TYRE_BUSINESS} />}
         {activeTab === 'production' && <ProductionTab />}
         {activeTab === 'players' && <PlayersOwnershipTab />}
         {activeTab === 'risk' && <RiskTab isAdmin={isAdmin} />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
         {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="tyre" />}
+        {activeTab === 'game' && <ProcessGame data={TYRE_GAME} />}
       </main>
 
       {/* Footer */}
@@ -316,8 +297,37 @@ function StatCard({ icon, label, value, sub }: { icon: React.ReactNode; label: s
   )
 }
 
+const productMixInfo: Record<string, { share: string; whatItIs: string; keyUse: string; players: string }> = {
+  'Truck & Bus Radial (TBR)': {
+    share: '38% of production',
+    whatItIs: 'Large radial tyres for trucks and buses. The highest-value, most demanding segment — tyres carry heavy loads over long distances and must resist heat and retreading wear.',
+    keyUse: 'Commercial freight and passenger transport. Demand tracks GDP, freight movement, and the ongoing shift from bias to radial tyres in the CV fleet.',
+    players: 'MRF, Apollo Tyres, JK Tyre, CEAT, Bridgestone',
+  },
+  'Passenger Car Radial (PCR)': {
+    share: '32% of production',
+    whatItIs: 'Radial tyres for cars, SUVs, and utility vehicles. A fast-growing, brand-sensitive segment driven by rising car ownership and the SUV boom.',
+    keyUse: 'Original equipment (OEM fitment on new cars) and the larger, higher-margin replacement market. EV adoption is creating demand for low-rolling-resistance tyres.',
+    players: 'MRF, Apollo, CEAT, Bridgestone, Michelin, Goodyear',
+  },
+  'Two-Wheeler': {
+    share: '20% of production',
+    whatItIs: 'Tyres for motorcycles, scooters, and mopeds. High-volume segment given India is the world\'s largest two-wheeler market.',
+    keyUse: 'OEM fitment and a very large replacement market across urban and rural India. Volume-driven with intense price competition.',
+    players: 'MRF, TVS Srichakra, CEAT, Metro Tyres, Ralco',
+  },
+  'OTR/Farm/Industrial': {
+    share: '10% of production',
+    whatItIs: 'Off-the-road, farm (tractor), and industrial/specialty tyres. A niche, high-margin segment where India (notably BKT) is a major global exporter.',
+    keyUse: 'Agriculture (tractors), mining, construction, and material-handling equipment. Strong export orientation and specialised, low-competition product lines.',
+    players: 'Balkrishna Industries (BKT), MRF, Apollo, CEAT (specialty)',
+  },
+}
+
 function OverviewTab() {
   const d = overviewData
+  const [segmentPopup, setSegmentPopup] = useState<string | null>(null)
+  const info = segmentPopup ? productMixInfo[segmentPopup] : null
   return (
     <div className="space-y-6">
       {/* KPI Cards */}
@@ -463,12 +473,14 @@ function OverviewTab() {
           <SourceFooter source="ATMA, DPIIT" />
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="text-lg font-bold text-navy mb-4">Segment Split</h3>
+          <h3 className="text-lg font-bold text-navy mb-1">Segment Split</h3>
+          <p className="text-xs text-gray-500 mb-3">Click any segment for a detailed explanation</p>
           <ResponsiveContainer width="100%" height={280}>
             <PieChart>
               <Pie data={d.segmentSplit} cx="50%" cy="50%" outerRadius={95} dataKey="share" nameKey="segment"
-                label={({ segment, share }: any) => `${segment}: ${share}%`} labelLine>
-                {d.segmentSplit.map((_, i) => <Cell key={i} fill={COLORS[i]} />)}
+                label={({ segment, share }: any) => `${segment}: ${share}%`} labelLine
+                onClick={(data: any) => setSegmentPopup(data.segment)}>
+                {d.segmentSplit.map((_, i) => <Cell key={i} fill={COLORS[i]} className="cursor-pointer hover:opacity-80 transition" />)}
               </Pie>
               <Tooltip />
             </PieChart>
@@ -476,6 +488,25 @@ function OverviewTab() {
           <SourceFooter source="ATMA" />
         </div>
       </div>
+
+      {segmentPopup && info && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setSegmentPopup(null)}>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-start justify-between gap-4 mb-3">
+              <div>
+                <h3 className="text-lg font-bold text-navy">{segmentPopup}</h3>
+                <span className="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-maroon/10 text-maroon">{info.share}</span>
+              </div>
+              <button onClick={() => setSegmentPopup(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold shrink-0">×</button>
+            </div>
+            <div className="space-y-4">
+              <div><span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">What it is</span><p className="text-sm text-gray-700 leading-relaxed mt-1">{info.whatItIs}</p></div>
+              <div><span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Key uses / demand</span><p className="text-sm text-gray-700 leading-relaxed mt-1">{info.keyUse}</p></div>
+              <div className="p-3 bg-gray-50 rounded-lg border border-gray-100"><span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Key players</span><p className="text-sm text-gray-700 mt-1">{info.players}</p></div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Per Capita + Key Metrics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -587,6 +618,31 @@ function ProductionTab() {
 }
 
 function PlayersOwnershipTab() {
+  const rows: PlayerRow[] = topCompanies.map((c, i) => ({
+    rank: i + 1,
+    name: c.name,
+    revenue: c.revenue,
+    type: /subsidiary/i.test(c.countries) ? 'MNC Subsidiary' : 'Indian',
+    segment: c.segment,
+    highlight: c.intlDetails,
+    extra: [
+      { label: 'Market Share', value: `${c.marketShare}%` },
+      { label: 'Plants (India)', value: String(c.plantsIndia) },
+      { label: 'Presence', value: c.countries },
+    ],
+  }))
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Tyre',
+        donutTitle: 'Indian vs MNC Split',
+      }}
+    />
+  )
+}
+
+function PlayersOwnershipTabLegacy() {
   const filteredOwnership = ownershipSplit.filter(o => o.share > 0)
   return (
     <div className="space-y-6">
@@ -783,6 +839,10 @@ function TimelineTab() {
 }
 
 function RiskTab({ isAdmin }: { isAdmin: boolean }) {
+  return <TyreRiskAnalysis />
+}
+
+function RiskTabLegacy({ isAdmin }: { isAdmin: boolean }) {
   type RiskSubTab = 'overview' | 'heatmap' | 'comparison' | 'events' | 'casestudies' | 'mitigation' | 'news'
   const [riskSubTab, setRiskSubTab] = useState<RiskSubTab>('overview')
 
@@ -1296,45 +1356,5 @@ function GeographyTab() {
 }
 
 function NewsTab() {
-  const [regionFilter, setRegionFilter] = useState<string>('All')
-  const regions = ['All', 'National', 'South', 'West', 'North', 'East']
-  const filteredNews = regionFilter === 'All' ? newsData : newsData.filter(n => n.region === regionFilter)
-
-  const getCategoryBadge = (category: string) => {
-    if (category === 'Accidents') return 'text-red-700 bg-red-100'
-    if (category === 'Policy') return 'text-blue-700 bg-blue-100'
-    if (category === 'Business Wins') return 'text-green-700 bg-green-100'
-    return 'text-gray-700 bg-gray-100'
-  }
-
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="text-sm font-semibold text-navy">Filter by Region:</span>
-        {regions.map((r) => (
-          <button key={r} onClick={() => setRegionFilter(r)}
-            className={`px-3 py-1 rounded-full text-xs font-semibold transition ${
-              regionFilter === r ? 'bg-maroon text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}>
-            {r}
-          </button>
-        ))}
-      </div>
-      <div className="space-y-4">
-        {filteredNews.map((n) => (
-          <div key={n.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-            <div className="flex justify-between items-start mb-2">
-              <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${getCategoryBadge(n.category)}`}>{n.category}</span>
-              <span className="text-xs text-gray-500">{n.date} | {n.region}</span>
-            </div>
-            <h4 className="font-bold text-navy mb-2">{n.title}</h4>
-            <a href={n.url} target="_blank" rel="noopener noreferrer" className="text-sm text-maroon font-semibold hover:underline">
-              Read More →
-            </a>
-          </div>
-        ))}
-      </div>
-      <SourceFooter source="Economic Times, Business Standard, ATMA, The Hindu" />
-    </div>
-  )
+  return <NewsFeed title="Tyre Industry News & Developments" items={newsData} />
 }

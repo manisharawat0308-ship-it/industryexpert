@@ -1,6 +1,7 @@
 import { create } from 'zustand'
+import { ADDITIONAL_COMPANIES } from './additionalCompanies'
 
-export type IndustryId = 'steel' | 'cement' | 'paper' | 'sugar' | 'automobile' | 'tyre' | 'textile' | 'electronics' | 'fmcg'
+export type IndustryId = 'steel' | 'cement' | 'paper' | 'sugar' | 'automobile' | 'tyre' | 'textile' | 'electronics' | 'fmcg' | 'pharma' | 'bfsi' | 'aviation' | 'startups' | 'hospitality' | 'chemical' | 'infrastructure' | 'fertilizer'
 
 export interface CompanySuggestion {
   id: string
@@ -88,7 +89,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'tata-steel', name: 'Tata Steel', industry: 'steel', ticker: 'TATASTEEL',
     founded: 1907, headquarters: 'Mumbai, Maharashtra', employees: '77,000+', marketCap: '₹1.85 Lakh Cr',
     ceo: 'T.V. Narendran', website: 'https://www.tatasteel.com',
-    description: "India's largest steel producer and among the top 10 globally. Operates in 26 countries with key operations in India, Netherlands, and UK. Vertically integrated with captive iron ore and coal mines.",
+    description: "​India's largest steel producer and among the top 10 globally. Operates in 26 countries with key operations in India, Netherlands, and UK. Vertically integrated with captive iron ore and coal mines. In FY25 the company reported revenue of ₹2,29,518 Cr and net profit of ₹10,250 Cr, at an EBITDA margin of around 15.0%. Its revenue is led by hot rolled coils/sheets (35% of sales), complemented by cold rolled products and long products. India's #1 steel producer by revenue. India (Jamshedpur, Kalinganagar, Meramandali, Sahibabad, Khopoli), Netherlands (IJmuiden — 7 MTPA flat products), UK (Port Talbot — 5 MTPA under restructuring).",
     products: [
       { name: 'Hot Rolled Coils/Sheets', revenueShare: 35, description: 'Automotive, construction, general engineering' },
       { name: 'Cold Rolled Products', revenueShare: 22, description: 'High-quality flat steel for appliances and automobiles' },
@@ -197,7 +198,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'jsw-steel', name: 'JSW Steel', industry: 'steel', ticker: 'JSWSTEEL',
     founded: 1982, headquarters: 'Mumbai, Maharashtra', employees: '65,000+', marketCap: '₹2.25 Lakh Cr',
     ceo: 'Jayant Acharya (Jt. MD & CEO)', website: 'https://www.jswsteel.in',
-    description: "India's second-largest private steel producer with 28.5 MTPA capacity. Part of JSW Group. Operates integrated plants at Vijayanagar, Dolvi, and Salem.",
+    description: "​India's second-largest private steel producer with 28.5 MTPA capacity. Part of JSW Group. Operates integrated plants at Vijayanagar, Dolvi, and Salem. In FY25 the company reported revenue of ₹1,72,500 Cr and net profit of ₹12,400 Cr, at an EBITDA margin of around 19.0%. Its revenue is led by flat products (45% of sales), complemented by long products and special steel & alloys. India's #2 private steel producer. India (Vijayanagar 18 MTPA — world's largest single-location plant, Dolvi 10 MTPA, Salem 1 MTPA).",
     products: [
       { name: 'Flat Products (HR/CR/Coated)', revenueShare: 45, description: 'Hot rolled, cold rolled, and galvanized flat steel' },
       { name: 'Long Products', revenueShare: 20, description: 'TMT bars, wire rods, structural sections' },
@@ -293,7 +294,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'sail', name: 'Steel Authority of India (SAIL)', industry: 'steel', ticker: 'SAIL',
     founded: 1954, headquarters: 'New Delhi', employees: '60,000+', marketCap: '₹52,000 Cr',
     ceo: 'Amarendu Prakash (Chairman)', website: 'https://www.sail.co.in',
-    description: "India's largest PSU steel producer under Ministry of Steel. Operates 5 integrated plants at Bhilai, Rourkela, Durgapur, Bokaro, and Burnpur. Combined capacity 21.4 MTPA.",
+    description: "​India's largest PSU steel producer under Ministry of Steel. Operates 5 integrated plants at Bhilai, Rourkela, Durgapur, Bokaro, and Burnpur. Combined capacity 21.4 MTPA. In FY25 the company reported revenue of ₹1,02,000 Cr and net profit of ₹3,800 Cr, at an EBITDA margin of around 11.3%. Its revenue is led by rails & structurals (25% of sales), complemented by plates & sheets and hot rolled coils. India's #2 steel producer by capacity (21.4 MTPA). Pan-India presence with plants across Chhattisgarh (Bhilai), Odisha (Rourkela), West Bengal (Durgapur, Burnpur), Jharkhand (Bokaro), Tamil Nadu (Salem), Karnataka (Bhadravati).",
     products: [
       { name: 'Rails & Structurals', revenueShare: 25, description: 'World-class rails for Indian Railways' },
       { name: 'Plates & Sheets', revenueShare: 25, description: 'Ship plates, boiler plates for defense' },
@@ -387,7 +388,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'jspl', name: 'Jindal Steel & Power (JSPL)', industry: 'steel', ticker: 'JINDALSTEL',
     founded: 1952, headquarters: 'New Delhi', employees: '45,000+', marketCap: '₹75,000 Cr',
     ceo: 'Bimlendra Jha (MD)', website: 'https://www.jindalsteelpower.com',
-    description: "Part of O.P. Jindal Group. Leading steel and power producer with 10.6 MTPA steelmaking capacity. Plants at Raigarh (Chhattisgarh) and Angul (Odisha). Also 3,400 MW power capacity.",
+    description: "​Part of O.P. Jindal Group. Leading steel and power producer with 10.6 MTPA steelmaking capacity. Plants at Raigarh (Chhattisgarh) and Angul (Odisha). Also 3,400 MW power capacity. In FY25 the company reported revenue of ₹55,000 Cr and net profit of ₹5,500 Cr, at an EBITDA margin of around 23.3%. Its revenue is led by rails & structural steel (28% of sales), complemented by plates & coils and tmt bars. India's #4 steel producer by capacity. India: Raigarh (Chhattisgarh — 6 MTPA steel + 2,600 MW power), Angul (Odisha — 6 MTPA steel, expanding to 12 MTPA).",
     products: [
       { name: 'Rails & Structural Steel', revenueShare: 28, description: 'Head-hardened rails, H-beams, channels' },
       { name: 'Plates & Coils', revenueShare: 25, description: 'Hot rolled plates and coils' },
@@ -482,7 +483,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'amns-india', name: 'ArcelorMittal Nippon Steel India', industry: 'steel', ticker: 'AMNS (Unlisted)',
     founded: 2019, headquarters: 'Mumbai, Maharashtra', employees: '30,000+', marketCap: 'Unlisted',
     ceo: 'Dilip Oommen (CEO)', website: 'https://www.amns.in',
-    description: "JV between ArcelorMittal and Nippon Steel, formed after acquiring Essar Steel in 2019. 9 MTPA integrated plant at Hazira, Gujarat. Bringing global steelmaking expertise to India.",
+    description: "​JV between ArcelorMittal and Nippon Steel, formed after acquiring Essar Steel in 2019. 9 MTPA integrated plant at Hazira, Gujarat. Bringing global steelmaking expertise to India. In FY25 the company reported revenue of ₹64,000 Cr and net profit of ₹5,800 Cr, at an EBITDA margin of around 20.0%. Its revenue is led by hot rolled coils (35% of sales), complemented by cold rolled & coated and pellets & dri. India's #3 private steel producer. Single mega complex at Hazira, Gujarat (9 MTPA, expanding to 15 MTPA).",
     products: [
       { name: 'Hot Rolled Coils', revenueShare: 35, description: 'Automotive and construction-grade HR coils' },
       { name: 'Cold Rolled & Coated', revenueShare: 25, description: 'Galvanized for auto and appliances' },
@@ -577,7 +578,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'vizag-steel', name: 'Rashtriya Ispat Nigam (Vizag Steel)', industry: 'steel', ticker: 'RINL (Unlisted)',
     founded: 1982, headquarters: 'Visakhapatnam, Andhra Pradesh', employees: '17,000+', marketCap: 'Unlisted (PSU)',
     ceo: 'Atul Bhatt (CMD)', website: 'https://www.vizagsteel.com',
-    description: "India's first shore-based integrated steel plant. A Navratna PSU under Ministry of Steel with 7.3 MTPA capacity at Visakhapatnam. Known for long products — wire rods, structural steel, and special steels.",
+    description: "​India's first shore-based integrated steel plant. A Navratna PSU under Ministry of Steel with 7.3 MTPA capacity at Visakhapatnam. Known for long products — wire rods, structural steel, and special steels. In FY25 the company reported revenue of ₹25,800 Cr and net profit of ₹-1,500 Cr (Loss), at an EBITDA margin of around 4.7%. Its revenue is led by wire rods (35% of sales), complemented by structural steel and bars & rounds. India's 5th largest steel producer by capacity. Single location at Visakhapatnam, Andhra Pradesh with 7.3 MTPA capacity.",
     products: [
       { name: 'Wire Rods', revenueShare: 35, description: 'High-quality wire rods for fasteners and springs' },
       { name: 'Structural Steel', revenueShare: 25, description: 'Beams, channels, and angles for construction' },
@@ -669,7 +670,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'nmdc-steel', name: 'NMDC Steel (formerly Nagarnar)', industry: 'steel', ticker: 'NMDCSTEEL',
     founded: 2023, headquarters: 'Jagdalpur, Chhattisgarh', employees: '4,500+', marketCap: '₹8,500 Cr',
     ceo: 'Amitava Mukherjee (CMD, NMDC)', website: 'https://www.nmdc.co.in',
-    description: "Newly commissioned 3 MTPA integrated steel plant at Nagarnar, Chhattisgarh. Demerged from NMDC Ltd in 2023. Has captive iron ore supply from NMDC mines. One of the most modern steel plants in India.",
+    description: "​Newly commissioned 3 MTPA integrated steel plant at Nagarnar, Chhattisgarh. Demerged from NMDC Ltd in 2023. Has captive iron ore supply from NMDC mines. One of the most modern steel plants in India. In FY25 the company reported revenue of ₹14,200 Cr and net profit of ₹350 Cr, at an EBITDA margin of around 12.7%. Its revenue is led by hot rolled coils (45% of sales), complemented by hr plates and slabs. Newest entrant in integrated steel. Single plant location at Nagarnar, Chhattisgarh.",
     products: [
       { name: 'Hot Rolled Coils', revenueShare: 45, description: 'Primary product — flat steel for construction and auto' },
       { name: 'HR Plates', revenueShare: 25, description: 'Heavy plates for infrastructure projects' },
@@ -760,7 +761,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'jindal-stainless', name: 'Jindal Stainless', industry: 'steel', ticker: 'JSL',
     founded: 1970, headquarters: 'New Delhi', employees: '10,000+', marketCap: '₹55,000 Cr',
     ceo: 'Abhyuday Jindal (MD)', website: 'https://www.jindalstainless.com',
-    description: "India's largest stainless steel manufacturer and among the top 5 globally. Capacity of 2.9 MTPA with plants at Jajpur (Odisha) and Hisar (Haryana). Dominates Indian stainless steel market with 35%+ share.",
+    description: "​India's largest stainless steel manufacturer and among the top 5 globally. Capacity of 2.9 MTPA with plants at Jajpur (Odisha) and Hisar (Haryana). Dominates Indian stainless steel market with 35%+ share. In FY25 the company reported revenue of ₹41,000 Cr and net profit of ₹3,800 Cr, at an EBITDA margin of around 15.1%. Its revenue is led by stainless steel flat products (55% of sales), complemented by stainless steel long products and specialty & high-value grades. India's undisputed #1 stainless steel producer (35%+ market share in organized segment). India: Jajpur (Odisha — 1.8 MTPA, primary integrated plant), Hisar (Haryana — 1.1 MTPA, downstream focused).",
     products: [
       { name: 'Stainless Steel Flat Products', revenueShare: 55, description: 'Cold rolled and hot rolled stainless steel coils/sheets' },
       { name: 'Stainless Steel Long Products', revenueShare: 15, description: 'Bars, rods, and angles in various grades' },
@@ -856,7 +857,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'tata-steel-long', name: 'Tata Steel Long Products', industry: 'steel', ticker: 'TATASTLLP',
     founded: 2018, headquarters: 'Jamshedpur, Jharkhand', employees: '5,000+', marketCap: '₹6,500 Cr',
     ceo: 'Ashish Anupam (MD)', website: 'https://www.tatasteellp.com',
-    description: "Subsidiary of Tata Steel focused on specialty long products. Operates at Gamharia (Jharkhand) with capacity of 1.1 MTPA. Specializes in special bars, wire rods, and DRI manufacturing.",
+    description: "​Subsidiary of Tata Steel focused on specialty long products. Operates at Gamharia (Jharkhand) with capacity of 1.1 MTPA. Specializes in special bars, wire rods, and DRI manufacturing. In FY25 the company reported revenue of ₹6,800 Cr and net profit of ₹520 Cr, at an EBITDA margin of around 16.2%. Its revenue is led by special bar quality (35% of sales), complemented by wire rods and dri/sponge iron. India's leading dedicated SBQ steel producer. Primary plant at Gamharia (Jamshedpur), Jharkhand.",
     products: [
       { name: 'Special Bar Quality (SBQ)', revenueShare: 35, description: 'High-quality bars for auto components and bearings' },
       { name: 'Wire Rods', revenueShare: 25, description: 'Wire rods for fasteners and springs' },
@@ -949,7 +950,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'welspun-corp', name: 'Welspun Corp', industry: 'steel', ticker: 'WELCORP',
     founded: 1995, headquarters: 'Mumbai, Maharashtra', employees: '8,000+', marketCap: '₹18,000 Cr',
     ceo: 'Vipul Mathur (MD & CEO)', website: 'https://www.welspuncorp.com',
-    description: "India's largest and world's second-largest manufacturer of large-diameter pipes. Supplies to oil & gas, water, and infrastructure sectors globally. Plants in Gujarat, Maharashtra, USA, and Saudi Arabia.",
+    description: "​India's largest and world's second-largest manufacturer of large-diameter pipes. Supplies to oil & gas, water, and infrastructure sectors globally. Plants in Gujarat, Maharashtra, USA, and Saudi Arabia. In FY25 the company reported revenue of ₹17,500 Cr and net profit of ₹1,350 Cr, at an EBITDA margin of around 14.9%. Its revenue is led by saw pipes (45% of sales), complemented by erw pipes and di pipes. India's #1 large diameter pipe maker. India: Anjar (Gujarat — SAW pipes, SS pipes), Mandya (Karnataka — SAW pipes), Bhopal (DI pipes).",
     products: [
       { name: 'SAW Pipes (Large Diameter)', revenueShare: 45, description: 'Submerged arc welded pipes for oil/gas pipelines' },
       { name: 'ERW Pipes', revenueShare: 20, description: 'Electric resistance welded pipes for water/gas' },
@@ -1044,7 +1045,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'jsw-ispat', name: 'JSW Ispat Special Products', industry: 'steel', ticker: 'JSWISPL',
     founded: 1999, headquarters: 'Mumbai, Maharashtra', employees: '3,500+', marketCap: '₹4,200 Cr',
     ceo: 'Satish Kumar Dubey (Director)', website: 'https://www.jswsteel.in',
-    description: "Part of JSW Group. Operates a 1.6 MTPA steel plant at Kalmeshwar, Maharashtra (formerly Ispat Industries). Focus on special alloy and value-added steel products for auto and engineering sectors.",
+    description: "​Part of JSW Group. Operates a 1.6 MTPA steel plant at Kalmeshwar, Maharashtra (formerly Ispat Industries). Focus on special alloy and value-added steel products for auto and engineering sectors. In FY25 the company reported revenue of ₹7,500 Cr and net profit of ₹380 Cr, at an EBITDA margin of around 10.9%. Its revenue is led by special alloy steel (35% of sales), complemented by wire rods and hot rolled coils. Small niche player in special alloy steel segment. Single plant at Kalmeshwar, Nagpur district, Maharashtra.",
     products: [
       { name: 'Special Alloy Steel', revenueShare: 35, description: 'Alloy bars and rods for automotive' },
       { name: 'Wire Rods (Special Grade)', revenueShare: 25, description: 'High-carbon wire rods for springs' },
@@ -1137,7 +1138,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'shyam-metalics', name: 'Shyam Metalics & Energy', industry: 'steel', ticker: 'SHYAMMETL',
     founded: 2002, headquarters: 'Kolkata, West Bengal', employees: '7,500+', marketCap: '₹16,000 Cr',
     ceo: 'Brij Bhushan Agarwal (Vice Chairman & MD)', website: 'https://www.shyammetalics.com',
-    description: "One of the largest integrated steel producers in Eastern India with 11.6 MTPA capacity across Sambalpur (Odisha) and Jamuria (West Bengal). Vertically integrated from pellets to finished steel. Also manufactures ferro alloys and cement.",
+    description: "​One of the largest integrated steel producers in Eastern India with 11.6 MTPA capacity across Sambalpur (Odisha) and Jamuria (West Bengal). Vertically integrated from pellets to finished steel. Also manufactures ferro alloys and cement. In FY25 the company reported revenue of ₹13,500 Cr and net profit of ₹1,100 Cr, at an EBITDA margin of around 18.5%. Its revenue is led by tmt bars (30% of sales), complemented by pellets & dri and ferro alloys. Largest integrated steel producer in Eastern India (excluding SAIL/Tata). Sambalpur (Odisha — primary steel complex, 8 MTPA total).",
     products: [
       { name: 'TMT Bars (SEL Brand)', revenueShare: 30, description: 'Construction rebars — strong brand in East India' },
       { name: 'Pellets & DRI', revenueShare: 25, description: 'Iron ore pellets and sponge iron' },
@@ -1230,7 +1231,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'kalyani-steels', name: 'Kalyani Steels', industry: 'steel', ticker: 'KALYANISTR',
     founded: 1973, headquarters: 'Pune, Maharashtra', employees: '1,500+', marketCap: '₹3,800 Cr',
     ceo: 'R.K. Goyal (MD)', website: 'https://www.kalyanisteels.com',
-    description: "Part of the Kalyani Group (Bharat Forge). Specialty steel manufacturer focused on forging-grade and auto-grade steel. Plant at Hospet, Karnataka with 3 lakh TPA capacity. Supplies to parent Bharat Forge and other auto companies.",
+    description: "​Part of the Kalyani Group (Bharat Forge). Specialty steel manufacturer focused on forging-grade and auto-grade steel. Plant at Hospet, Karnataka with 3 lakh TPA capacity. Supplies to parent Bharat Forge and other auto companies. In FY25 the company reported revenue of ₹3,400 Cr and net profit of ₹350 Cr, at an EBITDA margin of around 16.5%. Its revenue is led by forging quality steel (40% of sales), complemented by alloy steel bars and carbon steel billets. Niche specialty steel producer focused on automotive forging applications. Single manufacturing plant at Hospet (Hampi), Karnataka.",
     products: [
       { name: 'Forging Quality Steel', revenueShare: 40, description: 'Special steel for automotive forgings' },
       { name: 'Alloy Steel Bars', revenueShare: 25, description: 'EN series alloy steel for engineering' },
@@ -1322,7 +1323,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'lloyds-metals', name: 'Lloyds Metals & Energy', industry: 'steel', ticker: 'LLOYDSME',
     founded: 1977, headquarters: 'Mumbai, Maharashtra', employees: '5,000+', marketCap: '₹22,000 Cr',
     ceo: 'Mukesh Hari Gupta (Director)', website: 'https://www.lloyds.in',
-    description: "Integrated sponge iron and steel manufacturer based in Gadchiroli, Maharashtra. Has captive iron ore mines giving significant cost advantage. Rapidly expanding from 0.5 MTPA to 3.5 MTPA steel capacity.",
+    description: "​Integrated sponge iron and steel manufacturer based in Gadchiroli, Maharashtra. Has captive iron ore mines giving significant cost advantage. Rapidly expanding from 0.5 MTPA to 3.5 MTPA steel capacity. In FY25 the company reported revenue of ₹10,200 Cr and net profit of ₹1,900 Cr, at an EBITDA margin of around 31.4%. Its revenue is led by sponge iron / dri (30% of sales), complemented by tmt bars and iron ore. Small steel producer but India's most profitable on a margin basis. Single complex at Gadchiroli, Maharashtra (remote tribal district with rich mineral deposits).",
     products: [
       { name: 'Sponge Iron / DRI', revenueShare: 30, description: 'Direct reduced iron from captive ore' },
       { name: 'TMT Bars', revenueShare: 25, description: 'Construction steel under Lloyds brand' },
@@ -1415,7 +1416,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'man-industries', name: 'Man Industries', industry: 'steel', ticker: 'MANINDS',
     founded: 1988, headquarters: 'Mumbai, Maharashtra', employees: '2,500+', marketCap: '₹3,500 Cr',
     ceo: 'R.C. Mansukhani (CMD)', website: 'https://www.manindustries.com',
-    description: "Leading manufacturer of large-diameter line pipes for oil & gas sector. Plants at Pithampur (MP) and Kutch (Gujarat). Exports to Middle East, Africa, and Americas. Capacity 1.2 MTPA.",
+    description: "​Leading manufacturer of large-diameter line pipes for oil & gas sector. Plants at Pithampur (MP) and Kutch (Gujarat). Exports to Middle East, Africa, and Americas. Capacity 1.2 MTPA. In FY25 the company reported revenue of ₹5,800 Cr and net profit of ₹450 Cr, at an EBITDA margin of around 13.4%. Its revenue is led by lsaw pipes (45% of sales), complemented by hsaw pipes and erw pipes. India's #2 listed large-diameter pipe maker (after Welspun Corp). India: Pithampur (Madhya Pradesh — LSAW pipes), Kutch/Anjar (Gujarat — HSAW and ERW).",
     products: [
       { name: 'LSAW Pipes', revenueShare: 45, description: 'Longitudinal SAW pipes for oil/gas transmission' },
       { name: 'HSAW Pipes', revenueShare: 30, description: 'Helical SAW pipes for water and gas' },
@@ -1506,7 +1507,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'godawari-power', name: 'Godawari Power & Ispat', industry: 'steel', ticker: 'GPIL',
     founded: 1999, headquarters: 'Raipur, Chhattisgarh', employees: '4,000+', marketCap: '₹9,500 Cr',
     ceo: 'B.L. Agrawal (CMD)', website: 'https://www.godawaripower.com',
-    description: "Integrated steel producer in Chhattisgarh with operations spanning iron ore mining, pelletization, sponge iron, steel billets, TMT bars, and ferro alloys. Also has solar power business. Pellet capacity 4.5 MTPA.",
+    description: "​Integrated steel producer in Chhattisgarh with operations spanning iron ore mining, pelletization, sponge iron, steel billets, TMT bars, and ferro alloys. Also has solar power business. Pellet capacity 4.5 MTPA. In FY25 the company reported revenue of ₹7,500 Cr and net profit of ₹1,050 Cr, at an EBITDA margin of around 28.0%. Its revenue is led by iron ore pellets (35% of sales), complemented by tmt bars and sponge iron. Mid-size integrated steel/mining company in Chhattisgarh. All operations in Chhattisgarh (Raipur, Siltara industrial area).",
     products: [
       { name: 'Iron Ore Pellets', revenueShare: 35, description: 'High-grade pellets from captive mines' },
       { name: 'TMT Bars', revenueShare: 25, description: 'Construction rebars for central India market' },
@@ -1599,7 +1600,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'mishra-dhatu', name: 'Mishra Dhatu Nigam (MIDHANI)', industry: 'steel', ticker: 'MIDHANI',
     founded: 1973, headquarters: 'Hyderabad, Telangana', employees: '2,200+', marketCap: '₹7,500 Cr',
     ceo: 'Sanjay Kumar Jha (CMD)', website: 'https://www.midhani-india.in',
-    description: "A Defence Ministry PSU specializing in super alloys, titanium alloys, and special steels for aerospace, defence, and nuclear applications. Only Indian manufacturer of several critical materials. Monopoly supplier to ISRO and DRDO.",
+    description: "​A Defence Ministry PSU specializing in super alloys, titanium alloys, and special steels for aerospace, defence, and nuclear applications. Only Indian manufacturer of several critical materials. Monopoly supplier to ISRO and DRDO. In FY25 the company reported revenue of ₹1,450 Cr and net profit of ₹260 Cr, at an EBITDA margin of around 30.3%. Its revenue is led by super alloys (35% of sales), complemented by titanium alloys and special steels. India's ONLY manufacturer of super alloys, titanium alloys, and several defence-grade materials. Primary plant at Kanchanbagh, Hyderabad, Telangana.",
     products: [
       { name: 'Super Alloys', revenueShare: 35, description: 'Nickel-based alloys for jet engines and gas turbines' },
       { name: 'Titanium Alloys', revenueShare: 25, description: 'Aerospace and marine grade titanium' },
@@ -1694,7 +1695,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'jai-balaji', name: 'Jai Balaji Industries', industry: 'steel', ticker: 'JAIBALAJI',
     founded: 1999, headquarters: 'Kolkata, West Bengal', employees: '5,000+', marketCap: '₹12,000 Cr',
     ceo: 'Aditya Jajodia (MD)', website: 'https://www.jaibalajigroup.com',
-    description: "Integrated steel manufacturer in Eastern India with 2.9 MTPA capacity across plants in West Bengal, Chhattisgarh, and Odisha. Produces TMT bars, ductile iron pipes, ferro alloys, and cement. Strong infrastructure-linked product portfolio.",
+    description: "​Integrated steel manufacturer in Eastern India with 2.9 MTPA capacity across plants in West Bengal, Chhattisgarh, and Odisha. Produces TMT bars, ductile iron pipes, ferro alloys, and cement. Strong infrastructure-linked product portfolio. In FY25 the company reported revenue of ₹8,500 Cr and net profit of ₹1,250 Cr, at an EBITDA margin of around 23.5%. Its revenue is led by tmt bars (35% of sales), complemented by ductile iron pipes and ferro alloys. Mid-size integrated steel/ferro alloy player in East India. Plants in West Bengal (Durgapur, Raniganj), Chhattisgarh (Raipur), and Odisha.",
     products: [
       { name: 'TMT Bars', revenueShare: 35, description: 'Jai Balaji TMT brand for construction' },
       { name: 'Ductile Iron Pipes', revenueShare: 22, description: 'DI pipes for Jal Jeevan Mission' },
@@ -1787,7 +1788,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'hisar-metal', name: 'Hisar Metal Industries', industry: 'steel', ticker: 'HISARMETAL',
     founded: 1985, headquarters: 'New Delhi', employees: '1,200+', marketCap: '₹850 Cr',
     ceo: 'Ramesh Chand Garg (MD)', website: 'https://www.hisarmetal.com',
-    description: "Leading stainless steel pipes and tubes manufacturer. Produces SS welded and seamless pipes for industrial, architectural, and automotive applications. Plants in Haryana and Gujarat.",
+    description: "​Leading stainless steel pipes and tubes manufacturer. Produces SS welded and seamless pipes for industrial, architectural, and automotive applications. Plants in Haryana and Gujarat. In FY25 the company reported revenue of ₹1,200 Cr and net profit of ₹58 Cr, at an EBITDA margin of around 8.8%. Its revenue is led by ss welded pipes & tubes (45% of sales), complemented by ss seamless pipes and ss sheets & coils. Mid-size SS pipe manufacturer. Plants in Haryana (Hisar) and Gujarat (Ahmedabad).",
     products: [
       { name: 'SS Welded Pipes & Tubes', revenueShare: 45, description: 'Stainless steel welded pipes for industry' },
       { name: 'SS Seamless Pipes', revenueShare: 25, description: 'Seamless tubes for critical applications' },
@@ -1874,7 +1875,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'ratnamani-metals', name: 'Ratnamani Metals & Tubes', industry: 'steel', ticker: 'RATNAMANI',
     founded: 1983, headquarters: 'Ahmedabad, Gujarat', employees: '3,500+', marketCap: '₹18,500 Cr',
     ceo: 'Prakash Sanghvi (CMD)', website: 'https://www.ratnamani.com',
-    description: "India's premium stainless steel and carbon steel tube/pipe manufacturer. Serves oil & gas, power, chemical, and pharmaceutical sectors. Plants at Kutch and Chhatral, Gujarat. Known for high-quality, niche products.",
+    description: "​India's premium stainless steel and carbon steel tube/pipe manufacturer. Serves oil & gas, power, chemical, and pharmaceutical sectors. Plants at Kutch and Chhatral, Gujarat. Known for high-quality, niche products. In FY25 the company reported revenue of ₹5,800 Cr and net profit of ₹800 Cr, at an EBITDA margin of around 21.0%. Its revenue is led by stainless steel pipes & tubes (40% of sales), complemented by carbon steel pipes and titanium & exotic alloy tubes. India's #1 premium pipe/tube manufacturer. Plants at Kutch and Chhatral, Gujarat.",
     products: [
       { name: 'Stainless Steel Pipes & Tubes', revenueShare: 40, description: 'SS pipes for process industries and pharma' },
       { name: 'Carbon Steel Pipes', revenueShare: 30, description: 'Line pipes for oil & gas transmission' },
@@ -1967,7 +1968,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'surya-roshni', name: 'Surya Roshni (Steel Pipes Division)', industry: 'steel', ticker: 'SURYAROSNI',
     founded: 1973, headquarters: 'New Delhi', employees: '6,000+', marketCap: '₹7,500 Cr',
     ceo: 'Raju Bista (Chairman & MD)', website: 'https://www.suryaroshni.com',
-    description: "Major manufacturer of ERW steel pipes and GI pipes. Also has lighting business. Steel pipe capacity of 8.5 lakh TPA. Supplies to oil & gas, construction, and agricultural sectors. Plants in Haryana and UP.",
+    description: "​Major manufacturer of ERW steel pipes and GI pipes. Also has lighting business. Steel pipe capacity of 8.5 lakh TPA. Supplies to oil & gas, construction, and agricultural sectors. Plants in Haryana and UP. In FY25 the company reported revenue of ₹9,000 Cr and net profit of ₹380 Cr, at an EBITDA margin of around 8.3%. Its revenue is led by erw steel pipes (35% of sales), complemented by gi pipes and hollow sections. India's #2 ERW/GI pipe maker (after APL Apollo). Steel pipe plants: Bahadurgarh (Haryana), Malanpur (MP).",
     products: [
       { name: 'ERW Steel Pipes', revenueShare: 35, description: 'Electric resistance welded pipes for structural use' },
       { name: 'GI Pipes', revenueShare: 25, description: 'Galvanized iron pipes for water and gas' },
@@ -2058,7 +2059,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'apl-apollo', name: 'APL Apollo Tubes', industry: 'steel', ticker: 'APLAPOLLO',
     founded: 1986, headquarters: 'New Delhi', employees: '5,500+', marketCap: '₹38,000 Cr',
     ceo: 'Sanjay Gupta (CMD)', website: 'https://www.aplapollo.com',
-    description: "India's largest structural steel tube manufacturer with 4 MTPA capacity. Market leader in ERW pipes and hollow sections. Revolutionary DFT (Direct Forming Technology) and apollo Z patented products. 12 plants across India.",
+    description: "​India's largest structural steel tube manufacturer with 4 MTPA capacity. Market leader in ERW pipes and hollow sections. Revolutionary DFT (Direct Forming Technology) and apollo Z patented products. 12 plants across India. In FY25 the company reported revenue of ₹20,500 Cr and net profit of ₹1,100 Cr, at an EBITDA margin of around 9.8%. Its revenue is led by structural tubes (40% of sales), complemented by gp/gi tubes and apollo z. Undisputed #1 in Indian structural tubes with 55% organized market share. Pan-India manufacturing: 12 plants across Delhi-NCR, Hyderabad, Raipur, Chennai, Kolkata, Durgapur, Bengaluru, Hosur, and others.",
     products: [
       { name: 'Structural Tubes (MS)', revenueShare: 40, description: 'Hollow sections for construction and infrastructure' },
       { name: 'GP/GI Tubes', revenueShare: 22, description: 'Galvanized tubes for plumbing and fencing' },
@@ -2152,7 +2153,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'gallantt-ispat', name: 'Gallantt Ispat', industry: 'steel', ticker: 'GALLANTT',
     founded: 2005, headquarters: 'Gorakhpur, Uttar Pradesh', employees: '3,000+', marketCap: '₹4,200 Cr',
     ceo: 'Chandra Prakash Agrawal (CMD)', website: 'https://www.gallanttispat.com',
-    description: "Integrated steel and power company in Eastern UP. Produces TMT bars, sponge iron, ferro alloys, and power. Capacity of 0.8 MTPA steel with vertically integrated operations from pellets to finished steel.",
+    description: "​Integrated steel and power company in Eastern UP. Produces TMT bars, sponge iron, ferro alloys, and power. Capacity of 0.8 MTPA steel with vertically integrated operations from pellets to finished steel. In FY25 the company reported revenue of ₹4,000 Cr and net profit of ₹320 Cr, at an EBITDA margin of around 14.5%. Its revenue is led by tmt bars (35% of sales), complemented by sponge iron and ferro alloys. Regional player dominant in eastern UP/Bihar construction steel market. Single complex at Gorakhpur, Uttar Pradesh.",
     products: [
       { name: 'TMT Bars', revenueShare: 35, description: 'Construction steel for UP and Bihar markets' },
       { name: 'Sponge Iron', revenueShare: 22, description: 'DRI for internal and merchant use' },
@@ -2241,7 +2242,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'electrosteel', name: 'Electrosteel Castings', industry: 'steel', ticker: 'ELECTCAST',
     founded: 1955, headquarters: 'Kolkata, West Bengal', employees: '5,000+', marketCap: '₹6,500 Cr',
     ceo: 'Mayank Kejriwal (MD)', website: 'https://www.electrosteel.com',
-    description: "India's largest ductile iron (DI) pipe manufacturer with 1.3 MTPA capacity. Major beneficiary of Jal Jeevan Mission (rural water scheme). Plants in West Bengal and Chhattisgarh. Also produces cast iron pipes and fittings.",
+    description: "​India's largest ductile iron (DI) pipe manufacturer with 1.3 MTPA capacity. Major beneficiary of Jal Jeevan Mission (rural water scheme). Plants in West Bengal and Chhattisgarh. Also produces cast iron pipes and fittings. In FY25 the company reported revenue of ₹6,500 Cr and net profit of ₹650 Cr, at an EBITDA margin of around 17.7%. Its revenue is led by ductile iron pipes (65% of sales), complemented by cast iron pipes & fittings and ductile iron fittings. India's #1 DI pipe manufacturer by capacity and revenue. Plants in Khardah (West Bengal — original plant) and Elavur/Srikalahasti (Chhattisgarh — expansion).",
     products: [
       { name: 'Ductile Iron Pipes', revenueShare: 65, description: 'DI pipes for water supply projects' },
       { name: 'Cast Iron Pipes & Fittings', revenueShare: 15, description: 'Gravity flow drainage systems' },
@@ -2334,7 +2335,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'ultratech-cement', name: 'UltraTech Cement', industry: 'cement', ticker: 'ULTRACEMCO',
     founded: 1983, headquarters: 'Mumbai, Maharashtra', employees: '22,000+', marketCap: '₹3.2 Lakh Cr',
     ceo: 'K.C. Jhanwar (MD)', website: 'https://www.ultratechcement.com',
-    description: "India's largest cement manufacturer and world's largest outside China. Part of Aditya Birla Group. Capacity 152.6 MTPA across 23 integrated plants, 29 grinding units, and 8 bulk terminals.",
+    description: "​India's largest cement manufacturer and world's largest outside China. Part of Aditya Birla Group. Capacity 152.6 MTPA across 23 integrated plants, 29 grinding units, and 8 bulk terminals. In FY25 the company reported revenue of ₹75,400 Cr and net profit of ₹8,100 Cr, at an EBITDA margin of around 21.5%. Its revenue is led by opc (40% of sales), complemented by ppc and ready mix concrete. India's undisputed #1. Pan-India: 23 integrated plants, 29 grinding units, 8 bulk terminals.",
     products: [
       { name: 'OPC (Ordinary Portland Cement)', revenueShare: 40, description: 'Standard construction cement' },
       { name: 'PPC (Portland Pozzolana Cement)', revenueShare: 35, description: 'Blended cement for general construction' },
@@ -2428,7 +2429,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'ambuja-cements', name: 'Ambuja Cements', industry: 'cement', ticker: 'AMBUJACEM',
     founded: 1983, headquarters: 'Mumbai, Maharashtra', employees: '15,000+', marketCap: '₹1.35 Lakh Cr',
     ceo: 'Ajay Kapur (CEO)', website: 'https://www.ambujacement.com',
-    description: "Part of Adani Group since 2022. One of India's leading cement companies with 31 MTPA capacity. Known for premium brand positioning and strong distribution in western and northern India.",
+    description: "​Part of Adani Group since 2022. One of India's leading cement companies with 31 MTPA capacity. Known for premium brand positioning and strong distribution in western and northern India. In FY25 the company reported revenue of ₹38,500 Cr and net profit of ₹5,100 Cr, at an EBITDA margin of around 22.1%. Its revenue is led by portland pozzolana cement (42% of sales), complemented by ordinary portland cement and composite cement. India's #3 cement company by capacity (31 MTPA standalone, 89 MTPA combined with ACC). Pan-India presence with stronghold in western and northern India.",
     products: [
       { name: 'Portland Pozzolana Cement', revenueShare: 42, description: 'Flagship blended cement' },
       { name: 'Ordinary Portland Cement', revenueShare: 30, description: 'High-strength OPC' },
@@ -2519,7 +2520,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'shree-cement', name: 'Shree Cement', industry: 'cement', ticker: 'SHREECEM',
     founded: 1979, headquarters: 'Beawar, Rajasthan', employees: '11,000+', marketCap: '₹1.0 Lakh Cr',
     ceo: 'Neeraj Akhoury (MD)', website: 'https://www.shreecement.com',
-    description: "One of India's most profitable cement companies. Known for operational efficiency and lowest cost per tonne. Capacity 46.4 MTPA with plants in Rajasthan, Chhattisgarh, UP, and Bihar.",
+    description: "​One of India's most profitable cement companies. Known for operational efficiency and lowest cost per tonne. Capacity 46.4 MTPA with plants in Rajasthan, Chhattisgarh, UP, and Bihar. In FY25 the company reported revenue of ₹21,500 Cr and net profit of ₹2,600 Cr, at an EBITDA margin of around 23.7%. Its revenue is led by ppc (38% of sales), complemented by opc cement and composite & slag cement. India's #3 by capacity (46.4 MTPA). Strong in North, Central, and East India.",
     products: [
       { name: 'PPC (Shree Jung Rodhak/Bangur)', revenueShare: 38, description: 'Blended cements' },
       { name: 'OPC Cement', revenueShare: 30, description: 'High-grade OPC for infrastructure' },
@@ -2610,7 +2611,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'acc-cement', name: 'ACC', industry: 'cement', ticker: 'ACC',
     founded: 1936, headquarters: 'Mumbai, Maharashtra', employees: '9,000+', marketCap: '₹46,000 Cr',
     ceo: 'Ajay Kapur (MD & CEO)', website: 'https://www.acclimited.com',
-    description: "One of India's oldest cement companies, now part of Adani Group. Capacity 33.4 MTPA across 17 plants. Strong brand with ACC Gold and ACC Concrete.",
+    description: "​One of India's oldest cement companies, now part of Adani Group. Capacity 33.4 MTPA across 17 plants. Strong brand with ACC Gold and ACC Concrete. In FY25 the company reported revenue of ₹22,800 Cr and net profit of ₹1,800 Cr, at an EBITDA margin of around 18.0%. Its revenue is led by acc gold cement (40% of sales), complemented by acc concrete and acc f2r. India's #4 standalone cement company by capacity (33.4 MTPA). 17 cement plants across India — strong in Maharashtra, West Bengal, Tamil Nadu, Gujarat, Rajasthan.",
     products: [
       { name: 'ACC Gold Cement', revenueShare: 40, description: 'Premium blended cement' },
       { name: 'ACC Concrete (RMC)', revenueShare: 20, description: 'Ready mix concrete' },
@@ -2701,7 +2702,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'dalmia-bharat', name: 'Dalmia Bharat', industry: 'cement', ticker: 'DALBHARAT',
     founded: 1939, headquarters: 'New Delhi', employees: '12,000+', marketCap: '₹35,000 Cr',
     ceo: 'Mahendra Singhi (MD & CEO)', website: 'https://www.dalmiacement.com',
-    description: "India's 4th largest cement group with 46.6 MTPA capacity across East and South India. Sustainability leader targeting carbon-negative by 2040.",
+    description: "​India's 4th largest cement group with 46.6 MTPA capacity across East and South India. Sustainability leader targeting carbon-negative by 2040. In FY25 the company reported revenue of ₹16,800 Cr and net profit of ₹1,050 Cr, at an EBITDA margin of around 19.0%. Its revenue is led by portland slag cement (35% of sales), complemented by portland pozzolana cement and opc grades. India's #4 cement group by capacity (46.6 MTPA). Dominant in East India (Bihar, Jharkhand, Bengal, Odisha) and South India (Tamil Nadu, AP, Karnataka).",
     products: [
       { name: 'Portland Slag Cement', revenueShare: 35, description: 'Specialty cement from slag' },
       { name: 'Portland Pozzolana Cement', revenueShare: 30, description: 'General construction' },
@@ -2792,7 +2793,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'india-cements', name: 'India Cements', industry: 'cement', ticker: 'INDIACEM',
     founded: 1946, headquarters: 'Chennai, Tamil Nadu', employees: '6,500+', marketCap: '₹12,500 Cr',
     ceo: 'N. Srinivasan (Vice Chairman & MD)', website: 'https://www.indiacements.co.in',
-    description: "Major South Indian cement company with 14.8 MTPA capacity across Tamil Nadu, Andhra Pradesh, and Telangana. Being acquired by UltraTech Cement. Also owns Chennai Super Kings cricket team.",
+    description: "​Major South Indian cement company with 14.8 MTPA capacity across Tamil Nadu, Andhra Pradesh, and Telangana. Being acquired by UltraTech Cement. Also owns Chennai Super Kings cricket team. In FY25 the company reported revenue of ₹6,100 Cr and net profit of ₹-120 Cr (Loss), at an EBITDA margin of around 6.2%. Its revenue is led by opc cement (40% of sales), complemented by ppc cement and ready mix concrete. Was South India's #2 cement company. Exclusively South India — Tamil Nadu, Andhra Pradesh, Telangana, Karnataka.",
     products: [
       { name: 'OPC Cement (Sankar brand)', revenueShare: 40, description: 'OPC for infrastructure and housing' },
       { name: 'PPC Cement', revenueShare: 35, description: 'Blended cement for general use' },
@@ -2883,7 +2884,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'jk-cement', name: 'JK Cement', industry: 'cement', ticker: 'JKCEMENT',
     founded: 1975, headquarters: 'Kanpur, Uttar Pradesh', employees: '8,000+', marketCap: '₹30,000 Cr',
     ceo: 'Raghavpat Singhania (MD)', website: 'https://www.jkcement.com',
-    description: "Leading North Indian cement manufacturer with 22 MTPA grey cement and 1.2 MTPA white cement capacity. India's second-largest white cement producer after UltraTech. Plants in Rajasthan, UP, Karnataka, and Gujarat.",
+    description: "​Leading North Indian cement manufacturer with 22 MTPA grey cement and 1.2 MTPA white cement capacity. India's second-largest white cement producer after UltraTech. Plants in Rajasthan, UP, Karnataka, and Gujarat. In FY25 the company reported revenue of ₹12,200 Cr and net profit of ₹920 Cr, at an EBITDA margin of around 18.9%. Its revenue is led by grey cement (55% of sales), complemented by white cement and wall putty. India's #5-6 grey cement producer (22 MTPA). Grey cement: North India (Rajasthan, UP, MP, Gujarat, Karnataka).",
     products: [
       { name: 'Grey Cement (OPC/PPC)', revenueShare: 55, description: 'Grey cement for construction' },
       { name: 'White Cement (JK White)', revenueShare: 20, description: 'Decorative white cement' },
@@ -2974,7 +2975,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'ramco-cements', name: 'The Ramco Cements', industry: 'cement', ticker: 'RAMCOCEM',
     founded: 1957, headquarters: 'Chennai, Tamil Nadu', employees: '5,500+', marketCap: '₹20,000 Cr',
     ceo: 'A.V. Dharmakrishnan (CEO)', website: 'https://www.ramcocements.in',
-    description: "Leading South Indian cement company with 20.97 MTPA capacity. Known for premium Ramco Supergrade brand. Strong market position in Tamil Nadu, AP, and Telangana. Also has dry mortar business.",
+    description: "​Leading South Indian cement company with 20.97 MTPA capacity. Known for premium Ramco Supergrade brand. Strong market position in Tamil Nadu, AP, and Telangana. Also has dry mortar business. In FY25 the company reported revenue of ₹8,800 Cr and net profit of ₹720 Cr, at an EBITDA margin of around 19.9%. Its revenue is led by ppc (45% of sales), complemented by opc cement and ready mix concrete. South India's #2 cement company (after UltraTech). Dominant in Tamil Nadu, AP, Telangana, and Karnataka.",
     products: [
       { name: 'PPC (Ramco Supergrade)', revenueShare: 45, description: 'Premium blended cement — South India market leader' },
       { name: 'OPC Cement', revenueShare: 25, description: 'Infrastructure and structural cement' },
@@ -3065,7 +3066,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'birla-corp', name: 'Birla Corporation', industry: 'cement', ticker: 'BIRLACORPN',
     founded: 1919, headquarters: 'Kolkata, West Bengal', employees: '7,000+', marketCap: '₹10,500 Cr',
     ceo: 'Sandip Ghose (MD & CEO)', website: 'https://www.birlacorporation.com',
-    description: "Part of M.P. Birla Group. Operates 20 MTPA cement capacity with plants in Rajasthan, Madhya Pradesh, West Bengal, and Chhattisgarh. Flagship brands include Perfect Plus and Samrat.",
+    description: "​Part of M.P. Birla Group. Operates 20 MTPA cement capacity with plants in Rajasthan, Madhya Pradesh, West Bengal, and Chhattisgarh. Flagship brands include Perfect Plus and Samrat. In FY25 the company reported revenue of ₹10,500 Cr and net profit of ₹450 Cr, at an EBITDA margin of around 15.2%. Its revenue is led by ppc (40% of sales), complemented by opc cement and psc. India's #7-8 cement company by capacity (20 MTPA). North and Central India — Rajasthan (Chittorgarh), MP (Satna), Chhattisgarh (Raipur), West Bengal (Durgapur).",
     products: [
       { name: 'PPC (Perfect Plus)', revenueShare: 40, description: 'Premium PPC for housing construction' },
       { name: 'OPC Cement (Samrat)', revenueShare: 30, description: 'OPC for infrastructure' },
@@ -3154,7 +3155,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'nuvoco-vistas', name: 'Nuvoco Vistas', industry: 'cement', ticker: 'NUVOCO',
     founded: 1999, headquarters: 'Mumbai, Maharashtra', employees: '5,500+', marketCap: '₹10,000 Cr',
     ceo: 'Jayakumar Krishnaswamy (MD)', website: 'https://www.nuvoco.in',
-    description: "5th largest cement company in India with 25 MTPA capacity. Formerly Lafarge India, acquired by Nirma Group. Strong presence in East India (market leader in Bihar and Jharkhand). Brands: Double Bull, Concreto, Duraguard.",
+    description: "​5th largest cement company in India with 25 MTPA capacity. Formerly Lafarge India, acquired by Nirma Group. Strong presence in East India (market leader in Bihar and Jharkhand). Brands: Double Bull, Concreto, Duraguard. In FY25 the company reported revenue of ₹11,200 Cr and net profit of ₹380 Cr, at an EBITDA margin of around 17.0%. Its revenue is led by portland cement (40% of sales), complemented by ppc and premium cement. India's #5 cement company by capacity (25 MTPA). Dominant in East India — Bihar (#1), Jharkhand (#1), West Bengal, Odisha.",
     products: [
       { name: 'Portland Cement (Double Bull)', revenueShare: 40, description: 'Flagship brand in East India' },
       { name: 'PPC (Duraguard)', revenueShare: 25, description: 'Blended cement for housing' },
@@ -3244,7 +3245,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'jk-lakshmi', name: 'JK Lakshmi Cement', industry: 'cement', ticker: 'JKLAKSHMI',
     founded: 1982, headquarters: 'New Delhi', employees: '4,500+', marketCap: '₹11,000 Cr',
     ceo: 'Vinod Kumar Bansal (President)', website: 'https://www.jklakshmicement.com',
-    description: "Part of JK Organisation. Operates 14 MTPA capacity with plants in Rajasthan, Chhattisgarh, Gujarat, and Odisha. Strong brand in North and Central India. Also has AAC blocks subsidiary (Udaipur Cement Works).",
+    description: "​Part of JK Organisation. Operates 14 MTPA capacity with plants in Rajasthan, Chhattisgarh, Gujarat, and Odisha. Strong brand in North and Central India. Also has AAC blocks subsidiary (Udaipur Cement Works). In FY25 the company reported revenue of ₹6,800 Cr and net profit of ₹450 Cr, at an EBITDA margin of around 16.2%. Its revenue is led by ppc (40% of sales), complemented by opc cement and ready mix concrete. India's #8-9 cement company by capacity (14 MTPA). Strong in Rajasthan, Gujarat, MP, Chhattisgarh, and Odisha.",
     products: [
       { name: 'PPC (JK Lakshmi Pro+)', revenueShare: 40, description: 'Premium PPC brand' },
       { name: 'OPC Cement', revenueShare: 30, description: 'Infrastructure-grade OPC' },
@@ -3334,7 +3335,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'heidelberg-cement', name: 'Heidelberg Cement India', industry: 'cement', ticker: 'HEIDELBERG',
     founded: 1958, headquarters: 'Gurugram, Haryana', employees: '2,500+', marketCap: '₹5,500 Cr',
     ceo: 'Jamshed Navy Cooper (MD)', website: 'https://www.heidelbergcement.co.in',
-    description: "Indian subsidiary of Heidelberg Materials (Germany). Operates 6.26 MTPA capacity across Central India (MP and UP). Known for mycem brand and focus on sustainable cement production with highest proportion of blended cement.",
+    description: "​Indian subsidiary of Heidelberg Materials (Germany). Operates 6.26 MTPA capacity across Central India (MP and UP). Known for mycem brand and focus on sustainable cement production with highest proportion of blended cement. In FY25 the company reported revenue of ₹2,850 Cr and net profit of ₹250 Cr, at an EBITDA margin of around 18.6%. Its revenue is led by ppc (50% of sales), complemented by psc and opc cement. Small but efficient player in Central India (6.26 MTPA). Central India — Madhya Pradesh (Damoh, Imlai, Jhansi) and UP (Ammasandra).",
     products: [
       { name: 'PPC (mycem brand)', revenueShare: 50, description: 'Premium PPC for retail market' },
       { name: 'PSC (Portland Slag Cement)', revenueShare: 20, description: 'Infrastructure-grade slag cement' },
@@ -3422,7 +3423,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'orient-cement', name: 'Orient Cement', industry: 'cement', ticker: 'ORIENTCEM',
     founded: 1979, headquarters: 'New Delhi', employees: '2,000+', marketCap: '₹4,500 Cr',
     ceo: 'Deepak Khetrapal (MD & CEO)', website: 'https://www.orientcement.com',
-    description: "Part of CK Birla Group. Operates 8 MTPA capacity with plants at Devapur (Telangana), Chittapur (Karnataka), and Jalgaon (Maharashtra). Strong presence in AP, Telangana, and Maharashtra.",
+    description: "​Part of CK Birla Group. Operates 8 MTPA capacity with plants at Devapur (Telangana), Chittapur (Karnataka), and Jalgaon (Maharashtra). Strong presence in AP, Telangana, and Maharashtra. In FY25 the company reported revenue of ₹4,100 Cr and net profit of ₹220 Cr, at an EBITDA margin of around 15.1%. Its revenue is led by ppc (45% of sales), complemented by opc cement and composite cement. Mid-size player (8 MTPA) focused on Deccan region. Deccan region focus — Telangana (Devapur), Karnataka (Chittapur), Maharashtra (Jalgaon).",
     products: [
       { name: 'PPC (Birla-A1)', revenueShare: 45, description: 'Premium brand in Deccan region' },
       { name: 'OPC Cement', revenueShare: 30, description: 'OPC for construction projects' },
@@ -3509,7 +3510,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'star-cement', name: 'Star Cement', industry: 'cement', ticker: 'STARCEMENT',
     founded: 2001, headquarters: 'Guwahati, Assam', employees: '3,500+', marketCap: '₹7,500 Cr',
     ceo: 'Sanjay Kumar Gupta (MD)', website: 'https://www.starcement.co.in',
-    description: "Largest cement manufacturer in Northeast India with 5.7 MTPA capacity. Plants in Meghalaya and Assam. Benefits from zero excise/GST benefits in NE region. Strong brand in all 8 NE states and parts of North Bengal/Bihar.",
+    description: "​Largest cement manufacturer in Northeast India with 5.7 MTPA capacity. Plants in Meghalaya and Assam. Benefits from zero excise/GST benefits in NE region. Strong brand in all 8 NE states and parts of North Bengal/Bihar. In FY25 the company reported revenue of ₹3,100 Cr and net profit of ₹380 Cr, at an EBITDA margin of around 21.9%. Its revenue is led by ppc (50% of sales), complemented by opc cement and psc cement. Undisputed #1 in Northeast India with 60%+ market share. Northeast India monopoly — Meghalaya (Lumshnong plant), Assam (Guwahati grinding).",
     products: [
       { name: 'PPC (Star Super)', revenueShare: 50, description: 'Market-leading PPC in Northeast India' },
       { name: 'OPC Cement', revenueShare: 30, description: 'OPC for infrastructure projects in NE' },
@@ -3597,7 +3598,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'prism-johnson', name: 'Prism Johnson (Cement Division)', industry: 'cement', ticker: 'PRSMJOHNSN',
     founded: 1992, headquarters: 'Mumbai, Maharashtra', employees: '4,000+', marketCap: '₹4,800 Cr',
     ceo: 'Atul Desai (MD)', website: 'https://www.prismjohnson.in',
-    description: "Diversified building materials company with cement (5.6 MTPA), tiles (H&R Johnson), and RMC businesses. Cement plants in Chhattisgarh and Madhya Pradesh. H&R Johnson is a premium tile brand.",
+    description: "​Diversified building materials company with cement (5.6 MTPA), tiles (H&R Johnson), and RMC businesses. Cement plants in Chhattisgarh and Madhya Pradesh. H&R Johnson is a premium tile brand. In FY25 the company reported revenue of ₹7,500 Cr and net profit of ₹220 Cr, at an EBITDA margin of around 12.0%. Its revenue is led by cement (35% of sales), complemented by tiles and ready mix concrete. Unique diversified building materials play. Cement: Central India (Chhattisgarh, MP).",
     products: [
       { name: 'Cement (Champion/Rahul brands)', revenueShare: 35, description: 'Grey cement for Central India' },
       { name: 'Tiles (H&R Johnson)', revenueShare: 30, description: 'Floor/wall tiles and sanitaryware' },
@@ -3687,7 +3688,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'chettinad-cement', name: 'Chettinad Cement', industry: 'cement', ticker: 'Unlisted',
     founded: 1962, headquarters: 'Chennai, Tamil Nadu', employees: '5,000+', marketCap: 'Unlisted',
     ceo: 'M.A.M.R. Muthiah (CMD)', website: 'https://www.chettinadcement.com',
-    description: "Leading South Indian cement company (unlisted). Part of Chettinad Group. Operates 13 MTPA capacity with plants in Tamil Nadu, Karnataka, and Andhra Pradesh. Strong brand in Southern India.",
+    description: "​Leading South Indian cement company (unlisted). Part of Chettinad Group. Operates 13 MTPA capacity with plants in Tamil Nadu, Karnataka, and Andhra Pradesh. Strong brand in Southern India. In FY25 the company reported revenue of ₹6,200 Cr and net profit of ₹420 Cr, at an EBITDA margin of around 16.9%. Its revenue is led by opc cement (40% of sales), complemented by ppc cement and psc cement. South India's #3-4 cement company by capacity (13 MTPA, unlisted). South India — Tamil Nadu, Karnataka, AP.",
     products: [
       { name: 'OPC Cement', revenueShare: 40, description: 'OPC for large projects and infrastructure' },
       { name: 'PPC Cement', revenueShare: 35, description: 'Blended cement for housing construction' },
@@ -3777,7 +3778,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'zuari-cement', name: 'Zuari Cement (now Zuari Industries)', industry: 'cement', ticker: 'ZUARI',
     founded: 1997, headquarters: 'Hyderabad, Telangana', employees: '2,000+', marketCap: '₹3,200 Cr',
     ceo: 'K. Ramaswamy (CEO)', website: 'https://www.zuaricement.com',
-    description: "Part of Adventz Group. Operates 6.5 MTPA cement capacity in Andhra Pradesh (Yerraguntla plant). Strong regional player in AP and Karnataka market. Previously part of Italcementi/Heidelberg before Advent acquisition.",
+    description: "​Part of Adventz Group. Operates 6.5 MTPA cement capacity in Andhra Pradesh (Yerraguntla plant). Strong regional player in AP and Karnataka market. Previously part of Italcementi/Heidelberg before Advent acquisition. In FY25 the company reported revenue of ₹2,800 Cr and net profit of ₹150 Cr, at an EBITDA margin of around 15.0%. Its revenue is led by opc cement (45% of sales), complemented by ppc cement and composite cement. Regional player in AP/Karnataka (6.5 MTPA). AP and Karnataka focus — Yerraguntla plant (AP).",
     products: [
       { name: 'OPC Cement (Zuari Star)', revenueShare: 45, description: 'OPC for construction and infrastructure' },
       { name: 'PPC Cement', revenueShare: 35, description: 'Blended cement for housing' },
@@ -3865,7 +3866,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'mangalam-cement', name: 'Mangalam Cement', industry: 'cement', ticker: 'MANGLMCEM',
     founded: 1978, headquarters: 'Kota, Rajasthan', employees: '1,800+', marketCap: '₹2,500 Cr',
     ceo: 'Aditya Saraogi (MD)', website: 'https://www.mangalamcement.com',
-    description: "Part of BK Birla Group. Operates 4 MTPA capacity with an integrated plant at Morak, Rajasthan and grinding unit at Aligarh, UP. Strong brand in Rajasthan and Western UP.",
+    description: "​Part of BK Birla Group. Operates 4 MTPA capacity with an integrated plant at Morak, Rajasthan and grinding unit at Aligarh, UP. Strong brand in Rajasthan and Western UP. In FY25 the company reported revenue of ₹1,850 Cr and net profit of ₹120 Cr, at an EBITDA margin of around 15.7%. Its revenue is led by ppc cement (45% of sales), complemented by opc cement and psc cement. Small regional player (4 MTPA) in Rajasthan. Rajasthan and Western UP.",
     products: [
       { name: 'PPC Cement', revenueShare: 45, description: 'Mangalam PPC for housing construction' },
       { name: 'OPC Cement', revenueShare: 35, description: 'OPC for infrastructure' },
@@ -3952,7 +3953,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'sagar-cements', name: 'Sagar Cements', industry: 'cement', ticker: 'SAGCEM',
     founded: 1981, headquarters: 'Hyderabad, Telangana', employees: '2,800+', marketCap: '₹2,800 Cr',
     ceo: 'S. Sreekanth Reddy (JMD)', website: 'https://www.sagarcements.in',
-    description: "South/East India focused cement company with 8.25 MTPA capacity. Plants in Telangana, Andhra Pradesh, Karnataka, and Odisha. Known for BMM Cements brand in South and Sagar brand in East India.",
+    description: "​South/East India focused cement company with 8.25 MTPA capacity. Plants in Telangana, Andhra Pradesh, Karnataka, and Odisha. Known for BMM Cements brand in South and Sagar brand in East India. In FY25 the company reported revenue of ₹3,000 Cr and net profit of ₹120 Cr, at an EBITDA margin of around 13.3%. Its revenue is led by ppc cement (45% of sales), complemented by opc cement and psc. Mid-size player (8.25 MTPA) with dual South and East India presence. South India (Telangana, AP, Karnataka) and East India (Odisha).",
     products: [
       { name: 'PPC Cement (Sagar/BMM)', revenueShare: 45, description: 'Blended cement for South/East India' },
       { name: 'OPC Cement', revenueShare: 30, description: 'OPC for infrastructure and commercial' },
@@ -4039,7 +4040,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'kesoram-industries', name: 'Kesoram Industries (Cement)', industry: 'cement', ticker: 'KESORAMIND',
     founded: 1919, headquarters: 'Kolkata, West Bengal', employees: '3,000+', marketCap: '₹2,200 Cr',
     ceo: 'P. Radhakrishnan (CEO - Cement)', website: 'https://www.kesoram.net',
-    description: "Part of B.K. Birla Group. Cement capacity of 9 MTPA with plants in Telangana and Karnataka. Birla Shakti and Birla Supreme are its cement brands. Undergoing financial restructuring after years of stress.",
+    description: "​Part of B.K. Birla Group. Cement capacity of 9 MTPA with plants in Telangana and Karnataka. Birla Shakti and Birla Supreme are its cement brands. Undergoing financial restructuring after years of stress. In FY25 the company reported revenue of ₹3,900 Cr and net profit of ₹80 Cr, at an EBITDA margin of around 14.1%. Its revenue is led by opc (40% of sales), complemented by ppc and composite cement. Mid-size South India player (9 MTPA) undergoing turnaround. South India — Telangana (Basantnagar) and Karnataka (Sedam).",
     products: [
       { name: 'OPC (Birla Shakti)', revenueShare: 40, description: 'OPC brand for South India' },
       { name: 'PPC (Birla Supreme)', revenueShare: 35, description: 'Blended cement for housing' },
@@ -4126,7 +4127,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'wonder-cement', name: 'Wonder Cement', industry: 'cement', ticker: 'Unlisted',
     founded: 2012, headquarters: 'Udaipur, Rajasthan', employees: '3,500+', marketCap: 'Unlisted',
     ceo: 'Vivek Patni (MD)', website: 'https://www.wondercement.com',
-    description: "Fast-growing Rajasthan-based cement company (unlisted). Part of RHI Magnesita JV. Capacity of 17 MTPA across Rajasthan and Madhya Pradesh. Known for aggressive brand building and rapid capacity expansion.",
+    description: "​Fast-growing Rajasthan-based cement company (unlisted). Part of RHI Magnesita JV. Capacity of 17 MTPA across Rajasthan and Madhya Pradesh. Known for aggressive brand building and rapid capacity expansion. In FY25 the company reported revenue of ₹7,800 Cr and net profit of ₹520 Cr, at an EBITDA margin of around 16.7%. Its revenue is led by ppc cement (45% of sales), complemented by opc cement and ready mix concrete. India's fastest-growing cement company by capacity addition. Rajasthan (Nimbahera plants) and Madhya Pradesh.",
     products: [
       { name: 'PPC Cement', revenueShare: 45, description: 'Premium PPC for retail market' },
       { name: 'OPC Cement', revenueShare: 30, description: 'OPC for infrastructure' },
@@ -4215,7 +4216,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'my-home-group', name: 'My Home Industries (Cement)', industry: 'cement', ticker: 'Unlisted',
     founded: 2009, headquarters: 'Hyderabad, Telangana', employees: '3,000+', marketCap: 'Unlisted',
     ceo: 'Jupally Rameswar Rao (CMD)', website: 'https://www.myhomegroup.in',
-    description: "Hyderabad-based My Home Group cement operations with 10 MTPA capacity. Integrated plant at Mellacheruvu, Telangana. Real estate conglomerate with strong cement operations in South India.",
+    description: "​Hyderabad-based My Home Group cement operations with 10 MTPA capacity. Integrated plant at Mellacheruvu, Telangana. Real estate conglomerate with strong cement operations in South India. In FY25 the company reported revenue of ₹4,800 Cr and net profit of ₹420 Cr, at an EBITDA margin of around 18.8%. Its revenue is led by opc cement (45% of sales), complemented by ppc cement and specialty grades. Telangana-focused player (10 MTPA). Telangana and AP.",
     products: [
       { name: 'OPC Cement', revenueShare: 45, description: 'OPC for My Home real estate and external sales' },
       { name: 'PPC Cement', revenueShare: 35, description: 'Blended cement for South India market' },
@@ -4303,7 +4304,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'deccan-cements', name: 'Deccan Cements', industry: 'cement', ticker: 'DECCANCE',
     founded: 1979, headquarters: 'Hyderabad, Telangana', employees: '1,200+', marketCap: '₹1,200 Cr',
     ceo: 'S.R.K. Prasad (MD)', website: 'https://www.deccancements.com',
-    description: "Small but efficient cement company based in Telangana with 2.5 MTPA capacity. Plant at Bhoorgampahad, Nalgonda district. Strong local brand in Telangana and Andhra Pradesh.",
+    description: "​Small but efficient cement company based in Telangana with 2.5 MTPA capacity. Plant at Bhoorgampahad, Nalgonda district. Strong local brand in Telangana and Andhra Pradesh. In FY25 the company reported revenue of ₹850 Cr and net profit of ₹65 Cr, at an EBITDA margin of around 16.5%. Its revenue is led by opc cement (45% of sales), complemented by ppc cement and psc cement. Very small player (2.5 MTPA) in Telangana. Telangana and AP only.",
     products: [
       { name: 'OPC Cement', revenueShare: 45, description: 'OPC for construction in Telangana/AP' },
       { name: 'PPC Cement', revenueShare: 40, description: 'Blended cement for residential use' },
@@ -4390,7 +4391,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'itc-pspd', name: 'ITC PSPD (Paperboards & Specialty Papers)', industry: 'paper', ticker: 'ITC',
     founded: 1926, headquarters: 'Secunderabad, Telangana', employees: '8,000+ (division)', marketCap: '₹5.8 Lakh Cr (ITC Group)',
     ceo: 'Sanjiv Puri (CMD, ITC Ltd)', website: 'https://www.itcpspd.com',
-    description: "India's largest and most profitable paperboard manufacturer. 3 units at Bhadrachalam, Kovai, and Tribeni. Produces premium packaging boards, printing papers, and specialty papers.",
+    description: "​India's largest and most profitable paperboard manufacturer. 3 units at Bhadrachalam, Kovai, and Tribeni. Produces premium packaging boards, printing papers, and specialty papers. In FY25 the company reported revenue of ₹8,800 Cr and net profit of ₹1,200 Cr, at an EBITDA margin of around 26.1%. Its revenue is led by packaging & paperboards (45% of sales), complemented by printing & writing papers and specialty papers. Undisputed #1 in India for virgin fibre packaging boards. 3 manufacturing units — Bhadrachalam (Telangana, flagship), Kovai (Tamil Nadu), Tribeni (West Bengal).",
     products: [
       { name: 'Packaging & Paperboards', revenueShare: 45, description: 'Virgin fibre boards for FMCG/pharma' },
       { name: 'Printing & Writing Papers', revenueShare: 25, description: 'Classmate, Paperkraft brands' },
@@ -4481,7 +4482,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'jk-paper', name: 'JK Paper', industry: 'paper', ticker: 'JKPAPER',
     founded: 1960, headquarters: 'New Delhi', employees: '7,500+', marketCap: '₹8,200 Cr',
     ceo: 'Harsh Pati Singhania (CMD)', website: 'https://www.jkpaper.com',
-    description: "India's second-largest paper company with mills at Rayagada (Odisha) and Fort Songadh (Gujarat). Acquired Sirpur Paper. Capacity 6.6 lakh TPA.",
+    description: "​India's second-largest paper company with mills at Rayagada (Odisha) and Fort Songadh (Gujarat). Acquired Sirpur Paper. Capacity 6.6 lakh TPA. In FY25 the company reported revenue of ₹6,000 Cr and net profit of ₹920 Cr, at an EBITDA margin of around 26.0%. Its revenue is led by office & copier papers (35% of sales), complemented by packaging boards and writing & printing papers. India's #2 paper/board company. Mills at Rayagada (Odisha — flagship), Fort Songadh (Gujarat), and Sirpur (Telangana — acquired).",
     products: [
       { name: 'Office & Copier Papers', revenueShare: 35, description: 'JK Copier, JK Easy Copier — market leaders' },
       { name: 'Packaging Boards', revenueShare: 30, description: 'Virgin boards for FMCG/pharma' },
@@ -4571,7 +4572,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'west-coast-paper', name: 'West Coast Paper Mills', industry: 'paper', ticker: 'WESTPAPER',
     founded: 1955, headquarters: 'Dandeli, Karnataka', employees: '4,000+', marketCap: '₹5,500 Cr',
     ceo: 'S.K. Bangur (Chairman)', website: 'https://www.westcoastpaper.com',
-    description: "Leading paper manufacturer. Integrated mill at Dandeli. Acquired International Paper APPM in 2022. Combined capacity 4.65 lakh TPA.",
+    description: "​Leading paper manufacturer. Integrated mill at Dandeli. Acquired International Paper APPM in 2022. Combined capacity 4.65 lakh TPA. In FY25 the company reported revenue of ₹4,300 Cr and net profit of ₹680 Cr, at an EBITDA margin of around 26.7%. Its revenue is led by writing & printing papers (40% of sales), complemented by packaging boards and tissue & specialty papers. India's #3 paper company post-APPM acquisition (4.65 lakh TPA). Karnataka (Dandeli — flagship), Andhra Pradesh (Rajahmundry — APPM acquisition).",
     products: [
       { name: 'Writing & Printing Papers', revenueShare: 40, description: 'Cream wove, maplitho, copier papers' },
       { name: 'Packaging Boards', revenueShare: 28, description: 'Industrial packaging and folding box boards' },
@@ -4660,7 +4661,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'century-textiles-paper', name: 'Century Textiles (Pulp & Paper)', industry: 'paper', ticker: 'CENTURYTEX',
     founded: 1897, headquarters: 'Mumbai, Maharashtra', employees: '5,000+ (division)', marketCap: '₹14,000 Cr (Group)',
     ceo: 'J.C. Laddha (ED)', website: 'https://www.centurytextind.com',
-    description: "Part of BK Birla Group. Paper division operates at Lalkuan (Uttarakhand) with capacity of 2.5 lakh TPA. Produces writing papers, tissue papers, and multi-layer packaging boards. Also has real estate and textiles.",
+    description: "​Part of BK Birla Group. Paper division operates at Lalkuan (Uttarakhand) with capacity of 2.5 lakh TPA. Produces writing papers, tissue papers, and multi-layer packaging boards. Also has real estate and textiles. In FY25 the company reported revenue of ₹3,300 Cr and net profit of ₹280 Cr, at an EBITDA margin of around 16.7%. Its revenue is led by writing & printing papers (35% of sales), complemented by tissue papers and multi-layer boards. Mid-tier paper company (2.5 lakh TPA) within diversified BK Birla Group. Single large mill at Lalkuan (Uttarakhand).",
     products: [
       { name: 'Writing & Printing Papers', revenueShare: 35, description: 'Copier and offset papers' },
       { name: 'Tissue Papers', revenueShare: 25, description: 'Tissue rolls and napkins' },
@@ -4746,7 +4747,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'tamil-nadu-newsprint', name: 'Tamil Nadu Newsprint & Papers (TNPL)', industry: 'paper', ticker: 'TNPL',
     founded: 1979, headquarters: 'Karur, Tamil Nadu', employees: '3,500+', marketCap: '₹2,800 Cr',
     ceo: 'R. Senthilkumar (CMD)', website: 'https://www.tnpl.com',
-    description: "Tamil Nadu government PSU. One of the largest bagasse-based paper mills in the world. Capacity 4 lakh TPA at Karur and Mondipatti. Uses sugarcane bagasse (no wood) making it uniquely sustainable.",
+    description: "​Tamil Nadu government PSU. One of the largest bagasse-based paper mills in the world. Capacity 4 lakh TPA at Karur and Mondipatti. Uses sugarcane bagasse (no wood) making it uniquely sustainable. In FY25 the company reported revenue of ₹4,000 Cr and net profit of ₹380 Cr, at an EBITDA margin of around 18.8%. Its revenue is led by printing & writing papers (40% of sales), complemented by packaging boards and cement bags. India's largest bagasse-based paper company (4 lakh TPA). Tamil Nadu — Karur (Unit 1) and Mondipatti (Unit 2).",
     products: [
       { name: 'Printing & Writing Papers', revenueShare: 40, description: 'Newsprint, copier, and offset papers' },
       { name: 'Packaging Boards', revenueShare: 25, description: 'Duplex and triplex boards' },
@@ -4833,7 +4834,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'emami-paper', name: 'Emami Paper Mills', industry: 'paper', ticker: 'EMAMIPAP',
     founded: 1981, headquarters: 'Kolkata, West Bengal', employees: '2,500+', marketCap: '₹1,800 Cr',
     ceo: 'P.S. Patwari (ED)', website: 'https://www.emamipaper.in',
-    description: "Part of Emami Group. Operates paper and packaging board manufacturing at Balasore (Odisha). Capacity 2.6 lakh TPA. Focus on packaging boards and newsprint. Uses recycled fiber and wood pulp.",
+    description: "​Part of Emami Group. Operates paper and packaging board manufacturing at Balasore (Odisha). Capacity 2.6 lakh TPA. Focus on packaging boards and newsprint. Uses recycled fiber and wood pulp. In FY25 the company reported revenue of ₹2,100 Cr and net profit of ₹180 Cr, at an EBITDA margin of around 17.1%. Its revenue is led by packaging boards (40% of sales), complemented by newsprint and writing & printing. Mid-tier paper company (2.6 lakh TPA) pivoting from newsprint to packaging boards. East India — Balasore (Odisha).",
     products: [
       { name: 'Packaging Boards (Duplex/Triplex)', revenueShare: 40, description: 'Coated boards for packaging' },
       { name: 'Newsprint', revenueShare: 25, description: 'Standard newsprint for publications' },
@@ -4892,7 +4893,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'orient-paper', name: 'Orient Paper & Industries', industry: 'paper', ticker: 'ORIENTPPR',
     founded: 1936, headquarters: 'New Delhi', employees: '2,000+', marketCap: '₹1,500 Cr',
     ceo: 'C.K. Birla (Chairman)', website: 'https://www.orientpaperindia.com',
-    description: "Part of CK Birla Group. Paper mill at Amlai, Madhya Pradesh with capacity of 1.5 lakh TPA. Also has electrical and cement businesses under same listed entity.",
+    description: "​Part of CK Birla Group. Paper mill at Amlai, Madhya Pradesh with capacity of 1.5 lakh TPA. Also has electrical and cement businesses under same listed entity. In FY25 the company reported revenue of ₹1,350 Cr and net profit of ₹100 Cr, at an EBITDA margin of around 16.3%. Its revenue is led by writing & printing papers (45% of sales), complemented by tissue papers and packaging papers. Small paper company (1.5 lakh TPA) with unique security paper niche. Central India — Amlai (MP).",
     products: [
       { name: 'Writing & Printing Papers', revenueShare: 45, description: 'Copier and offset papers for Central India' },
       { name: 'Tissue Papers', revenueShare: 20, description: 'Tissue base paper and consumer tissue' },
@@ -4952,7 +4953,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'satia-industries', name: 'Satia Industries', industry: 'paper', ticker: 'SATIA',
     founded: 1980, headquarters: 'Muktsar, Punjab', employees: '2,000+', marketCap: '₹1,200 Cr',
     ceo: 'Dr. Ajay Satia (CMD)', website: 'https://www.satiaindustries.com',
-    description: "Punjab-based writing and printing paper manufacturer. Uses wheat straw (agricultural waste) as primary raw material — unique among Indian paper companies. Capacity 1.25 lakh TPA at Muktsar.",
+    description: "​Punjab-based writing and printing paper manufacturer. Uses wheat straw (agricultural waste) as primary raw material — unique among Indian paper companies. Capacity 1.25 lakh TPA at Muktsar. In FY25 the company reported revenue of ₹1,150 Cr and net profit of ₹115 Cr, at an EBITDA margin of around 18.7%. Its revenue is led by writing & printing papers (50% of sales), complemented by creamwove paper and kraft paper. Small niche player (1.25 lakh TPA) with unique sustainability story. Punjab — Muktsar.",
     products: [
       { name: 'Writing & Printing Papers', revenueShare: 50, description: 'Copier, maplitho, and offset papers' },
       { name: 'Creamwove Paper', revenueShare: 25, description: 'Exercise notebook paper' },
@@ -5011,7 +5012,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'seshasayee-paper', name: 'Seshasayee Paper & Boards', industry: 'paper', ticker: 'SESHAPAPER',
     founded: 1960, headquarters: 'Erode, Tamil Nadu', employees: '2,800+', marketCap: '₹2,200 Cr',
     ceo: 'N. Gopalaratnam (CMD)', website: 'https://www.spb.co.in',
-    description: "One of India's oldest paper companies. Integrated mill at Erode, Tamil Nadu with 1.35 lakh TPA capacity. Uses hardwood and eucalyptus from company-promoted farm forestry.",
+    description: "​One of India's oldest paper companies. Integrated mill at Erode, Tamil Nadu with 1.35 lakh TPA capacity. Uses hardwood and eucalyptus from company-promoted farm forestry. In FY25 the company reported revenue of ₹1,600 Cr and net profit of ₹170 Cr, at an EBITDA margin of around 21.3%. Its revenue is led by printing & writing papers (45% of sales), complemented by industrial papers and paperboards. Small but efficient South India paper company (1.35 lakh TPA). Tamil Nadu — Erode.",
     products: [
       { name: 'Printing & Writing Papers', revenueShare: 45, description: 'Copier, offset, and map litho papers' },
       { name: 'Industrial Papers', revenueShare: 25, description: 'MG poster, kraft papers' },
@@ -5071,7 +5072,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'andhra-paper', name: 'Andhra Paper', industry: 'paper', ticker: 'ANDHRAPAP',
     founded: 1964, headquarters: 'Rajahmundry, Andhra Pradesh', employees: '2,000+', marketCap: '₹1,500 Cr',
     ceo: 'S.K. Bangur (Chairman)', website: 'https://www.andhrapaper.com',
-    description: "Part of West Coast Paper group (acquired from International Paper in 2022). Mill at Rajahmundry, AP with 1.5 lakh TPA capacity. Strong in writing/printing papers for South India market.",
+    description: "​Part of West Coast Paper group (acquired from International Paper in 2022). Mill at Rajahmundry, AP with 1.5 lakh TPA capacity. Strong in writing/printing papers for South India market. In FY25 the company reported revenue of ₹1,500 Cr and net profit of ₹150 Cr, at an EBITDA margin of around 20.0%. Its revenue is led by copier papers (40% of sales), complemented by writing papers and packaging papers. Mid-size South India paper company (1.5 lakh TPA) now under West Coast Paper group. AP — Rajahmundry.",
     products: [
       { name: 'Copier Papers', revenueShare: 40, description: 'Office copier and printing papers' },
       { name: 'Writing Papers', revenueShare: 25, description: 'Creamwove and maplitho' },
@@ -5129,7 +5130,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'kuantum-papers', name: 'Kuantum Papers', industry: 'paper', ticker: 'KUANTUM',
     founded: 1977, headquarters: 'Saharanpur, Uttar Pradesh', employees: '1,500+', marketCap: '₹800 Cr',
     ceo: 'Pavan Khaitan (MD)', website: 'https://www.kuantumpapers.com',
-    description: "Specialty paper manufacturer in Saharanpur, UP. Known for high-brightness copier papers and creamwove. Capacity 1 lakh TPA. Strong brand in North India copier paper market.",
+    description: "​Specialty paper manufacturer in Saharanpur, UP. Known for high-brightness copier papers and creamwove. Capacity 1 lakh TPA. Strong brand in North India copier paper market. In FY25 the company reported revenue of ₹850 Cr and net profit of ₹85 Cr, at an EBITDA margin of around 18.2%. Its revenue is led by hi-bright copier paper (45% of sales), complemented by creamwove paper and maplitho paper. Small niche player (1 lakh TPA) focused on premium copier paper. UP — Saharanpur.",
     products: [
       { name: 'Hi-Bright Copier Paper', revenueShare: 45, description: 'Premium copier paper — white and bright' },
       { name: 'Creamwove Paper', revenueShare: 30, description: 'Writing and exercise notebook paper' },
@@ -5186,7 +5187,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'srp-industries', name: 'Star Paper Mills', industry: 'paper', ticker: 'STARPAPER',
     founded: 1938, headquarters: 'Saharanpur, Uttar Pradesh', employees: '1,200+', marketCap: '₹450 Cr',
     ceo: 'Sanjay Goenka (MD)', website: 'https://www.starpaper.com',
-    description: "One of the oldest paper mills in India, located at Saharanpur, UP. Capacity 80,000 TPA. Produces writing papers, kraft papers, and paperboards using eucalyptus and waste paper.",
+    description: "​One of the oldest paper mills in India, located at Saharanpur, UP. Capacity 80,000 TPA. Produces writing papers, kraft papers, and paperboards using eucalyptus and waste paper. In FY25 the company reported revenue of ₹620 Cr and net profit of ₹42 Cr, at an EBITDA margin of around 13.7%. Its revenue is led by writing papers (40% of sales), complemented by kraft papers and paperboards. Small legacy player (80,000 TPA). UP — Saharanpur.",
     products: [
       { name: 'Writing Papers', revenueShare: 40, description: 'Creamwove and maplitho papers' },
       { name: 'Kraft Papers', revenueShare: 30, description: 'Industrial kraft for corrugation' },
@@ -5243,7 +5244,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'nagaland-pulp', name: 'Nagaland Pulp & Paper (HPPL Cachar)', industry: 'paper', ticker: 'NAGAPULP (Unlisted)',
     founded: 1971, headquarters: 'Dimapur, Nagaland', employees: '1,500+', marketCap: 'Unlisted (PSU)',
     ceo: 'Government Appointed', website: 'https://www.nagalandpaperindia.com',
-    description: "Northeast India PSU paper company. Known more for revival attempts. Represents small PSU paper mills struggling with competition. Part of the NE paper cluster (with HPPL and Cachar Paper).",
+    description: "​Northeast India PSU paper company. Known more for revival attempts. Represents small PSU paper mills struggling with competition. Part of the NE paper cluster (with HPPL and Cachar Paper). In FY25 the company reported revenue of ₹220 Cr and net profit of ₹-15 Cr (Loss), at an EBITDA margin of around 9.1%. Its revenue is led by writing papers (45% of sales), complemented by newsprint and kraft papers. Distressed PSU paper company. Northeast India — Nagaland/Assam.",
     products: [
       { name: 'Writing Papers', revenueShare: 45, description: 'Writing and printing papers' },
       { name: 'Newsprint', revenueShare: 30, description: 'Newsprint for NE publications' },
@@ -5300,7 +5301,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'ruchira-papers', name: 'Ruchira Papers', industry: 'paper', ticker: 'RUCHIRA',
     founded: 1980, headquarters: 'Kala Amb, Himachal Pradesh', employees: '1,200+', marketCap: '₹600 Cr',
     ceo: 'Jatinder Singh (MD)', website: 'https://www.ruchirapapers.com',
-    description: "Himachal Pradesh-based paper manufacturer with 1.2 lakh TPA capacity across two units. Produces kraft paper, writing paper, and duplex boards. Benefits from HP state industrial incentives.",
+    description: "​Himachal Pradesh-based paper manufacturer with 1.2 lakh TPA capacity across two units. Produces kraft paper, writing paper, and duplex boards. Benefits from HP state industrial incentives. In FY25 the company reported revenue of ₹850 Cr and net profit of ₹65 Cr, at an EBITDA margin of around 14.7%. Its revenue is led by kraft paper (40% of sales), complemented by writing & printing papers and duplex board. Small North India paper company (1.2 lakh TPA) benefiting from HP incentives. Himachal Pradesh — Kala Amb (Unit 1) and Trilokpur (Unit 2).",
     products: [
       { name: 'Kraft Paper (BF/SF grades)', revenueShare: 40, description: 'Corrugating medium and fluting' },
       { name: 'Writing & Printing Papers', revenueShare: 30, description: 'Creamwove and copier papers' },
@@ -5358,7 +5359,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'trident-paper', name: 'Trident (Paper & Chemicals Division)', industry: 'paper', ticker: 'TRIDENT',
     founded: 1990, headquarters: 'Ludhiana, Punjab', employees: '4,000+ (division)', marketCap: '₹12,000 Cr (Group)',
     ceo: 'Rajinder Gupta (Chairman)', website: 'https://www.tridentindia.com',
-    description: "Part of Trident Group (mainly textiles). Paper division at Dhaula (Punjab) produces copier papers and notebooks. Capacity 1 lakh TPA. Uses wheat straw and wood as raw materials.",
+    description: "​Part of Trident Group (mainly textiles). Paper division at Dhaula (Punjab) produces copier papers and notebooks. Capacity 1 lakh TPA. Uses wheat straw and wood as raw materials. In FY25 the company reported revenue of ₹1,900 Cr and net profit of ₹160 Cr, at an EBITDA margin of around 17.4%. Its revenue is led by copier paper (45% of sales), complemented by exercise notebooks and writing papers. Growing branded paper company (1 lakh TPA). Punjab — Dhaula mill.",
     products: [
       { name: 'Copier Paper', revenueShare: 45, description: 'Office and copier papers (Trident brand)' },
       { name: 'Exercise Notebooks', revenueShare: 25, description: 'Branded notebooks for students' },
@@ -5418,7 +5419,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'bajaj-hindusthan', name: 'Bajaj Hindusthan Sugar', industry: 'sugar', ticker: 'BAJAJHIND',
     founded: 1931, headquarters: 'Mumbai, Maharashtra', employees: '18,000+', marketCap: '₹4,148 Cr',
     ceo: 'Kushagra Bajaj (Chairman)', website: 'https://www.bajajhindusthan.com',
-    description: "India's largest sugar manufacturer with 14 mills across UP. Crushing capacity 1,36,000 TCD. Also has ethanol distillation capacity of 800 KLD.",
+    description: "​India's largest sugar manufacturer with 14 mills across UP. Crushing capacity 1,36,000 TCD. Also has ethanol distillation capacity of 800 KLD. In FY25 the company reported revenue of ₹5,200 Cr and net profit of ₹50 Cr, at an EBITDA margin of around 9.8%. Its revenue is led by white sugar (55% of sales), complemented by ethanol and cogeneration power. India's #1 sugar company by capacity. Uttar Pradesh — 14 mills across UP.",
     products: [
       { name: 'White Sugar', revenueShare: 55, description: 'Plantation white sugar' },
       { name: 'Ethanol', revenueShare: 25, description: 'Fuel-grade ethanol for blending' },
@@ -5481,7 +5482,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'balrampur-chini', name: 'Balrampur Chini Mills', industry: 'sugar', ticker: 'BALRAMCHIN',
     founded: 1975, headquarters: 'Kolkata, West Bengal', employees: '12,000+', marketCap: '₹8,500 Cr',
     ceo: 'Vivek Saraogi (MD)', website: 'https://www.balrampur-chini.com',
-    description: "One of India's most efficient sugar producers with 10 mills in UP. Known for high recovery rates and diversified revenue. Crushing capacity 76,000 TCD. Largest private ethanol supplier.",
+    description: "​One of India's most efficient sugar producers with 10 mills in UP. Known for high recovery rates and diversified revenue. Crushing capacity 76,000 TCD. Largest private ethanol supplier. In FY25 the company reported revenue of ₹5,500 Cr and net profit of ₹650 Cr, at an EBITDA margin of around 21.8%. Its revenue is led by white crystal sugar (48% of sales), complemented by ethanol and cogeneration power. India's most efficient and profitable sugar company. Eastern UP — 10 mills concentrated in eastern UP belt.",
     products: [
       { name: 'White Crystal Sugar', revenueShare: 48, description: 'Premium quality sugar' },
       { name: 'Ethanol (Multiple Grades)', revenueShare: 30, description: 'Largest private ethanol supplier to OMCs' },
@@ -5544,7 +5545,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'triveni-engineering', name: 'Triveni Engineering', industry: 'sugar', ticker: 'TRIVENI',
     founded: 1932, headquarters: 'New Delhi', employees: '8,000+', marketCap: '₹9,500 Cr',
     ceo: 'Dhruv M. Sawhney (CMD)', website: 'https://www.trivenigroup.com',
-    description: "Diversified sugar and engineering company. 7 sugar mills in UP with 61,000 TCD crushing capacity. Engineering division makes steam turbines and gears. Also has water treatment business.",
+    description: "​Diversified sugar and engineering company. 7 sugar mills in UP with 61,000 TCD crushing capacity. Engineering division makes steam turbines and gears. Also has water treatment business. In FY25 the company reported revenue of ₹5,900 Cr and net profit of ₹580 Cr, at an EBITDA margin of around 16.9%. Its revenue is led by sugar (45% of sales), complemented by ethanol & chemicals and engineering. Top-5 UP sugar company by efficiency. Sugar: Western UP (7 mills).",
     products: [
       { name: 'Sugar', revenueShare: 45, description: 'White sugar and refined sugar' },
       { name: 'Ethanol & Chemicals', revenueShare: 22, description: 'Fuel ethanol and ENA' },
@@ -5605,7 +5606,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'dalmia-sugar', name: 'Dalmia Bharat Sugar', industry: 'sugar', ticker: 'DALMIASUG',
     founded: 1994, headquarters: 'New Delhi', employees: '5,000+', marketCap: '₹3,200 Cr',
     ceo: 'Gautam Dalmia (MD)', website: 'https://www.dalmiasugar.com',
-    description: "Part of Dalmia Bharat Group. Operates 5 sugar mills in UP with 35,000 TCD crushing capacity. Strong focus on ethanol and cogeneration. Also produces organic sugar.",
+    description: "​Part of Dalmia Bharat Group. Operates 5 sugar mills in UP with 35,000 TCD crushing capacity. Strong focus on ethanol and cogeneration. Also produces organic sugar. In FY25 the company reported revenue of ₹2,800 Cr and net profit of ₹220 Cr, at an EBITDA margin of around 15.4%. Its revenue is led by sugar (45% of sales), complemented by ethanol and cogeneration power. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Sugar (White & Organic)', revenueShare: 45, description: 'Conventional and organic sugar' },
       { name: 'Ethanol', revenueShare: 28, description: 'Ethanol from molasses and syrup' },
@@ -5663,7 +5664,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'eid-parry', name: 'EID Parry (Coromandel Group)', industry: 'sugar', ticker: 'EIDPARRY',
     founded: 1788, headquarters: 'Chennai, Tamil Nadu', employees: '6,000+', marketCap: '₹7,500 Cr',
     ceo: 'S. Ravichandran (MD)', website: 'https://www.eidparry.com',
-    description: "One of India's oldest companies (Murugappa Group). Operates sugar mills in TN, AP, Karnataka, and Puducherry. Also has significant nutraceuticals (spirulina) business. Total crushing 43,000 TCD.",
+    description: "​One of India's oldest companies (Murugappa Group). Operates sugar mills in TN, AP, Karnataka, and Puducherry. Also has significant nutraceuticals (spirulina) business. Total crushing 43,000 TCD. In FY25 the company reported revenue of ₹3,600 Cr and net profit of ₹350 Cr, at an EBITDA margin of around 17.2%. Its revenue is led by sugar (50% of sales), complemented by ethanol & industrial alcohol and cogeneration power. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Sugar', revenueShare: 50, description: 'White and refined sugar from South India' },
       { name: 'Ethanol & Industrial Alcohol', revenueShare: 22, description: 'Ethanol and ENA from molasses' },
@@ -5721,7 +5722,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'shree-renuka', name: 'Shree Renuka Sugars', industry: 'sugar', ticker: 'RENUKA',
     founded: 1998, headquarters: 'Mumbai, Maharashtra', employees: '5,000+', marketCap: '₹3,800 Cr',
     ceo: 'Atul Chaturvedi (ED)', website: 'https://www.renukasugars.com',
-    description: "Major integrated sugar company in Maharashtra and Karnataka. Subsidiary of Wilmar International (Singapore). 4 sugar mills with 35,000 TCD capacity. Focus on refined sugar and ethanol.",
+    description: "​Major integrated sugar company in Maharashtra and Karnataka. Subsidiary of Wilmar International (Singapore). 4 sugar mills with 35,000 TCD capacity. Focus on refined sugar and ethanol. In FY25 the company reported revenue of ₹4,800 Cr and net profit of ₹180 Cr, at an EBITDA margin of around 12.5%. Its revenue is led by refined sugar (50% of sales), complemented by ethanol and power. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Refined Sugar', revenueShare: 50, description: 'White and refined plantation sugar' },
       { name: 'Ethanol', revenueShare: 25, description: 'Fuel ethanol from molasses/juice' },
@@ -5779,7 +5780,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'dcm-shriram', name: 'DCM Shriram (Sugar & Ethanol Division)', industry: 'sugar', ticker: 'DCMSHRIRAM',
     founded: 1889, headquarters: 'New Delhi', employees: '5,000+ (division)', marketCap: '₹18,000 Cr (Group)',
     ceo: 'Ajay S. Shriram (Chairman & Sr. MD)', website: 'https://www.dcmshriram.com',
-    description: "Diversified conglomerate with significant sugar operations in UP. 5 sugar mills with 46,000 TCD. Also has chemicals (chlor-alkali), agri-inputs, and fenesta building systems. Sugar & ethanol is 40% of group revenue.",
+    description: "​Diversified conglomerate with significant sugar operations in UP. 5 sugar mills with 46,000 TCD. Also has chemicals (chlor-alkali), agri-inputs, and fenesta building systems. Sugar & ethanol is 40% of group revenue. In FY25 the company reported revenue of ₹11,200 Cr and net profit of ₹1,050 Cr, at an EBITDA margin of around 17.4%. Its revenue is led by sugar (40% of sales), complemented by ethanol & ena and chemicals. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Sugar', revenueShare: 40, description: 'White plantation sugar' },
       { name: 'Ethanol & ENA', revenueShare: 25, description: 'Ethanol for blending and potable alcohol' },
@@ -5837,7 +5838,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'dwarikesh-sugar', name: 'Dwarikesh Sugar Industries', industry: 'sugar', ticker: 'DWARKESH',
     founded: 1993, headquarters: 'New Delhi', employees: '3,000+', marketCap: '₹2,200 Cr',
     ceo: 'Vijay S. Banka (MD)', website: 'https://www.dfrsugar.com',
-    description: "UP-based sugar company with 3 mills (22,500 TCD crushing). Known for high efficiency and above-average recovery rates. Also has ethanol distillery (175 KLD) and 96 MW cogeneration.",
+    description: "​UP-based sugar company with 3 mills (22,500 TCD crushing). Known for high efficiency and above-average recovery rates. Also has ethanol distillery (175 KLD) and 96 MW cogeneration. In FY25 the company reported revenue of ₹2,000 Cr and net profit of ₹140 Cr, at an EBITDA margin of around 15.0%. Its revenue is led by sugar (52% of sales), complemented by ethanol and cogeneration power. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Sugar', revenueShare: 52, description: 'Quality white sugar from Western UP' },
       { name: 'Ethanol', revenueShare: 25, description: 'Fuel-grade ethanol' },
@@ -5894,7 +5895,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'mawana-sugars', name: 'Mawana Sugars', industry: 'sugar', ticker: 'MAWANASUG',
     founded: 1939, headquarters: 'New Delhi', employees: '4,000+', marketCap: '₹420 Cr',
     ceo: 'Siddharth Shriram (CMD)', website: 'https://www.mawanasugars.com',
-    description: "Part of Siddharth Shriram Group. Operates 3 sugar mills in Western UP (Mawana, Titawi, Nanglamal) with 20,500 TCD capacity. Also has distillery and cogeneration operations.",
+    description: "​Part of Siddharth Shriram Group. Operates 3 sugar mills in Western UP (Mawana, Titawi, Nanglamal) with 20,500 TCD capacity. Also has distillery and cogeneration operations. In FY25 the company reported revenue of ₹1,350 Cr and net profit of ₹30 Cr, at an EBITDA margin of around 8.9%. Its revenue is led by sugar (55% of sales), complemented by country liquor/ena and ethanol. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Sugar', revenueShare: 55, description: 'White plantation sugar' },
       { name: 'Country Liquor/ENA', revenueShare: 20, description: 'Industrial and potable alcohol' },
@@ -5952,7 +5953,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'uttam-sugar', name: 'Uttam Sugar Mills', industry: 'sugar', ticker: 'UTTAMSUGAR',
     founded: 1956, headquarters: 'Noida, UP', employees: '3,500+', marketCap: '₹600 Cr',
     ceo: 'Ravi Gupta (MD)', website: 'https://www.uttamsugar.com',
-    description: "Mid-size sugar company in UP with 3 mills (25,000 TCD). Plants at Khaikheri, Libberheri, and Barkatpur. Has distillery operations (110 KLD) and cogeneration (60 MW). Focus on efficiency improvement.",
+    description: "​Mid-size sugar company in UP with 3 mills (25,000 TCD). Plants at Khaikheri, Libberheri, and Barkatpur. Has distillery operations (110 KLD) and cogeneration (60 MW). Focus on efficiency improvement. In FY25 the company reported revenue of ₹1,800 Cr and net profit of ₹75 Cr, at an EBITDA margin of around 11.1%. Its revenue is led by sugar (55% of sales), complemented by ethanol and power. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Sugar', revenueShare: 55, description: 'White sugar for domestic market' },
       { name: 'Ethanol', revenueShare: 22, description: 'Fuel-grade ethanol' },
@@ -6010,7 +6011,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'dharani-sugars', name: 'Dharani Sugars & Chemicals', industry: 'sugar', ticker: 'DHARSUGAR',
     founded: 1987, headquarters: 'Chennai, Tamil Nadu', employees: '2,500+', marketCap: '₹280 Cr',
     ceo: 'Palani G. Periasamy (CMD)', website: 'https://www.dharanisugars.in',
-    description: "South India (Tamil Nadu) based sugar manufacturer. 3 sugar mills with 12,500 TCD. One of the few listed sugar companies in South India. Also produces ethanol and power from bagasse.",
+    description: "​South India (Tamil Nadu) based sugar manufacturer. 3 sugar mills with 12,500 TCD. One of the few listed sugar companies in South India. Also produces ethanol and power from bagasse. In FY25 the company reported revenue of ₹820 Cr and net profit of ₹22 Cr, at an EBITDA margin of around 9.8%. Its revenue is led by sugar (55% of sales), complemented by ethanol/ena and cogeneration power. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Sugar', revenueShare: 55, description: 'White sugar for South India' },
       { name: 'Ethanol/ENA', revenueShare: 20, description: 'Rectified spirit and ethanol' },
@@ -6067,7 +6068,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'avadh-sugar', name: 'Avadh Sugar & Energy', industry: 'sugar', ticker: 'AVADHSUGAR',
     founded: 2015, headquarters: 'New Delhi', employees: '3,000+', marketCap: '₹550 Cr',
     ceo: 'N.K. Jain (MD)', website: 'https://www.avadhsugar.com',
-    description: "UP-based sugar and energy company with 3 mills (22,000 TCD crushing). Part of Simbhaoli Group reorganization. Has ethanol distillery and cogeneration. Focus on integrated sugar-ethanol-power complex.",
+    description: "​UP-based sugar and energy company with 3 mills (22,000 TCD crushing). Part of Simbhaoli Group reorganization. Has ethanol distillery and cogeneration. Focus on integrated sugar-ethanol-power complex. In FY25 the company reported revenue of ₹1,350 Cr and net profit of ₹50 Cr, at an EBITDA margin of around 11.5%. Its revenue is led by sugar (50% of sales), complemented by ethanol and cogeneration power. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Sugar', revenueShare: 50, description: 'White sugar for UP and north market' },
       { name: 'Ethanol', revenueShare: 25, description: 'Ethanol from molasses and B-heavy' },
@@ -6124,7 +6125,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'nsl-sugars', name: 'NSL Sugars (KCP Sugar)', industry: 'sugar', ticker: 'KCPSUGAR',
     founded: 1941, headquarters: 'Hyderabad, Telangana', employees: '2,500+', marketCap: '₹350 Cr',
     ceo: 'N. Srinivasan (MD)', website: 'https://www.nslsugars.com',
-    description: "South India sugar manufacturer with mills in Karnataka (Koppa and Lingsugur). Part of KCP Group. Crushing capacity 10,000 TCD. Produces sugar, ethanol, and cogeneration power.",
+    description: "​South India sugar manufacturer with mills in Karnataka (Koppa and Lingsugur). Part of KCP Group. Crushing capacity 10,000 TCD. Produces sugar, ethanol, and cogeneration power. In FY25 the company reported revenue of ₹700 Cr and net profit of ₹28 Cr, at an EBITDA margin of around 10.3%. Its revenue is led by sugar (55% of sales), complemented by ethanol/rs and power. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Sugar', revenueShare: 55, description: 'White plantation sugar' },
       { name: 'Ethanol/RS', revenueShare: 22, description: 'Rectified spirit and ethanol' },
@@ -6181,7 +6182,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'rajshree-sugars', name: 'Rajshree Sugars & Chemicals', industry: 'sugar', ticker: 'RAJSREESUG',
     founded: 1984, headquarters: 'Chennai, Tamil Nadu', employees: '2,000+', marketCap: '₹180 Cr',
     ceo: 'S.P. Alagappan (CMD)', website: 'https://www.rajshreesugars.com',
-    description: "Tamil Nadu-based integrated sugar company. Mills in Varadaraj Nagar with 5,200 TCD. Also produces industrial alcohol, ethanol, and bio-compost. Part of Rajshree Group.",
+    description: "​Tamil Nadu-based integrated sugar company. Mills in Varadaraj Nagar with 5,200 TCD. Also produces industrial alcohol, ethanol, and bio-compost. Part of Rajshree Group. In FY25 the company reported revenue of ₹500 Cr and net profit of ₹15 Cr, at an EBITDA margin of around 9.0%. Its revenue is led by sugar (50% of sales), complemented by industrial alcohol/ena and ethanol. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Sugar', revenueShare: 50, description: 'White sugar for Tamil Nadu market' },
       { name: 'Industrial Alcohol/ENA', revenueShare: 25, description: 'Spirits and industrial alcohol' },
@@ -6239,7 +6240,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'dhampur-sugar', name: 'Dhampur Sugar Mills', industry: 'sugar', ticker: 'DHAMPURSUG',
     founded: 1933, headquarters: 'New Delhi', employees: '7,000+', marketCap: '₹1,800 Cr',
     ceo: 'Gaurav Goel (MD)', website: 'https://www.dhampursugar.com',
-    description: "One of UP's oldest sugar companies. 5 mills with 42,000 TCD crushing capacity in Western UP. Also has ethanol distillery (320 KLD) and significant cogeneration. Known for branded sugar.",
+    description: "​One of UP's oldest sugar companies. 5 mills with 42,000 TCD crushing capacity in Western UP. Also has ethanol distillery (320 KLD) and significant cogeneration. Known for branded sugar. In FY25 the company reported revenue of ₹4,000 Cr and net profit of ₹250 Cr, at an EBITDA margin of around 12.8%. Its revenue is led by sugar (48% of sales), complemented by ethanol and cogeneration power. Established player in the Indian sugar industry with growing ethanol diversification to de-risk from sugar price cyclicality. Operations primarily in UP/Maharashtra sugar belt with integrated sugar mills and distilleries.",
     products: [
       { name: 'Sugar (Branded & Bulk)', revenueShare: 48, description: 'Dhampure branded and bulk sugar' },
       { name: 'Ethanol', revenueShare: 28, description: 'Largest ethanol capacity in Western UP belt' },
@@ -6298,7 +6299,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'maruti-suzuki', name: 'Maruti Suzuki', industry: 'automobile', ticker: 'MARUTI',
     founded: 1981, headquarters: 'New Delhi', employees: '35,000+', marketCap: '₹3,80,000 Cr',
     ceo: 'Hisashi Takeuchi (MD & CEO)', website: 'https://www.marutisuzuki.com',
-    description: "India's largest passenger car manufacturer with 42% market share. Subsidiary of Suzuki Motor Corporation, Japan. Over 4 million vehicles sold annually across hatchbacks, sedans, SUVs, and MPVs.",
+    description: "​India's largest passenger car manufacturer with 42% market share. Subsidiary of Suzuki Motor Corporation, Japan. Over 4 million vehicles sold annually across hatchbacks, sedans, SUVs, and MPVs. In FY25 the company reported revenue of ₹1,48,690 Cr and net profit of ₹13,400 Cr, at an EBITDA margin of around 13.3%. Its revenue is led by suvs (35% of sales), complemented by hatchbacks and sedans & mpvs. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'Hatchbacks (Alto, WagonR, Swift, Baleno)', revenueShare: 30, description: 'Entry and premium hatchback segment leaders' },
       { name: 'SUVs (Brezza, Grand Vitara, Fronx, Jimny)', revenueShare: 35, description: 'Fast-growing SUV portfolio' },
@@ -6356,7 +6357,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'tata-motors', name: 'Tata Motors', industry: 'automobile', ticker: 'TATAMOTORS',
     founded: 1945, headquarters: 'Mumbai, Maharashtra', employees: '80,000+', marketCap: '₹2,70,000 Cr',
     ceo: 'Girish Wagh (ED) / Shailesh Chandra (MD, PV & EV)', website: 'https://www.tatamotors.com',
-    description: "India's largest automobile company by revenue. Owns Jaguar Land Rover (JLR). Domestic leader in commercial vehicles and #2 in passenger vehicles. Pioneer of EVs in India with 70%+ EV market share.",
+    description: "​India's largest automobile company by revenue. Owns Jaguar Land Rover (JLR). Domestic leader in commercial vehicles and #2 in passenger vehicles. Pioneer of EVs in India with 70%+ EV market share. In FY25 the company reported revenue of ₹4,58,000 Cr and net profit of ₹34,500 Cr, at an EBITDA margin of around 14.4%. Its revenue is led by jaguar land rover (40% of sales), complemented by commercial vehicles and passenger vehicles. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'Commercial Vehicles (Trucks & Buses)', revenueShare: 25, description: 'Market leader in M&HCV and buses' },
       { name: 'Passenger Vehicles (Nexon, Punch, Harrier, Safari)', revenueShare: 22, description: 'SUV-led PV portfolio with strong brand' },
@@ -6414,7 +6415,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'mahindra-mahindra', name: 'Mahindra & Mahindra', industry: 'automobile', ticker: 'M&M',
     founded: 1945, headquarters: 'Mumbai, Maharashtra', employees: '50,000+', marketCap: '₹3,50,000 Cr',
     ceo: 'Anish Shah (MD & CEO)', website: 'https://www.mahindra.com',
-    description: "India's leading SUV manufacturer and largest tractor company globally (by volume). Diversified across auto, farm equipment, IT, and financial services. SUV brands include Thar, Scorpio, XUV series.",
+    description: "​India's leading SUV manufacturer and largest tractor company globally (by volume). Diversified across auto, farm equipment, IT, and financial services. SUV brands include Thar, Scorpio, XUV series. In FY25 the company reported revenue of ₹1,55,000 Cr and net profit of ₹14,200 Cr, at an EBITDA margin of around 17.1%. Its revenue is led by suvs (40% of sales), complemented by farm equipment and light commercial vehicles. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'SUVs (Thar, Scorpio-N, XUV700, XUV400, Bolero)', revenueShare: 40, description: 'Dominant SUV portfolio with premium positioning' },
       { name: 'Farm Equipment (Tractors)', revenueShare: 28, description: 'Largest tractor brand in India — 40%+ market share' },
@@ -6472,7 +6473,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'hyundai-motor-india', name: 'Hyundai Motor India', industry: 'automobile', ticker: 'HYUNDAI',
     founded: 1996, headquarters: 'Chennai, Tamil Nadu', employees: '25,000+', marketCap: '₹1,52,000 Cr',
     ceo: 'Unsoo Kim (MD & CEO)', website: 'https://www.hyundai.com/in',
-    description: "India's second-largest carmaker with 15% market share. Wholly-owned subsidiary of Hyundai Motor Company, South Korea. Listed on Indian exchanges in 2024. Manufacturing plant at Sriperumbudur, Tamil Nadu (8.2 lakh units/year).",
+    description: "​India's second-largest carmaker with 15% market share. Wholly-owned subsidiary of Hyundai Motor Company, South Korea. Listed on Indian exchanges in 2024. Manufacturing plant at Sriperumbudur, Tamil Nadu (8.2 lakh units/year). In FY25 the company reported revenue of ₹76,500 Cr and net profit of ₹6,800 Cr, at an EBITDA margin of around 16.3%. Its revenue is led by suvs (45% of sales), complemented by hatchbacks and exports. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'SUVs (Creta, Tucson, Venue, Alcazar)', revenueShare: 45, description: 'Creta is India best-selling mid-SUV' },
       { name: 'Hatchbacks (i20, Grand i10 Nios)', revenueShare: 20, description: 'Premium hatchback segment' },
@@ -6530,7 +6531,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'bajaj-auto', name: 'Bajaj Auto', industry: 'automobile', ticker: 'BAJAJ-AUTO',
     founded: 1945, headquarters: 'Pune, Maharashtra', employees: '12,000+', marketCap: '₹2,50,000 Cr',
     ceo: 'Rajiv Bajaj (MD & CEO)', website: 'https://www.bajajauto.com',
-    description: "India's largest exporter of two-wheelers and three-wheelers. Known for Pulsar, Dominar, and Chetak brands. Strong presence in Africa and ASEAN. Also holds 48% stake in KTM AG (Austria).",
+    description: "​India's largest exporter of two-wheelers and three-wheelers. Known for Pulsar, Dominar, and Chetak brands. Strong presence in Africa and ASEAN. Also holds 48% stake in KTM AG (Austria). In FY25 the company reported revenue of ₹52,800 Cr and net profit of ₹8,900 Cr, at an EBITDA margin of around 21.2%. Its revenue is led by motorcycles (55% of sales), complemented by three wheelers and exports. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'Motorcycles (Pulsar, Dominar, Platina, CT)', revenueShare: 55, description: 'Market leader in sports/premium motorcycle segment' },
       { name: 'Three Wheelers (Auto, Cargo)', revenueShare: 20, description: 'Dominant in domestic and export 3W market' },
@@ -6588,7 +6589,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'hero-motocorp', name: 'Hero MotoCorp', industry: 'automobile', ticker: 'HEROMOTOCO',
     founded: 1984, headquarters: 'New Delhi', employees: '18,000+', marketCap: '₹1,05,000 Cr',
     ceo: 'Niranjan Gupta (CEO)', website: 'https://www.heromotocorp.com',
-    description: "World's largest two-wheeler manufacturer by volume. Sells over 5 million units annually. Dominant in commuter motorcycle segment with Splendor and HF Deluxe. Expanding into premium and EV segments.",
+    description: "​World's largest two-wheeler manufacturer by volume. Sells over 5 million units annually. Dominant in commuter motorcycle segment with Splendor and HF Deluxe. Expanding into premium and EV segments. In FY25 the company reported revenue of ₹42,800 Cr and net profit of ₹4,350 Cr, at an EBITDA margin of around 15.2%. Its revenue is led by commuter motorcycles (45% of sales), complemented by executive/premium bikes and scooters. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'Commuter Motorcycles (Splendor, HF Deluxe, Passion)', revenueShare: 45, description: 'Undisputed leader in 100-110cc commuter bikes' },
       { name: 'Executive/Premium Bikes (Glamour, Xtreme, Karizma)', revenueShare: 25, description: 'Growing premium portfolio 125cc and above' },
@@ -6646,7 +6647,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'tvs-motor', name: 'TVS Motor Company', industry: 'automobile', ticker: 'TVSMOTOR',
     founded: 1978, headquarters: 'Chennai, Tamil Nadu', employees: '22,000+', marketCap: '₹1,10,000 Cr',
     ceo: 'Sudarshan Venu (MD)', website: 'https://www.tvsmotor.com',
-    description: "India's third-largest two-wheeler manufacturer. Known for Apache, Jupiter, and iQube brands. Also owns Norton Motorcycles (UK). Strong export presence in Asia, Africa, and LATAM.",
+    description: "​India's third-largest two-wheeler manufacturer. Known for Apache, Jupiter, and iQube brands. Also owns Norton Motorcycles (UK). Strong export presence in Asia, Africa, and LATAM. In FY25 the company reported revenue of ₹44,500 Cr and net profit of ₹2,650 Cr, at an EBITDA margin of around 12.1%. Its revenue is led by motorcycles (40% of sales), complemented by scooters and international business & norton. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'Motorcycles (Apache, Raider, Star City, Radeon)', revenueShare: 40, description: 'Premium and commuter motorcycle range' },
       { name: 'Scooters (Jupiter, Ntorq)', revenueShare: 25, description: 'Jupiter is India second-best-selling scooter' },
@@ -6704,7 +6705,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'ashok-leyland', name: 'Ashok Leyland', industry: 'automobile', ticker: 'ASHOKLEY',
     founded: 1948, headquarters: 'Chennai, Tamil Nadu', employees: '20,000+', marketCap: '₹60,000 Cr',
     ceo: 'Shenu Agarwal (MD & CEO)', website: 'https://www.ashokleyland.com',
-    description: "India's second-largest commercial vehicle manufacturer and flagship of the Hinduja Group. Market leader in buses. Strong presence in M&HCV trucks. Also makes defense vehicles and electric buses.",
+    description: "​India's second-largest commercial vehicle manufacturer and flagship of the Hinduja Group. Market leader in buses. Strong presence in M&HCV trucks. Also makes defense vehicles and electric buses. In FY25 the company reported revenue of ₹46,500 Cr and net profit of ₹3,500 Cr, at an EBITDA margin of around 13.3%. Its revenue is led by m&hcv trucks (45% of sales), complemented by buses and light commercial vehicles. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'M&HCV Trucks (AVTR, Captain, 4825)', revenueShare: 45, description: 'Haulage and tipper trucks for mining/infra' },
       { name: 'Buses (Viking, Lynx, Oyster)', revenueShare: 22, description: '#1 bus maker in India — ICV to luxury coaches' },
@@ -6762,7 +6763,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'eicher-motors', name: 'Eicher Motors (Royal Enfield)', industry: 'automobile', ticker: 'EICHERMOT',
     founded: 1948, headquarters: 'Chennai, Tamil Nadu', employees: '15,000+', marketCap: '₹1,30,000 Cr',
     ceo: 'Siddhartha Lal (MD & CEO)', website: 'https://www.eicher.in',
-    description: "Parent company of Royal Enfield — the world's largest mid-size motorcycle manufacturer (250-650cc). Also operates VECV (JV with Volvo) for commercial vehicles. Royal Enfield sells 9+ lakh bikes annually.",
+    description: "​Parent company of Royal Enfield — the world's largest mid-size motorcycle manufacturer (250-650cc). Also operates VECV (JV with Volvo) for commercial vehicles. Royal Enfield sells 9+ lakh bikes annually. In FY25 the company reported revenue of ₹19,800 Cr and net profit of ₹4,000 Cr, at an EBITDA margin of around 28.8%. Its revenue is led by royal enfield motorcycles (72% of sales), complemented by ve commercial vehicles and royal enfield accessories & apparel. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'Royal Enfield Motorcycles (Classic, Meteor, Hunter, Himalayan)', revenueShare: 72, description: 'Iconic mid-size motorcycles 350-650cc' },
       { name: 'Royal Enfield Accessories & Apparel', revenueShare: 8, description: 'Riding gear, accessories, and lifestyle merchandise' },
@@ -6819,7 +6820,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'force-motors', name: 'Force Motors', industry: 'automobile', ticker: 'FORCEMOT',
     founded: 1958, headquarters: 'Pune, Maharashtra', employees: '8,000+', marketCap: '₹12,000 Cr',
     ceo: 'Prasan Firodia (MD)', website: 'https://www.forcemotors.com',
-    description: "Niche manufacturer of LCVs, SUVs (Gurkha), and tempo/3-wheelers. Also a key powertrain supplier to Mercedes-Benz, BMW, and Rolls-Royce for India-assembled vehicles. Operates independently since the Firodia family buyout.",
+    description: "​Niche manufacturer of LCVs, SUVs (Gurkha), and tempo/3-wheelers. Also a key powertrain supplier to Mercedes-Benz, BMW, and Rolls-Royce for India-assembled vehicles. Operates independently since the Firodia family buyout. In FY25 the company reported revenue of ₹8,100 Cr and net profit of ₹520 Cr, at an EBITDA margin of around 12.3%. Its revenue is led by light commercial vehicles (35% of sales), complemented by powertrain manufacturing and small cvs & three wheelers. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'Light Commercial Vehicles (Traveller, Citiline)', revenueShare: 35, description: 'Traveller is India best-selling staff bus/school bus' },
       { name: 'Powertrain Manufacturing (Mercedes, BMW)', revenueShare: 30, description: 'Engines and axles for luxury car OEMs in India' },
@@ -6877,7 +6878,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'mg-motor-india', name: 'MG Motor India', industry: 'automobile', ticker: 'Unlisted - SAIC',
     founded: 2017, headquarters: 'Gurugram, Haryana', employees: '5,000+', marketCap: 'Unlisted',
     ceo: 'Rajeev Chaba (President & MD)', website: 'https://www.mgmotor.co.in',
-    description: "Indian subsidiary of SAIC Motor (China). Manufactures at Halol, Gujarat (former GM plant). Known for connected SUVs — Hector, Astor, ZS EV, and Comet EV. JSW Group acquired stake in 2023.",
+    description: "​Indian subsidiary of SAIC Motor (China). Manufactures at Halol, Gujarat (former GM plant). Known for connected SUVs — Hector, Astor, ZS EV, and Comet EV. JSW Group acquired stake in 2023. In FY25 the company reported revenue of ₹12,500 Cr and net profit of ₹350 Cr, at an EBITDA margin of around 9.6%. Its revenue is led by suvs (50% of sales), complemented by compact suv and electric vehicles. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'SUVs (Hector, Hector Plus, Gloster)', revenueShare: 50, description: 'Internet-connected SUVs with premium features' },
       { name: 'Compact SUV (Astor/ZS)', revenueShare: 22, description: 'Mid-size SUV competing with Creta, Seltos' },
@@ -6934,7 +6935,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'kia-india', name: 'Kia India', industry: 'automobile', ticker: 'Unlisted',
     founded: 2019, headquarters: 'Gurugram, Haryana', employees: '12,000+', marketCap: 'Unlisted',
     ceo: 'Gwanggu Lee (MD & CEO)', website: 'https://www.kia.com/in',
-    description: "Indian subsidiary of Kia Corporation (South Korea). Fastest car brand to reach 10 lakh sales in India (in 5 years). Manufacturing plant at Anantapur, Andhra Pradesh with 3 lakh units capacity. Known for Seltos, Sonet, Carens.",
+    description: "​Indian subsidiary of Kia Corporation (South Korea). Fastest car brand to reach 10 lakh sales in India (in 5 years). Manufacturing plant at Anantapur, Andhra Pradesh with 3 lakh units capacity. Known for Seltos, Sonet, Carens. In FY25 the company reported revenue of ₹42,000 Cr and net profit of ₹4,200 Cr, at an EBITDA margin of around 16.7%. Its revenue is led by suvs (50% of sales), complemented by mpvs and exports. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'SUVs (Seltos, Sonet)', revenueShare: 50, description: 'Seltos and Sonet among top-5 selling SUVs in India' },
       { name: 'MPVs (Carens)', revenueShare: 25, description: 'Three-row MPV with strong demand' },
@@ -6991,7 +6992,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'toyota-kirloskar', name: 'Toyota Kirloskar Motor', industry: 'automobile', ticker: 'Unlisted',
     founded: 1997, headquarters: 'Bengaluru, Karnataka', employees: '8,000+', marketCap: 'Unlisted',
     ceo: 'Masakazu Yoshimura (MD)', website: 'https://www.toyotabharat.com',
-    description: "JV between Toyota Motor Corporation (89%) and Kirloskar Group (11%). Manufacturing at Bidadi, Karnataka. Known for Innova, Fortuner, and Hilux. Strong in hybrid technology with Hyryder and Innova Hycross.",
+    description: "​JV between Toyota Motor Corporation (89%) and Kirloskar Group (11%). Manufacturing at Bidadi, Karnataka. Known for Innova, Fortuner, and Hilux. Strong in hybrid technology with Hyryder and Innova Hycross. In FY25 the company reported revenue of ₹58,000 Cr and net profit of ₹5,800 Cr, at an EBITDA margin of around 16.4%. Its revenue is led by mpvs/muvs (35% of sales), complemented by suvs and hybrid vehicles. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'MPVs/MUVs (Innova Crysta, Innova Hycross)', revenueShare: 35, description: 'Innova dominates premium MPV segment for 20 years' },
       { name: 'SUVs (Fortuner, Legender, Hyryder)', revenueShare: 35, description: 'Fortuner is premium SUV leader; Hyryder targets mid-market' },
@@ -7049,7 +7050,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'ola-electric', name: 'Ola Electric', industry: 'automobile', ticker: 'OLAELEC',
     founded: 2017, headquarters: 'Bengaluru, Karnataka', employees: '7,000+', marketCap: '₹35,000 Cr',
     ceo: 'Bhavish Aggarwal (Founder & CEO)', website: 'https://www.olaelectric.com',
-    description: "India's largest electric two-wheeler company by market share. Operates the world's largest e-scooter factory (Futurefactory) at Krishnagiri, Tamil Nadu with 10 lakh units/year capacity. IPO in 2024.",
+    description: "​India's largest electric two-wheeler company by market share. Operates the world's largest e-scooter factory (Futurefactory) at Krishnagiri, Tamil Nadu with 10 lakh units/year capacity. IPO in 2024. In FY25 the company reported revenue of ₹5,900 Cr and net profit of ₹-2,200 Cr (Loss), at an EBITDA margin of around -25.4%. Its revenue is led by electric scooters (75% of sales), complemented by battery cells & packs and electric motorcycles. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'Electric Scooters (S1 Pro, S1 Air, S1 X)', revenueShare: 75, description: 'S1 portfolio across price points from Rs 70K to Rs 1.4L' },
       { name: 'Battery Cells & Packs', revenueShare: 10, description: 'In-house cell manufacturing at Gigafactory' },
@@ -7106,7 +7107,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'ather-energy', name: 'Ather Energy', industry: 'automobile', ticker: 'Unlisted',
     founded: 2013, headquarters: 'Bengaluru, Karnataka', employees: '4,500+', marketCap: 'Unlisted (Pre-IPO ~₹12,000 Cr)',
     ceo: 'Tarun Mehta (Co-founder & CEO)', website: 'https://www.atherenergy.com',
-    description: "Premium electric scooter startup backed by Hero MotoCorp (37% stake). Known for best-in-class technology, connected features, and Ather Grid fast-charging network. IPO planned for 2025. Models: 450X, 450S, Rizta.",
+    description: "​Premium electric scooter startup backed by Hero MotoCorp (37% stake). Known for best-in-class technology, connected features, and Ather Grid fast-charging network. IPO planned for 2025. Models: 450X, 450S, Rizta. In FY25 the company reported revenue of ₹2,800 Cr and net profit of ₹-900 Cr (Loss), at an EBITDA margin of around -23.2%. Its revenue is led by electric scooters (65% of sales), complemented by family scooter and ather grid. Significant player in Indian automobile industry with strong brand, distribution, and manufacturing capabilities. Pan-India manufacturing with multiple plants.",
     products: [
       { name: 'Electric Scooters (450X, 450S)', revenueShare: 65, description: 'Premium performance e-scooters with connected features' },
       { name: 'Family Scooter (Rizta)', revenueShare: 20, description: 'New family-oriented EV scooter for mass market' },
@@ -7165,7 +7166,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'aditya-birla-fashion', name: 'Aditya Birla Fashion & Retail', industry: 'textile', ticker: 'ABFRL',
     founded: 2007, headquarters: 'Mumbai, Maharashtra', employees: '35,000+', marketCap: '₹22,500 Cr',
     ceo: 'Ashish Dikshit (MD)', website: 'https://www.abfrl.com',
-    description: "India's largest pure-play fashion and lifestyle company. Houses Madura Fashion (Louis Philippe, Van Heusen, Allen Solly, Peter England) and Pantaloons. Also operates ethnic wear brands (Jaypore, Sabyasachi) and partnerships with Galeries Lafayette and Valentino.",
+    description: "​India's largest pure-play fashion and lifestyle company. Houses Madura Fashion (Louis Philippe, Van Heusen, Allen Solly, Peter England) and Pantaloons. Also operates ethnic wear brands (Jaypore, Sabyasachi) and partnerships with Galeries Lafayette and Valentino. In FY25 the company reported revenue of ₹15,200 Cr and net profit of ₹-320 Cr (Loss), at an EBITDA margin of around 12.2%. Its revenue is led by madura fashion & lifestyle (40% of sales), complemented by pantaloons and ethnic wear portfolio. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Madura Fashion & Lifestyle', revenueShare: 40, description: 'Louis Philippe, Van Heusen, Allen Solly, Peter England' },
       { name: 'Pantaloons', revenueShare: 30, description: 'Value fashion retail chain with 400+ stores' },
@@ -7223,7 +7224,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'mrf', name: 'MRF', industry: 'tyre', ticker: 'MRF',
     founded: 1946, headquarters: 'Chennai, Tamil Nadu', employees: '20,000+', marketCap: '₹61,000 Cr',
     ceo: 'K.M. Mammen (Chairman & MD)', website: 'https://www.mrftyres.com',
-    description: "India's largest tyre manufacturer by revenue and market capitalization. Produces tyres for passenger vehicles, trucks, two-wheelers, and off-road applications. Also manufactures pretreads, tubes, and sports goods including cricket bats.",
+    description: "​India's largest tyre manufacturer by revenue and market capitalization. Produces tyres for passenger vehicles, trucks, two-wheelers, and off-road applications. Also manufactures pretreads, tubes, and sports goods including cricket bats. In FY25 the company reported revenue of ₹27,200 Cr and net profit of ₹2,350 Cr, at an EBITDA margin of around 17.5%. Its revenue is led by truck & bus tyres (40% of sales), complemented by passenger car tyres and two-wheeler tyres. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Truck & Bus Tyres', revenueShare: 40, description: 'Radial and bias tyres for commercial vehicles' },
       { name: 'Passenger Car Tyres', revenueShare: 30, description: 'Radial tyres for cars, SUVs, and MUVs' },
@@ -7281,7 +7282,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'raymond', name: 'Raymond', industry: 'textile', ticker: 'RAYMOND',
     founded: 1925, headquarters: 'Mumbai, Maharashtra', employees: '30,000+', marketCap: '₹14,500 Cr',
     ceo: 'Gautam Hari Singhania (CMD)', website: 'https://www.raymond.in',
-    description: "India's iconic textile and apparel conglomerate. Known as the 'Complete Man' brand. World's third-largest producer of worsted suiting fabric. Also has real estate (Raymond Realty), FMCG, and engineering segments.",
+    description: "​India's iconic textile and apparel conglomerate. Known as the 'Complete Man' brand. World's third-largest producer of worsted suiting fabric. Also has real estate (Raymond Realty), FMCG, and engineering segments. In FY25 the company reported revenue of ₹10,100 Cr and net profit of ₹820 Cr, at an EBITDA margin of around 15.6%. Its revenue is led by branded textiles (35% of sales), complemented by branded apparel and garmenting. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Branded Textiles (Suiting & Shirting)', revenueShare: 35, description: 'Raymond, Park Avenue, ColorPlus fabrics' },
       { name: 'Branded Apparel', revenueShare: 25, description: 'Ready-to-wear garments under Raymond, Parx' },
@@ -7339,7 +7340,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'apollo-tyres', name: 'Apollo Tyres', industry: 'tyre', ticker: 'APOLLOTYRE',
     founded: 1972, headquarters: 'Gurugram, Haryana', employees: '16,000+', marketCap: '₹36,000 Cr',
     ceo: 'Neeraj Kanwar (Vice Chairman & MD)', website: 'https://www.apollotyres.com',
-    description: "India's second-largest tyre company with global operations across India, Europe (Vredestein brand), and presence in over 100 countries. Operates plants in Kerala, Gujarat, Andhra Pradesh, Hungary, and Netherlands.",
+    description: "​India's second-largest tyre company with global operations across India, Europe (Vredestein brand), and presence in over 100 countries. Operates plants in Kerala, Gujarat, Andhra Pradesh, Hungary, and Netherlands. In FY25 the company reported revenue of ₹28,500 Cr and net profit of ₹2,100 Cr, at an EBITDA margin of around 16.0%. Its revenue is led by truck & bus radial tyres (38% of sales), complemented by passenger car tyres and light truck tyres. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Truck & Bus Radial Tyres', revenueShare: 38, description: 'Commercial vehicle radial tyres for Indian and global markets' },
       { name: 'Passenger Car Tyres', revenueShare: 32, description: 'Premium tyres under Apollo and Vredestein brands' },
@@ -7397,7 +7398,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'vardhman-textiles', name: 'Vardhman Textiles', industry: 'textile', ticker: 'VTL',
     founded: 1965, headquarters: 'Ludhiana, Punjab', employees: '25,000+', marketCap: '₹16,000 Cr',
     ceo: 'Neeraj Jain (MD & CEO)', website: 'https://www.vardhman.com',
-    description: "India's largest manufacturer of yarn and one of the top fabric producers. Vertically integrated from fiber to fabric with 1.1 million spindles. Exports to 75+ countries. Known for cotton and blended yarns supplying to top global brands.",
+    description: "​India's largest manufacturer of yarn and one of the top fabric producers. Vertically integrated from fiber to fabric with 1.1 million spindles. Exports to 75+ countries. Known for cotton and blended yarns supplying to top global brands. In FY25 the company reported revenue of ₹9,500 Cr and net profit of ₹950 Cr, at an EBITDA margin of around 17.9%. Its revenue is led by yarn (50% of sales), complemented by woven fabrics and acrylic fiber. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Yarn (Cotton & Blended)', revenueShare: 50, description: 'Cotton, polyester-cotton, viscose yarn — 1.1M spindles' },
       { name: 'Woven Fabrics', revenueShare: 25, description: 'Shirting fabrics for domestic and export markets' },
@@ -7455,7 +7456,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'ceat', name: 'CEAT', industry: 'tyre', ticker: 'CEAT',
     founded: 1958, headquarters: 'Mumbai, Maharashtra', employees: '12,000+', marketCap: '₹18,000 Cr',
     ceo: 'Arnab Banerjee (MD & CEO)', website: 'https://www.ceat.com',
-    description: "Part of the RPG Group. India's third-largest tyre manufacturer with strong presence in two-wheeler and passenger car segments. Operates plants at Nashik, Nagpur, Halol, and Chennai. Known for innovation in wet-grip and fuel-efficient tyres.",
+    description: "​Part of the RPG Group. India's third-largest tyre manufacturer with strong presence in two-wheeler and passenger car segments. Operates plants at Nashik, Nagpur, Halol, and Chennai. Known for innovation in wet-grip and fuel-efficient tyres. In FY25 the company reported revenue of ₹13,200 Cr and net profit of ₹780 Cr, at an EBITDA margin of around 15.0%. Its revenue is led by passenger car tyres (30% of sales), complemented by two-wheeler tyres and truck & bus tyres. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Two-Wheeler Tyres', revenueShare: 28, description: 'Market leader in motorcycle and scooter tyres' },
       { name: 'Passenger Car Tyres', revenueShare: 30, description: 'Radial tyres for cars and SUVs' },
@@ -7513,7 +7514,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'welspun-living', name: 'Welspun Living', industry: 'textile', ticker: 'WELSPUNLIV',
     founded: 1985, headquarters: 'Mumbai, Maharashtra', employees: '28,000+', marketCap: '₹11,500 Cr',
     ceo: 'Dipali Goenka (CEO & MD)', website: 'https://www.welspunliving.com',
-    description: "India's largest home textiles exporter and second-largest globally. Major supplier of towels, bed linen, and rugs to US and European retailers (Walmart, Target, Costco). Manufacturing at Vapi and Anjar in Gujarat.",
+    description: "​India's largest home textiles exporter and second-largest globally. Major supplier of towels, bed linen, and rugs to US and European retailers (Walmart, Target, Costco). Manufacturing at Vapi and Anjar in Gujarat. In FY25 the company reported revenue of ₹10,800 Cr and net profit of ₹850 Cr, at an EBITDA margin of around 17.1%. Its revenue is led by towels (40% of sales), complemented by bed linen and rugs & carpets. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Towels (Terry Products)', revenueShare: 40, description: "Bath towels — world's second-largest manufacturer" },
       { name: 'Bed Linen (Sheets & Covers)', revenueShare: 30, description: 'Premium bed sheets for global retailers' },
@@ -7571,7 +7572,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'jk-tyre', name: 'JK Tyre & Industries', industry: 'tyre', ticker: 'JKTYRE',
     founded: 1974, headquarters: 'New Delhi', employees: '14,000+', marketCap: '₹8,500 Cr',
     ceo: 'Raghupati Singhania (Chairman & MD)', website: 'https://www.jktyre.com',
-    description: "Part of JK Organisation. Pioneer of radial tyre technology in India. Operates 12 plants — 9 in India and 3 in Mexico (through Tornel acquisition). Strong OEM relationships with Maruti, Tata, and Mahindra.",
+    description: "​Part of JK Organisation. Pioneer of radial tyre technology in India. Operates 12 plants — 9 in India and 3 in Mexico (through Tornel acquisition). Strong OEM relationships with Maruti, Tata, and Mahindra. In FY25 the company reported revenue of ₹15,200 Cr and net profit of ₹820 Cr, at an EBITDA margin of around 13.8%. Its revenue is led by truck & bus radial tyres (35% of sales), complemented by passenger car radial tyres and two & three wheeler tyres. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Truck & Bus Radial Tyres', revenueShare: 35, description: 'Steel radial and bias tyres for CVs' },
       { name: 'Passenger Car Radial Tyres', revenueShare: 28, description: 'Tyres for cars, UVs under JK and Vikrant brands' },
@@ -7629,7 +7630,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'balkrishna-industries', name: 'Balkrishna Industries (BKT)', industry: 'tyre', ticker: 'BALKRISIND',
     founded: 1987, headquarters: 'Mumbai, Maharashtra', employees: '11,000+', marketCap: '₹52,000 Cr',
     ceo: 'Rajiv Poddar (Jt. MD)', website: 'https://www.bfrubber.com',
-    description: "Global leader in off-highway tyres (OHT) — agriculture, mining, industrial, and ATV segments. Exports 55% of revenue to 160+ countries. Plants at Aurangabad, Bhiwadi, Chopanki, Dombivli, and Waluj. Niche player with no direct competition from MRF/Apollo in core segment.",
+    description: "​Global leader in off-highway tyres (OHT) — agriculture, mining, industrial, and ATV segments. Exports 55% of revenue to 160+ countries. Plants at Aurangabad, Bhiwadi, Chopanki, Dombivli, and Waluj. Niche player with no direct competition from MRF/Apollo in core segment. In FY25 the company reported revenue of ₹11,200 Cr and net profit of ₹1,850 Cr, at an EBITDA margin of around 27.7%. Its revenue is led by agricultural tyres (45% of sales), complemented by industrial & construction tyres and mining & otr tyres. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Agricultural Tyres', revenueShare: 45, description: 'Tractor, harvester, and farm implement tyres — global #3' },
       { name: 'Industrial & Construction Tyres', revenueShare: 25, description: 'Tyres for loaders, forklifts, and earthmovers' },
@@ -7687,7 +7688,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'page-industries', name: 'Page Industries', industry: 'textile', ticker: 'PAGEIND',
     founded: 1994, headquarters: 'Bengaluru, Karnataka', employees: '25,000+', marketCap: '₹52,000 Cr',
     ceo: 'Ashok Genomal (MD)', website: 'https://www.pageindustries.com',
-    description: "Exclusive licensee of Jockey International in India, Sri Lanka, Bangladesh, Nepal, and UAE. India's largest innerwear company by revenue. Also holds Speedo swimwear license for India. Known for premium quality and strong distribution.",
+    description: "​Exclusive licensee of Jockey International in India, Sri Lanka, Bangladesh, Nepal, and UAE. India's largest innerwear company by revenue. Also holds Speedo swimwear license for India. Known for premium quality and strong distribution. In FY25 the company reported revenue of ₹5,350 Cr and net profit of ₹710 Cr, at an EBITDA margin of around 20.6%. Its revenue is led by jockey men innerwear (45% of sales), complemented by jockey women innerwear and jockey athleisure & loungewear. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Jockey Men Innerwear', revenueShare: 45, description: 'Briefs, trunks, vests — market leader in premium segment' },
       { name: 'Jockey Women Innerwear', revenueShare: 25, description: 'Bras, panties, athleisure — fastest growing segment' },
@@ -7745,7 +7746,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'arvind-ltd', name: 'Arvind Ltd', industry: 'textile', ticker: 'ARVIND',
     founded: 1931, headquarters: 'Ahmedabad, Gujarat', employees: '30,000+', marketCap: '₹8,500 Cr',
     ceo: 'Punit Lalbhai (ED & CEO)', website: 'https://www.arvind.com',
-    description: "India's largest denim manufacturer and a leading diversified textile company. Supplies denim fabric globally and operates branded apparel (Arrow, US Polo, Flying Machine). Also has advanced materials division for technical textiles.",
+    description: "​India's largest denim manufacturer and a leading diversified textile company. Supplies denim fabric globally and operates branded apparel (Arrow, US Polo, Flying Machine). Also has advanced materials division for technical textiles. In FY25 the company reported revenue of ₹8,200 Cr and net profit of ₹430 Cr, at an EBITDA margin of around 13.4%. Its revenue is led by denim fabric (30% of sales), complemented by woven & knit fabrics and garment export. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Denim Fabric', revenueShare: 30, description: 'Largest denim producer in India — exports to 70+ countries' },
       { name: 'Woven & Knit Fabrics', revenueShare: 25, description: 'Shirting, voiles, and knitted fabrics' },
@@ -7803,7 +7804,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'goodyear-india', name: 'Goodyear India', industry: 'tyre', ticker: 'GOODYEAR',
     founded: 1961, headquarters: 'Gurugram, Haryana', employees: '2,500+', marketCap: '₹3,800 Cr',
     ceo: 'Sandeep Mahajan (Chairman & MD)', website: 'https://www.goodyear.co.in',
-    description: "Indian subsidiary of The Goodyear Tire & Rubber Company (USA). Operates manufacturing plant at Ballabgarh, Haryana. Focuses on farm tyres and passenger car tyre segment. Known for premium quality and global technology access.",
+    description: "​Indian subsidiary of The Goodyear Tire & Rubber Company (USA). Operates manufacturing plant at Ballabgarh, Haryana. Focuses on farm tyres and passenger car tyre segment. Known for premium quality and global technology access. In FY25 the company reported revenue of ₹3,050 Cr and net profit of ₹245 Cr, at an EBITDA margin of around 14.3%. Its revenue is led by farm tyres (45% of sales), complemented by passenger car tyres and light commercial vehicle tyres. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Farm Tyres', revenueShare: 45, description: 'Tractor front and rear tyres — strong rural brand' },
       { name: 'Passenger Car Tyres', revenueShare: 30, description: 'Premium car and SUV radial tyres' },
@@ -7860,7 +7861,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'trident-ltd', name: 'Trident Ltd', industry: 'textile', ticker: 'TRIDENT',
     founded: 1990, headquarters: 'Ludhiana, Punjab', employees: '20,000+', marketCap: '₹13,500 Cr',
     ceo: 'Rajinder Gupta (Chairman & MD)', website: 'https://www.tridentindia.com',
-    description: "India's largest terry towel manufacturer and a leading home textiles exporter. Also a significant paper manufacturer. Integrated operations from yarn to finished products at Barnala and Budni (MP). Exports to 100+ countries.",
+    description: "​India's largest terry towel manufacturer and a leading home textiles exporter. Also a significant paper manufacturer. Integrated operations from yarn to finished products at Barnala and Budni (MP). Exports to 100+ countries. In FY25 the company reported revenue of ₹7,600 Cr and net profit of ₹620 Cr, at an EBITDA margin of around 18.7%. Its revenue is led by terry towels (40% of sales), complemented by bed linen and yarn. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Terry Towels', revenueShare: 40, description: 'Bath and kitchen towels — largest Indian manufacturer' },
       { name: 'Bed Linen', revenueShare: 20, description: 'Bed sheets and pillow covers for export and domestic' },
@@ -7918,7 +7919,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'tvs-srichakra', name: 'TVS Srichakra', industry: 'tyre', ticker: 'TVSSRICHAK',
     founded: 1982, headquarters: 'Madurai, Tamil Nadu', employees: '5,500+', marketCap: '₹5,200 Cr',
     ceo: 'P. Vijayaraghavan (MD)', website: 'https://www.tvssrichakra.com',
-    description: "Part of the TVS Group. Leading manufacturer of two-wheeler and three-wheeler tyres under the TVS Eurogrip brand. Also manufactures off-highway tyres for exports. Plants at Madurai (TN) and Rudrapur (Uttarakhand).",
+    description: "​Part of the TVS Group. Leading manufacturer of two-wheeler and three-wheeler tyres under the TVS Eurogrip brand. Also manufactures off-highway tyres for exports. Plants at Madurai (TN) and Rudrapur (Uttarakhand). In FY25 the company reported revenue of ₹5,100 Cr and net profit of ₹380 Cr, at an EBITDA margin of around 14.1%. Its revenue is led by two-wheeler tyres (45% of sales), complemented by off-highway tyres and three-wheeler tyres. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Two-Wheeler Tyres', revenueShare: 45, description: 'Motorcycle and scooter tyres under TVS Eurogrip brand' },
       { name: 'Three-Wheeler Tyres', revenueShare: 15, description: 'Auto-rickshaw and cargo three-wheeler tyres' },
@@ -7976,7 +7977,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'indo-count', name: 'Indo Count Industries', industry: 'textile', ticker: 'ICIL',
     founded: 1991, headquarters: 'Mumbai, Maharashtra', employees: '18,000+', marketCap: '₹8,000 Cr',
     ceo: 'Mohit Jain (MD)', website: 'https://www.indocount.com',
-    description: "India's largest bed linen exporter and among the top 3 globally. Supplies to major US retailers including Walmart, Target, Costco, and JCPenney. Manufacturing at Kolhapur, Maharashtra. Known for quality and scale in sheeting.",
+    description: "​India's largest bed linen exporter and among the top 3 globally. Supplies to major US retailers including Walmart, Target, Costco, and JCPenney. Manufacturing at Kolhapur, Maharashtra. Known for quality and scale in sheeting. In FY25 the company reported revenue of ₹4,000 Cr and net profit of ₹420 Cr, at an EBITDA margin of around 18.5%. Its revenue is led by bed sheets & sets (55% of sales), complemented by utility bedding and fashion bedding & accessories. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Bed Sheets & Sets', revenueShare: 55, description: 'Cotton bed sheets — largest Indian exporter' },
       { name: 'Utility Bedding', revenueShare: 20, description: 'Comforters, quilts, mattress pads' },
@@ -8034,7 +8035,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'birla-tyres', name: 'Birla Tyres', industry: 'tyre', ticker: 'Unlisted (Kesoram)',
     founded: 1991, headquarters: 'Kolkata, West Bengal', employees: '4,000+', marketCap: 'Unlisted (Part of Kesoram Industries)',
     ceo: 'Raghav Poddar (Promoter)', website: 'https://www.birlatyres.com',
-    description: "Tyre division of Kesoram Industries (B.K. Birla Group). Operates plants at Balasore (Odisha) and Haridwar (Uttarakhand). Focuses on truck and bus bias tyres with growing radial portfolio. Has faced financial challenges due to parent company debt.",
+    description: "​Tyre division of Kesoram Industries (B.K. Birla Group). Operates plants at Balasore (Odisha) and Haridwar (Uttarakhand). Focuses on truck and bus bias tyres with growing radial portfolio. Has faced financial challenges due to parent company debt. In FY25 the company reported revenue of ₹3,500 Cr and net profit of ₹110 Cr, at an EBITDA margin of around 12.0%. Its revenue is led by truck & bus bias tyres (40% of sales), complemented by truck & bus radial tyres and light commercial vehicle tyres. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Truck & Bus Bias Tyres', revenueShare: 40, description: 'Cross-ply tyres for commercial vehicles' },
       { name: 'Truck & Bus Radial Tyres', revenueShare: 25, description: 'Growing TBR radial segment' },
@@ -8092,7 +8093,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'gokaldas-exports', name: 'Gokaldas Exports', industry: 'textile', ticker: 'GOKEX',
     founded: 1979, headquarters: 'Bengaluru, Karnataka', employees: '50,000+', marketCap: '₹7,500 Cr',
     ceo: 'Sivaramakrishnan Ganapathi (MD)', website: 'https://www.gokaldasexports.com',
-    description: "India's largest garment exporter by capacity with 40+ manufacturing units across Karnataka, Tamil Nadu, and Andhra Pradesh. Supplies to global brands like H&M, GAP, Decathlon, Nike, and Columbia. Specializes in outerwear, activewear, and bottomwear.",
+    description: "​India's largest garment exporter by capacity with 40+ manufacturing units across Karnataka, Tamil Nadu, and Andhra Pradesh. Supplies to global brands like H&M, GAP, Decathlon, Nike, and Columbia. Specializes in outerwear, activewear, and bottomwear. In FY25 the company reported revenue of ₹2,950 Cr and net profit of ₹310 Cr, at an EBITDA margin of around 17.3%. Its revenue is led by outerwear & jackets (35% of sales), complemented by activewear & sportswear and bottomwear. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Outerwear & Jackets', revenueShare: 35, description: 'Technical jackets, padded outerwear for global brands' },
       { name: 'Activewear & Sportswear', revenueShare: 25, description: 'Performance wear for Nike, Decathlon, Columbia' },
@@ -8150,7 +8151,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'yokohama-india', name: 'Yokohama India (Alliance Tire Group)', industry: 'tyre', ticker: 'Unlisted (Yokohama Rubber)',
     founded: 2007, headquarters: 'Pune, Maharashtra', employees: '6,500+', marketCap: 'Unlisted (Subsidiary of Yokohama Rubber, Japan)',
     ceo: 'Harinder Singh (CEO, Alliance Tire Group India)', website: 'https://www.atgtires.com',
-    description: "Alliance Tire Group (ATG), acquired by Yokohama Rubber in 2016 for $1.2 billion. Leading off-highway tyre manufacturer in India with plants at Dahej (Gujarat) and Tirunelveli (Tamil Nadu). Brands include Alliance, Galaxy, and Primex for agriculture, forestry, and construction.",
+    description: "​Alliance Tire Group (ATG), acquired by Yokohama Rubber in 2016 for $1.2 billion. Leading off-highway tyre manufacturer in India with plants at Dahej (Gujarat) and Tirunelveli (Tamil Nadu). Brands include Alliance, Galaxy, and Primex for agriculture, forestry, and construction. In FY25 the company reported revenue of ₹7,800 Cr and net profit of ₹800 Cr, at an EBITDA margin of around 19.5%. Its revenue is led by agricultural tyres (50% of sales), complemented by construction & industrial tyres and forestry tyres. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Agricultural Tyres', revenueShare: 50, description: 'Tractor and farm implement tyres under Alliance brand' },
       { name: 'Forestry Tyres', revenueShare: 15, description: 'Specialty tyres for forestry equipment' },
@@ -8208,7 +8209,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'kpr-mill', name: 'KPR Mill', industry: 'textile', ticker: 'KPRMILL',
     founded: 1984, headquarters: 'Coimbatore, Tamil Nadu', employees: '22,000+', marketCap: '₹22,000 Cr',
     ceo: 'K.P. Ramasamy (CMD)', website: 'https://www.kprmill.com',
-    description: "India's largest integrated knitwear and garment manufacturer. Vertically integrated from yarn spinning to finished garments. Known for exceptional operational efficiency and high margins. Key supplier to global brands and growing domestic brand (FASO).",
+    description: "​India's largest integrated knitwear and garment manufacturer. Vertically integrated from yarn spinning to finished garments. Known for exceptional operational efficiency and high margins. Key supplier to global brands and growing domestic brand (FASO). In FY25 the company reported revenue of ₹6,500 Cr and net profit of ₹900 Cr, at an EBITDA margin of around 21.8%. Its revenue is led by garments (50% of sales), complemented by yarn and fabric. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Garments (Knitwear)', revenueShare: 50, description: 'T-shirts, innerwear for global brands — 350M pieces/year' },
       { name: 'Yarn (Cotton & Compact)', revenueShare: 30, description: 'Premium compact cotton yarn — 4.5 lakh spindles' },
@@ -8266,7 +8267,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'continental-india', name: 'Continental India', industry: 'tyre', ticker: 'Unlisted (Continental AG)',
     founded: 2010, headquarters: 'Gurugram, Haryana', employees: '3,500+', marketCap: 'Unlisted (Subsidiary of Continental AG, Germany)',
     ceo: 'Prashanth Doreswamy (President & CEO, Continental India)', website: 'https://www.continental.com/en-in',
-    description: "Indian operations of Continental AG, Germany. Manufactures passenger car and two-wheeler tyres at Modipuram (Uttar Pradesh) plant. Also has automotive components business (brakes, electronics). Tyre brand positioning in premium and OEM segments.",
+    description: "​Indian operations of Continental AG, Germany. Manufactures passenger car and two-wheeler tyres at Modipuram (Uttar Pradesh) plant. Also has automotive components business (brakes, electronics). Tyre brand positioning in premium and OEM segments. In FY25 the company reported revenue of ₹4,800 Cr and net profit of ₹370 Cr, at an EBITDA margin of around 14.6%. Its revenue is led by passenger car tyres (45% of sales), complemented by two-wheeler tyres and automotive electronics. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Passenger Car Tyres', revenueShare: 45, description: 'Premium radial tyres for cars and SUVs' },
       { name: 'Two-Wheeler Tyres', revenueShare: 20, description: 'High-performance motorcycle and scooter tyres' },
@@ -8324,7 +8325,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'nahar-spinning', name: 'Nahar Spinning', industry: 'textile', ticker: 'NAHARSPING',
     founded: 1983, headquarters: 'Ludhiana, Punjab', employees: '8,000+', marketCap: '₹1,200 Cr',
     ceo: 'Dinesh Oswal (CMD)', website: 'https://www.nahargroup.com',
-    description: "Part of Oswal Group. Leading cotton yarn manufacturer based in Punjab with integrated spinning, knitting, and garment facilities. Also produces fabrics and knitwear. Exports to 50+ countries. Known for Nahar and Monte Carlo brands.",
+    description: "​Part of Oswal Group. Leading cotton yarn manufacturer based in Punjab with integrated spinning, knitting, and garment facilities. Also produces fabrics and knitwear. Exports to 50+ countries. Known for Nahar and Monte Carlo brands. In FY25 the company reported revenue of ₹2,500 Cr and net profit of ₹130 Cr, at an EBITDA margin of around 12.8%. Its revenue is led by cotton & blended yarn (45% of sales), complemented by knitted fabrics and knitwear & garments. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Cotton & Blended Yarn', revenueShare: 45, description: 'Carded and combed cotton yarn — 2.5 lakh spindles' },
       { name: 'Knitted Fabrics', revenueShare: 20, description: 'Hosiery and knitted fabric for garments' },
@@ -8382,7 +8383,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'michelin-india', name: 'Michelin India', industry: 'tyre', ticker: 'Unlisted (Michelin Group)',
     founded: 2009, headquarters: 'Chennai, Tamil Nadu', employees: '4,500+', marketCap: 'Unlisted (Subsidiary of Compagnie Générale des Établissements Michelin, France)',
     ceo: 'Mohan Kumar (President, Michelin India)', website: 'https://www.michelin.in',
-    description: "Indian manufacturing and sales arm of Michelin Group, the world's largest tyre company. Operates a truck and bus radial tyre plant at Thervoy Kandigai near Chennai (commissioned 2012). Also imports and sells Michelin passenger car tyres. Strong OEM ties with Ashok Leyland and Daimler India.",
+    description: "​Indian manufacturing and sales arm of Michelin Group, the world's largest tyre company. Operates a truck and bus radial tyre plant at Thervoy Kandigai near Chennai (commissioned 2012). Also imports and sells Michelin passenger car tyres. Strong OEM ties with Ashok Leyland and Daimler India. In FY25 the company reported revenue of ₹6,500 Cr and net profit of ₹600 Cr, at an EBITDA margin of around 17.7%. Its revenue is led by truck & bus radial tyres (55% of sales), complemented by passenger car tyres and two-wheeler tyres. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Truck & Bus Radial Tyres', revenueShare: 55, description: 'Premium TBR tyres manufactured at Chennai plant' },
       { name: 'Passenger Car Tyres (Import)', revenueShare: 25, description: 'Imported premium car and SUV tyres' },
@@ -8440,7 +8441,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'nitin-spinners', name: 'Nitin Spinners', industry: 'textile', ticker: 'NITINSPIN',
     founded: 1992, headquarters: 'Bhilwara, Rajasthan', employees: '5,000+', marketCap: '₹2,800 Cr',
     ceo: 'Dinesh Nolkha (MD)', website: 'https://www.nitinspinners.com',
-    description: "Leading cotton yarn manufacturer from Rajasthan's Bhilwara textile hub. Specializes in knitting yarn, weaving yarn, and organic cotton yarn. Known for consistent quality supplying to domestic and international knitters and weavers.",
+    description: "​Leading cotton yarn manufacturer from Rajasthan's Bhilwara textile hub. Specializes in knitting yarn, weaving yarn, and organic cotton yarn. Known for consistent quality supplying to domestic and international knitters and weavers. In FY25 the company reported revenue of ₹2,600 Cr and net profit of ₹240 Cr, at an EBITDA margin of around 18.5%. Its revenue is led by knitting yarn (40% of sales), complemented by weaving yarn and organic & specialty yarn. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Knitting Yarn', revenueShare: 40, description: 'Cotton and blended yarns for hosiery/knitting' },
       { name: 'Weaving Yarn', revenueShare: 30, description: 'High-quality yarn for weaving mills' },
@@ -8498,7 +8499,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'bridgestone-india', name: 'Bridgestone India', industry: 'tyre', ticker: 'Unlisted (Bridgestone Corporation)',
     founded: 1996, headquarters: 'Pune, Maharashtra', employees: '3,800+', marketCap: 'Unlisted (Subsidiary of Bridgestone Corporation, Japan)',
     ceo: 'Parag Satpute (MD, Bridgestone India)', website: 'https://www.bridgestone.co.in',
-    description: "Indian subsidiary of Bridgestone Corporation, world's largest tyre and rubber company. Operates manufacturing plant at Kheda (Chakan), Pune. Focuses on passenger car, SUV, and commercial vehicle tyres. OEM supplier to Honda, Toyota, Maruti, and Hyundai in India.",
+    description: "​Indian subsidiary of Bridgestone Corporation, world's largest tyre and rubber company. Operates manufacturing plant at Kheda (Chakan), Pune. Focuses on passenger car, SUV, and commercial vehicle tyres. OEM supplier to Honda, Toyota, Maruti, and Hyundai in India. In FY25 the company reported revenue of ₹6,200 Cr and net profit of ₹520 Cr, at an EBITDA margin of around 15.8%. Its revenue is led by passenger car tyres (50% of sales), complemented by truck & bus tyres and light truck & lcv tyres. Established Indian tyre manufacturer with strong domestic presence and growing global footprint. Manufacturing plants across India.",
     products: [
       { name: 'Passenger Car Tyres', revenueShare: 50, description: 'Premium radial tyres for cars and SUVs — Turanza, Ecopia, Potenza ranges' },
       { name: 'Truck & Bus Tyres', revenueShare: 25, description: 'Radial tyres for medium and heavy commercial vehicles' },
@@ -8556,7 +8557,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'siyaram-silk', name: 'Siyaram Silk Mills', industry: 'textile', ticker: 'SIYSIL',
     founded: 1978, headquarters: 'Mumbai, Maharashtra', employees: '5,500+', marketCap: '₹3,200 Cr',
     ceo: 'Ramesh Poddar (CMD)', website: 'https://www.sfrbrands.com',
-    description: "One of India's leading branded fabric companies with strong presence in men's suiting and shirting. Popular brands include Siyaram's, Mistair, Oxemberg, and J.Hampstead. Strong distribution network of 1 lakh+ retail touchpoints across India.",
+    description: "​One of India's leading branded fabric companies with strong presence in men's suiting and shirting. Popular brands include Siyaram's, Mistair, Oxemberg, and J.Hampstead. Strong distribution network of 1 lakh+ retail touchpoints across India. In FY25 the company reported revenue of ₹2,650 Cr and net profit of ₹250 Cr, at an EBITDA margin of around 15.5%. Its revenue is led by siyaram's fabrics (35% of sales), complemented by j.hampstead and oxemberg. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: "Siyaram's Fabrics (Mass Premium)", revenueShare: 35, description: "Flagship brand — India's favorite suiting/shirting" },
       { name: 'J.Hampstead (Premium)', revenueShare: 20, description: 'Premium Italian-finish suiting fabrics' },
@@ -8614,7 +8615,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'lux-industries', name: 'Lux Industries', industry: 'textile', ticker: 'LUXIND',
     founded: 1957, headquarters: 'Kolkata, West Bengal', employees: '8,000+', marketCap: '₹4,200 Cr',
     ceo: 'Ashok Kumar Todi (CMD)', website: 'https://www.luxinnerwear.com',
-    description: "One of India's leading innerwear companies with strong brand portfolio targeting mass and mid-premium segments. Popular brands include Lux Cozi, Lux Venus, Lux Inferno (thermals), ONN, and GenX. Dominant in Eastern and Northern India.",
+    description: "​One of India's leading innerwear companies with strong brand portfolio targeting mass and mid-premium segments. Popular brands include Lux Cozi, Lux Venus, Lux Inferno (thermals), ONN, and GenX. Dominant in Eastern and Northern India. In FY25 the company reported revenue of ₹2,850 Cr and net profit of ₹225 Cr, at an EBITDA margin of around 12.8%. Its revenue is led by lux cozi (35% of sales), complemented by lux venus & lyra and lux inferno. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Lux Cozi (Mid-Premium)', revenueShare: 35, description: 'Flagship men innerwear brand' },
       { name: 'Lux Venus & Lyra', revenueShare: 25, description: 'Economy segment innerwear for men and women' },
@@ -8672,7 +8673,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'dollar-industries', name: 'Dollar Industries', industry: 'textile', ticker: 'DOLLAR',
     founded: 1972, headquarters: 'Kolkata, West Bengal', employees: '6,000+', marketCap: '₹2,500 Cr',
     ceo: 'Vinod Kumar Gupta (MD)', website: 'https://www.dollarindustries.com',
-    description: "One of India's top innerwear companies with strong presence in economy and mid-segment. Key brands include Dollar Bigboss, Dollar Missy (women), Dollar Ultra, and Force NXT (premium). Pan-India distribution with 1 lakh+ retail outlets.",
+    description: "​One of India's top innerwear companies with strong presence in economy and mid-segment. Key brands include Dollar Bigboss, Dollar Missy (women), Dollar Ultra, and Force NXT (premium). Pan-India distribution with 1 lakh+ retail outlets. In FY25 the company reported revenue of ₹1,780 Cr and net profit of ₹135 Cr, at an EBITDA margin of around 12.9%. Its revenue is led by dollar bigboss (35% of sales), complemented by dollar missy and force nxt. Established Indian textile company with integrated manufacturing and growing brand/retail presence. Manufacturing clusters in Gujarat, Tamil Nadu, Maharashtra, Punjab.",
     products: [
       { name: 'Dollar Bigboss (Men Economy)', revenueShare: 35, description: 'Mass-market men innerwear brand' },
       { name: 'Dollar Missy (Women)', revenueShare: 20, description: 'Women innerwear — fastest growing segment' },
@@ -8731,7 +8732,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'dixon-technologies', name: 'Dixon Technologies', industry: 'electronics', ticker: 'DIXON',
     founded: 1993, headquarters: 'Noida, Uttar Pradesh', employees: '15,000+', marketCap: '₹92,000 Cr',
     ceo: 'Atul B. Lall (Vice Chairman & MD)', website: 'https://www.dixontech.com',
-    description: "India's largest Electronics Manufacturing Services (EMS) company. Manufactures consumer electronics, lighting, mobile phones, and security systems for leading brands. Key beneficiary of PLI scheme.",
+    description: "​India's largest Electronics Manufacturing Services (EMS) company. Manufactures consumer electronics, lighting, mobile phones, and security systems for leading brands. Key beneficiary of PLI scheme. In FY25 the company reported revenue of ₹23,500 Cr and net profit of ₹560 Cr, at an EBITDA margin of around 4.7%. Its revenue is led by mobile phones & ems (40% of sales), complemented by consumer electronics and lighting products. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Mobile Phones & EMS', revenueShare: 40, description: 'Smartphone and feature phone manufacturing for Samsung, Xiaomi' },
       { name: 'Consumer Electronics (TVs)', revenueShare: 25, description: 'LED TVs for Samsung, Panasonic, Xiaomi' },
@@ -8789,7 +8790,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'tata-electronics', name: 'Tata Electronics', industry: 'electronics', ticker: 'Unlisted',
     founded: 2020, headquarters: 'Bangalore, Karnataka', employees: '45,000+', marketCap: 'Unlisted',
     ceo: 'Randhir Thakur (CEO & MD)', website: 'https://www.tataelectronics.com',
-    description: "Tata Group's electronics and semiconductor arm. Operates India's first semiconductor fab at Dholera (Gujarat) and assembles iPhones at Hosur (Tamil Nadu). Acquired Wistron India plant for Apple manufacturing.",
+    description: "​Tata Group's electronics and semiconductor arm. Operates India's first semiconductor fab at Dholera (Gujarat) and assembles iPhones at Hosur (Tamil Nadu). Acquired Wistron India plant for Apple manufacturing. In FY25 the company reported revenue of ₹38,000 Cr and net profit of ₹450 Cr, at an EBITDA margin of around 3.9%. Its revenue is led by iphone assembly (45% of sales), complemented by semiconductor fabrication and osat. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'iPhone Assembly', revenueShare: 45, description: 'Apple iPhone manufacturing at Hosur facility' },
       { name: 'Semiconductor Fabrication', revenueShare: 25, description: 'Chip fab at Dholera under construction with PSMC partnership' },
@@ -8847,7 +8848,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'havells-india', name: 'Havells India', industry: 'electronics', ticker: 'HAVELLS',
     founded: 1958, headquarters: 'Noida, Uttar Pradesh', employees: '12,000+', marketCap: '₹1,05,000 Cr',
     ceo: 'Anil Rai Gupta (Chairman & MD)', website: 'https://www.havells.com',
-    description: "Leading Indian electrical and consumer electronics company. Portfolio includes Havells, Lloyd (ACs & appliances), Standard, and REO brands. Operates 13 manufacturing plants across India with strong brand recall.",
+    description: "​Leading Indian electrical and consumer electronics company. Portfolio includes Havells, Lloyd (ACs & appliances), Standard, and REO brands. Operates 13 manufacturing plants across India with strong brand recall. In FY25 the company reported revenue of ₹21,200 Cr and net profit of ₹1,920 Cr, at an EBITDA margin of around 13.0%. Its revenue is led by lloyd consumer appliances (28% of sales), complemented by cables & wires and lighting & fixtures. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Lloyd Consumer Appliances', revenueShare: 28, description: 'ACs, washing machines, refrigerators, TVs under Lloyd brand' },
       { name: 'Cables & Wires', revenueShare: 25, description: 'Industrial and domestic cables and wires' },
@@ -8905,7 +8906,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'bharat-electronics', name: 'Bharat Electronics (BEL)', industry: 'electronics', ticker: 'BEL',
     founded: 1954, headquarters: 'Bangalore, Karnataka', employees: '11,500+', marketCap: '₹2,10,000 Cr',
     ceo: 'Manoj Jain (CMD)', website: 'https://www.bel-india.in',
-    description: "India's premier defence electronics PSU under Ministry of Defence. Manufactures radar systems, electronic warfare equipment, communications systems, and avionics. Key supplier to Indian armed forces with growing civilian segment.",
+    description: "​India's premier defence electronics PSU under Ministry of Defence. Manufactures radar systems, electronic warfare equipment, communications systems, and avionics. Key supplier to Indian armed forces with growing civilian segment. In FY25 the company reported revenue of ₹23,800 Cr and net profit of ₹4,500 Cr, at an EBITDA margin of around 27.7%. Its revenue is led by radar & weapon systems (30% of sales), complemented by communication & network systems and electronic warfare. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Radar & Weapon Systems', revenueShare: 30, description: 'Air defence radars, fire control systems, naval systems' },
       { name: 'Communication & Network Systems', revenueShare: 25, description: 'Software defined radios, tactical communication' },
@@ -8963,7 +8964,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'voltas', name: 'Voltas', industry: 'electronics', ticker: 'VOLTAS',
     founded: 1954, headquarters: 'Mumbai, Maharashtra', employees: '8,500+', marketCap: '₹52,000 Cr',
     ceo: 'Pradeep Bakshi (MD & CEO)', website: 'https://www.voltas.com',
-    description: "India's No.1 AC brand by market share (24%+). Part of Tata Group. Operations span Unitary Cooling Products (room ACs), Engineering Projects, and Voltas Beko JV for home appliances. Strong distribution network across India.",
+    description: "​India's No.1 AC brand by market share (24%+). Part of Tata Group. Operations span Unitary Cooling Products (room ACs), Engineering Projects, and Voltas Beko JV for home appliances. Strong distribution network across India. In FY25 the company reported revenue of ₹13,200 Cr and net profit of ₹850 Cr, at an EBITDA margin of around 9.5%. Its revenue is led by room air conditioners (45% of sales), complemented by commercial refrigeration and voltas beko appliances. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Room Air Conditioners', revenueShare: 45, description: 'Split and window ACs — market leader with 24% share' },
       { name: 'Commercial Refrigeration', revenueShare: 18, description: 'Visi-coolers, chest freezers, water coolers' },
@@ -9021,7 +9022,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'amber-enterprises', name: 'Amber Enterprises', industry: 'electronics', ticker: 'AMBER',
     founded: 1990, headquarters: 'Gurugram, Haryana', employees: '10,000+', marketCap: '₹18,000 Cr',
     ceo: 'Jasbir Singh (Chairman & CEO)', website: 'https://www.ambergroupindia.com',
-    description: "India's largest contract manufacturer of room ACs and AC components. Supplies IDUs, ODUs, and components to brands like Voltas, Blue Star, Panasonic, and Daikin. Also expanding into electronics EMS through subsidiaries.",
+    description: "​India's largest contract manufacturer of room ACs and AC components. Supplies IDUs, ODUs, and components to brands like Voltas, Blue Star, Panasonic, and Daikin. Also expanding into electronics EMS through subsidiaries. In FY25 the company reported revenue of ₹10,500 Cr and net profit of ₹280 Cr, at an EBITDA margin of around 7.4%. Its revenue is led by room ac odm/oem (40% of sales), complemented by ac components and electronics ems. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Room AC (RAC) ODM/OEM', revenueShare: 40, description: 'Complete AC manufacturing for consumer brands' },
       { name: 'AC Components (IDU/ODU)', revenueShare: 25, description: 'Indoor and outdoor units, heat exchangers, sheet metal' },
@@ -9079,7 +9080,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'kaynes-technology', name: 'Kaynes Technology', industry: 'electronics', ticker: 'KAYNES',
     founded: 2008, headquarters: 'Mysore, Karnataka', employees: '4,500+', marketCap: '₹28,000 Cr',
     ceo: 'Ramesh Kunhikannan (Chairman & MD)', website: 'https://www.kaynestech.com',
-    description: "End-to-end IoT and EMS solutions provider specializing in high-mix, low-volume electronics. Serves automotive, industrial, aerospace, and railway sectors. Known for complex PCB assemblies and box-build solutions.",
+    description: "​End-to-end IoT and EMS solutions provider specializing in high-mix, low-volume electronics. Serves automotive, industrial, aerospace, and railway sectors. Known for complex PCB assemblies and box-build solutions. In FY25 the company reported revenue of ₹2,650 Cr and net profit of ₹285 Cr, at an EBITDA margin of around 18.1%. Its revenue is led by industrial electronics ems (30% of sales), complemented by automotive electronics and railway & aerospace electronics. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Industrial Electronics EMS', revenueShare: 30, description: 'Industrial automation, IoT devices, smart meters' },
       { name: 'Automotive Electronics', revenueShare: 25, description: 'ECUs, ADAS modules, EV controllers' },
@@ -9137,7 +9138,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'syrma-sgs', name: 'Syrma SGS Technology', industry: 'electronics', ticker: 'SYRMA',
     founded: 2004, headquarters: 'Chennai, Tamil Nadu', employees: '5,500+', marketCap: '₹8,500 Cr',
     ceo: 'Sanmit Syrma (Co-Founder & MD)', website: 'https://www.syrmasgs.com',
-    description: "Emerging EMS player specializing in PCBA, sub-assemblies, and box-build for industrial, automotive, healthcare, and IT sectors. Merged with SGS Tekniks in 2021 to create a diversified EMS platform across India.",
+    description: "​Emerging EMS player specializing in PCBA, sub-assemblies, and box-build for industrial, automotive, healthcare, and IT sectors. Merged with SGS Tekniks in 2021 to create a diversified EMS platform across India. In FY25 the company reported revenue of ₹3,500 Cr and net profit of ₹200 Cr, at an EBITDA margin of around 11.4%. Its revenue is led by industrial electronics (30% of sales), complemented by it & consumer electronics and automotive electronics. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Industrial Electronics', revenueShare: 30, description: 'Smart meters, power electronics, industrial automation' },
       { name: 'IT & Consumer Electronics', revenueShare: 25, description: 'Set-top boxes, routers, RFID products' },
@@ -9195,7 +9196,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'foxconn-india', name: 'Foxconn India (Hon Hai)', industry: 'electronics', ticker: 'Unlisted',
     founded: 2015, headquarters: 'Sriperumbudur, Tamil Nadu', employees: '40,000+', marketCap: 'Unlisted',
     ceo: 'V. Lee (India Head)', website: 'https://www.foxconn.com',
-    description: "Indian operations of the world's largest electronics contract manufacturer (Hon Hai Precision). Manufactures Apple iPhones, Xiaomi phones, and Nokia devices at plants in Tamil Nadu and Karnataka. Largest electronics exporter from India.",
+    description: "​Indian operations of the world's largest electronics contract manufacturer (Hon Hai Precision). Manufactures Apple iPhones, Xiaomi phones, and Nokia devices at plants in Tamil Nadu and Karnataka. Largest electronics exporter from India. In FY25 the company reported revenue of ₹85,000 Cr and net profit of ₹850 Cr, at an EBITDA margin of around 3.0%. Its revenue is led by apple iphone assembly (55% of sales), complemented by xiaomi smartphone assembly and nokia/hmd devices. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Apple iPhone Assembly', revenueShare: 55, description: 'iPhone 15 and iPhone 16 series manufacturing for export and domestic' },
       { name: 'Xiaomi Smartphone Assembly', revenueShare: 20, description: 'Xiaomi and Redmi phone manufacturing' },
@@ -9253,7 +9254,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'samsung-india', name: 'Samsung India Electronics', industry: 'electronics', ticker: 'Unlisted',
     founded: 1995, headquarters: 'Gurugram, Haryana', employees: '70,000+', marketCap: 'Unlisted',
     ceo: 'JB Park (President & CEO, Samsung Southwest Asia)', website: 'https://www.samsung.com/in',
-    description: "India's largest consumer electronics company and second-largest smartphone brand. Operates the world's largest mobile factory at Noida and a home appliance plant at Chennai. Major exporter of smartphones and electronics from India.",
+    description: "​India's largest consumer electronics company and second-largest smartphone brand. Operates the world's largest mobile factory at Noida and a home appliance plant at Chennai. Major exporter of smartphones and electronics from India. In FY25 the company reported revenue of ₹1,05,000 Cr and net profit of ₹5,800 Cr, at an EBITDA margin of around 9.7%. Its revenue is led by smartphones & tablets (40% of sales), complemented by consumer electronics and home appliances. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Smartphones & Tablets', revenueShare: 40, description: 'Galaxy S, A, M, and F series phones — 18% market share' },
       { name: 'Consumer Electronics (TVs)', revenueShare: 20, description: 'QLED, Neo QLED, Crystal UHD TVs — market leader' },
@@ -9311,7 +9312,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'vedanta-semiconductors', name: 'Vedanta Semiconductors', industry: 'electronics', ticker: 'Unlisted',
     founded: 2022, headquarters: 'Dholera, Gujarat', employees: '2,000+', marketCap: 'Unlisted',
     ceo: 'Akarsh K Hebbar (Vedanta Semiconductors Business Head)', website: 'https://www.vedantaltd.com',
-    description: "Vedanta Group's semiconductor venture to build India's first commercial display fab and semiconductor chip plant at Dholera SIR, Gujarat. Partnership with Foxconn (later dissolved) replaced by new technology partners. Part of India Semiconductor Mission.",
+    description: "​Vedanta Group's semiconductor venture to build India's first commercial display fab and semiconductor chip plant at Dholera SIR, Gujarat. Partnership with Foxconn (later dissolved) replaced by new technology partners. Part of India Semiconductor Mission. In FY25 the company reported revenue of ₹0 Cr (Pre-revenue) and net profit of ₹-1,200 Cr (Investment phase), at an EBITDA margin of around N/A. Its revenue is led by display fab (40% of sales), complemented by semiconductor fab and atmp. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Display Fab (Gen 8.6 LCD)', revenueShare: 40, description: 'Large area glass substrates for TV and monitor displays' },
       { name: 'Semiconductor Fab (28-65nm)', revenueShare: 30, description: 'Chip fabrication for IoT, auto, and consumer electronics' },
@@ -9368,7 +9369,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'blue-star', name: 'Blue Star', industry: 'electronics', ticker: 'BLUESTARCO',
     founded: 1943, headquarters: 'Mumbai, Maharashtra', employees: '5,500+', marketCap: '₹38,000 Cr',
     ceo: 'B. Thiagarajan (MD)', website: 'https://www.bluestarindia.com',
-    description: "India's leading air conditioning and commercial refrigeration company. Strong in central/VRF AC for commercial buildings. Room AC is fastest growing segment with 13%+ market share. Also in water purification and air purifiers.",
+    description: "​India's leading air conditioning and commercial refrigeration company. Strong in central/VRF AC for commercial buildings. Room AC is fastest growing segment with 13%+ market share. Also in water purification and air purifiers. In FY25 the company reported revenue of ₹12,000 Cr and net profit of ₹720 Cr, at an EBITDA margin of around 10.0%. Its revenue is led by room air conditioners (35% of sales), complemented by central & vrf air conditioning and commercial refrigeration. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Room Air Conditioners', revenueShare: 35, description: 'Split ACs — fastest growing segment, 13%+ market share' },
       { name: 'Central & VRF Air Conditioning', revenueShare: 28, description: 'Centralized HVAC, VRF systems for commercial buildings' },
@@ -9426,7 +9427,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'orient-electric', name: 'Orient Electric', industry: 'electronics', ticker: 'ORIENTELEC',
     founded: 1954, headquarters: 'New Delhi', employees: '4,200+', marketCap: '₹8,500 Cr',
     ceo: 'Ravindra Singh Negi (MD & CEO)', website: 'https://www.orientelectric.com',
-    description: "Part of CK Birla Group. Leading Indian brand for fans, lighting, and home appliances. Market leader in ceiling fans with 25%+ share. Also strong in LED lighting and switchgear. Known for design-led premium fans.",
+    description: "​Part of CK Birla Group. Leading Indian brand for fans, lighting, and home appliances. Market leader in ceiling fans with 25%+ share. Also strong in LED lighting and switchgear. Known for design-led premium fans. In FY25 the company reported revenue of ₹3,250 Cr and net profit of ₹185 Cr, at an EBITDA margin of around 9.5%. Its revenue is led by fans (42% of sales), complemented by lighting and home appliances. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Fans (Ceiling, Table, Exhaust)', revenueShare: 42, description: 'Ceiling fans market leader — decorative and BLDC energy-efficient range' },
       { name: 'Lighting (LED)', revenueShare: 22, description: 'LED bulbs, battens, downlighters, smart lighting' },
@@ -9484,7 +9485,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'crompton-greaves', name: 'Crompton Greaves Consumer Electricals', industry: 'electronics', ticker: 'CROMPTON',
     founded: 2015, headquarters: 'Mumbai, Maharashtra', employees: '5,000+', marketCap: '₹25,000 Cr',
     ceo: 'Promeet Ghosh (MD & CEO)', website: 'https://www.crompton.co.in',
-    description: "Leading Indian consumer electricals company demerged from Crompton Greaves in 2015. Market leader in fans (27% share) and residential pumps. Acquired Butterfly Gandhimathi for kitchen appliances. Strong brand with 100+ year heritage.",
+    description: "​Leading Indian consumer electricals company demerged from Crompton Greaves in 2015. Market leader in fans (27% share) and residential pumps. Acquired Butterfly Gandhimathi for kitchen appliances. Strong brand with 100+ year heritage. In FY25 the company reported revenue of ₹7,200 Cr and net profit of ₹620 Cr, at an EBITDA margin of around 12.8%. Its revenue is led by fans (35% of sales), complemented by pumps and lighting. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Fans (Ceiling, TPW)', revenueShare: 35, description: 'Ceiling fans, table/pedestal/wall fans — 27% market share' },
       { name: 'Pumps (Residential)', revenueShare: 22, description: 'Water pumps for residential and agriculture — No.1 brand' },
@@ -9543,7 +9544,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'hindustan-unilever', name: 'Hindustan Unilever', industry: 'fmcg', ticker: 'HINDUNILVR',
     founded: 1933, headquarters: 'Mumbai, Maharashtra', employees: '21,000+', marketCap: '₹5,72,000 Cr',
     ceo: 'Rohit Jawa (CEO & MD)', website: 'https://www.hul.co.in',
-    description: "India's largest FMCG company and subsidiary of Unilever. Operates across home care, beauty & personal care, and foods & refreshment segments. Portfolio includes iconic brands like Surf Excel, Dove, Lux, Rin, Knorr, and Kwality Wall's.",
+    description: "​India's largest FMCG company and subsidiary of Unilever. Operates across home care, beauty & personal care, and foods & refreshment segments. Portfolio includes iconic brands like Surf Excel, Dove, Lux, Rin, Knorr, and Kwality Wall's. In FY25 the company reported revenue of ₹61,800 Cr and net profit of ₹10,750 Cr, at an EBITDA margin of around 24.4%. Its revenue is led by home care (35% of sales), complemented by beauty & personal care and foods & refreshment. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Home Care (Surf Excel, Rin, Vim)', revenueShare: 35, description: 'Fabric wash, household cleaning, and dishwash products' },
       { name: 'Beauty & Personal Care (Dove, Lux, Pond\'s)', revenueShare: 30, description: 'Skin care, hair care, deodorants, and oral care' },
@@ -9601,7 +9602,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'polycab-india', name: 'Polycab India', industry: 'electronics', ticker: 'POLYCAB',
     founded: 1996, headquarters: 'Mumbai, Maharashtra', employees: '24,000+', marketCap: '₹95,000 Cr',
     ceo: 'Inder T. Jaisinghani (Chairman & MD)', website: 'https://www.polycab.com',
-    description: "India's largest wire and cable manufacturer with 25%+ market share. Also growing Fast Moving Electrical Goods (FMEG) business including fans, lighting, switches, and appliances. 25 manufacturing facilities across India.",
+    description: "​India's largest wire and cable manufacturer with 25%+ market share. Also growing Fast Moving Electrical Goods (FMEG) business including fans, lighting, switches, and appliances. 25 manufacturing facilities across India. In FY25 the company reported revenue of ₹22,000 Cr and net profit of ₹2,400 Cr, at an EBITDA margin of around 15.2%. Its revenue is led by wires & cables (55% of sales), complemented by fmeg and epc & projects. Growing Indian electronics company benefiting from government push for domestic manufacturing and rising consumer demand. Manufacturing in India (multiple states).",
     products: [
       { name: 'Wires & Cables', revenueShare: 55, description: 'Building wires, power cables, telecom cables, solar cables' },
       { name: 'FMEG (Fans, Lighting, Switches)', revenueShare: 20, description: 'Ceiling fans, LED lighting, modular switches, water heaters' },
@@ -9659,7 +9660,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'itc-limited', name: 'ITC Limited', industry: 'fmcg', ticker: 'ITC',
     founded: 1910, headquarters: 'Kolkata, West Bengal', employees: '36,000+', marketCap: '₹5,85,000 Cr',
     ceo: 'Sanjiv Puri (CMD)', website: 'https://www.itcportal.com',
-    description: "Diversified conglomerate with FMCG as fastest-growing segment. Portfolio includes Aashirvaad, Sunfeast, Bingo!, YiPPee!, Classmate, Fiama, and Engage. Also has cigarettes, hotels, paperboards, and agri-business verticals.",
+    description: "​Diversified conglomerate with FMCG as fastest-growing segment. Portfolio includes Aashirvaad, Sunfeast, Bingo!, YiPPee!, Classmate, Fiama, and Engage. Also has cigarettes, hotels, paperboards, and agri-business verticals. In FY25 the company reported revenue of ₹73,500 Cr and net profit of ₹21,800 Cr, at an EBITDA margin of around 39.5%. Its revenue is led by cigarettes (37% of sales), complemented by fmcg-others and paperboards & packaging. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Cigarettes (Gold Flake, Classic)', revenueShare: 37, description: 'Market leader in Indian cigarettes with 75%+ share' },
       { name: 'FMCG-Others (Aashirvaad, Bingo!, Sunfeast)', revenueShare: 28, description: 'Foods, personal care, education, and stationery' },
@@ -9717,7 +9718,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'nestle-india', name: 'Nestle India', industry: 'fmcg', ticker: 'NESTLEIND',
     founded: 1961, headquarters: 'Gurugram, Haryana', employees: '8,000+', marketCap: '₹2,20,000 Cr',
     ceo: 'Suresh Narayanan (CMD)', website: 'https://www.nestle.in',
-    description: "Indian subsidiary of Nestle S.A., Switzerland. Dominates instant noodles (Maggi), infant nutrition, and confectionery segments. Operates 9 factories across India. Known for strong brand loyalty and premiumization strategy.",
+    description: "​Indian subsidiary of Nestle S.A., Switzerland. Dominates instant noodles (Maggi), infant nutrition, and confectionery segments. Operates 9 factories across India. Known for strong brand loyalty and premiumization strategy. In FY25 the company reported revenue of ₹20,800 Cr and net profit of ₹3,500 Cr, at an EBITDA margin of around 26.0%. Its revenue is led by prepared dishes & cooking aids (30% of sales), complemented by milk products & nutrition and beverages. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Prepared Dishes & Cooking Aids (Maggi)', revenueShare: 30, description: 'Instant noodles, sauces, seasonings, and masalas' },
       { name: 'Milk Products & Nutrition', revenueShare: 28, description: 'Everyday dairy whitener, Cerelac, Lactogen, NAN' },
@@ -9775,7 +9776,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'dabur-india', name: 'Dabur India', industry: 'fmcg', ticker: 'DABUR',
     founded: 1884, headquarters: 'Ghaziabad, Uttar Pradesh', employees: '7,500+', marketCap: '₹88,000 Cr',
     ceo: 'Mohit Malhotra (CEO)', website: 'https://www.dabur.com',
-    description: "India's leading Ayurvedic and natural products company. Portfolio spans health care, personal care, home care, and foods. Key brands include Dabur Chyawanprash, Real juices, Vatika, Meswak, Hajmola, and Honitus.",
+    description: "​India's leading Ayurvedic and natural products company. Portfolio spans health care, personal care, home care, and foods. Key brands include Dabur Chyawanprash, Real juices, Vatika, Meswak, Hajmola, and Honitus. In FY25 the company reported revenue of ₹12,800 Cr and net profit of ₹2,050 Cr, at an EBITDA margin of around 21.1%. Its revenue is led by health care (30% of sales), complemented by hair care and oral care. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Health Care (Chyawanprash, Honitus)', revenueShare: 30, description: 'Ayurvedic health supplements, digestives, and OTC products' },
       { name: 'Hair Care (Vatika, Amla)', revenueShare: 22, description: 'Hair oils, shampoos, and hair care treatments' },
@@ -9833,7 +9834,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'britannia-industries', name: 'Britannia Industries', industry: 'fmcg', ticker: 'BRITANNIA',
     founded: 1892, headquarters: 'Bengaluru, Karnataka', employees: '5,000+', marketCap: '₹1,20,000 Cr',
     ceo: 'Varun Berry (Vice Chairman & MD)', website: 'https://www.britannia.co.in',
-    description: "India's largest bakery and biscuit company with 35%+ market share. Portfolio includes Good Day, Marie Gold, Tiger, NutriChoice, Treat croissants, and dairy products. Reaches 6+ million retail outlets across India.",
+    description: "​India's largest bakery and biscuit company with 35%+ market share. Portfolio includes Good Day, Marie Gold, Tiger, NutriChoice, Treat croissants, and dairy products. Reaches 6+ million retail outlets across India. In FY25 the company reported revenue of ₹18,200 Cr and net profit of ₹2,500 Cr, at an EBITDA margin of around 18.7%. Its revenue is led by biscuits (55% of sales), complemented by bread & bakery and dairy products. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Biscuits (Good Day, Marie Gold, Tiger)', revenueShare: 55, description: 'Cookies, cream biscuits, glucose, and health biscuits' },
       { name: 'Bread & Bakery (Treat)', revenueShare: 15, description: 'Bread, cakes, croissants, and rusk' },
@@ -9891,7 +9892,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'godrej-consumer', name: 'Godrej Consumer Products', industry: 'fmcg', ticker: 'GODREJCP',
     founded: 2001, headquarters: 'Mumbai, Maharashtra', employees: '12,000+', marketCap: '₹1,15,000 Cr',
     ceo: 'Sudhir Sitapati (MD & CEO)', website: 'https://www.godrejcp.com',
-    description: "Part of Godrej Group. Leading FMCG company in home care, personal care, and hair care. Strong international presence in Indonesia, Africa, and Latin America. Key brands include Cinthol, Godrej Expert, HIT, Good Knight, and Godrej aer.",
+    description: "​Part of Godrej Group. Leading FMCG company in home care, personal care, and hair care. Strong international presence in Indonesia, Africa, and Latin America. Key brands include Cinthol, Godrej Expert, HIT, Good Knight, and Godrej aer. In FY25 the company reported revenue of ₹15,500 Cr and net profit of ₹2,200 Cr, at an EBITDA margin of around 21.3%. Its revenue is led by home care (32% of sales), complemented by hair care and personal care. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Home Care (Good Knight, HIT)', revenueShare: 32, description: 'Household insecticides, mosquito repellents, and air fresheners' },
       { name: 'Hair Care (Godrej Expert, Nupur)', revenueShare: 28, description: 'Hair colours, shampoos, and conditioners' },
@@ -9949,7 +9950,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'marico', name: 'Marico', industry: 'fmcg', ticker: 'MARICO',
     founded: 1990, headquarters: 'Mumbai, Maharashtra', employees: '3,500+', marketCap: '₹82,000 Cr',
     ceo: 'Saugata Gupta (MD & CEO)', website: 'https://www.marico.com',
-    description: "Leading Indian FMCG company focused on health, beauty, and wellness. Flagship brands include Parachute (coconut oil), Saffola (edible oils and oats), Nihar Naturals, and Set Wet. Operates in over 25 countries.",
+    description: "​Leading Indian FMCG company focused on health, beauty, and wellness. Flagship brands include Parachute (coconut oil), Saffola (edible oils and oats), Nihar Naturals, and Set Wet. Operates in over 25 countries. In FY25 the company reported revenue of ₹10,500 Cr and net profit of ₹1,700 Cr, at an EBITDA margin of around 21.0%. Its revenue is led by parachute (35% of sales), complemented by saffola and value-added hair oils. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Parachute (Coconut Oil)', revenueShare: 35, description: 'Market leader in branded coconut oil with 60%+ share' },
       { name: 'Saffola (Edible Oils & Foods)', revenueShare: 25, description: 'Healthy oils, oats, honey, and wellness foods' },
@@ -10007,7 +10008,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'colgate-palmolive', name: 'Colgate-Palmolive India', industry: 'fmcg', ticker: 'COLPAL',
     founded: 1937, headquarters: 'Mumbai, Maharashtra', employees: '4,200+', marketCap: '₹72,000 Cr',
     ceo: 'Prabha Narasimhan (MD & CEO)', website: 'https://www.colgatepalmolive.co.in',
-    description: "Market leader in Indian oral care with 55%+ toothpaste market share. Subsidiary of Colgate-Palmolive Company, USA. Portfolio includes Colgate Strong Teeth, MaxFresh, Visible White, and Palmolive personal care products.",
+    description: "​Market leader in Indian oral care with 55%+ toothpaste market share. Subsidiary of Colgate-Palmolive Company, USA. Portfolio includes Colgate Strong Teeth, MaxFresh, Visible White, and Palmolive personal care products. In FY25 the company reported revenue of ₹6,300 Cr and net profit of ₹1,500 Cr, at an EBITDA margin of around 31.7%. Its revenue is led by toothpaste (60% of sales), complemented by toothbrush and personal care. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Toothpaste (Strong Teeth, MaxFresh)', revenueShare: 60, description: 'Complete oral care range from mass to premium' },
       { name: 'Toothbrush', revenueShare: 18, description: 'Manual and electric toothbrush range' },
@@ -10065,7 +10066,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'procter-gamble-india', name: 'Procter & Gamble India', industry: 'fmcg', ticker: 'PGHH',
     founded: 1964, headquarters: 'Mumbai, Maharashtra', employees: '4,000+', marketCap: '₹55,000 Cr',
     ceo: 'L.V. Vaidyanathan (CEO, Indian Subcontinent)', website: 'https://www.pg.co.in',
-    description: "Indian subsidiary of Procter & Gamble, USA. Operates in feminine hygiene (Whisper), hair care (Head & Shoulders, Pantene), skin care (Olay), and home care (Ariel, Tide). Premium positioning strategy with focus on urban consumers.",
+    description: "​Indian subsidiary of Procter & Gamble, USA. Operates in feminine hygiene (Whisper), hair care (Head & Shoulders, Pantene), skin care (Olay), and home care (Ariel, Tide). Premium positioning strategy with focus on urban consumers. In FY25 the company reported revenue of ₹17,500 Cr and net profit of ₹2,650 Cr, at an EBITDA margin of around 23.4%. Its revenue is led by fabric care (30% of sales), complemented by feminine hygiene and hair care. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Fabric Care (Ariel, Tide)', revenueShare: 30, description: 'Detergents and fabric conditioners' },
       { name: 'Feminine Hygiene (Whisper)', revenueShare: 25, description: 'Sanitary pads and feminine care products' },
@@ -10123,7 +10124,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'tata-consumer', name: 'Tata Consumer Products', industry: 'fmcg', ticker: 'TATACONSUM',
     founded: 1962, headquarters: 'Mumbai, Maharashtra', employees: '10,000+', marketCap: '₹1,05,000 Cr',
     ceo: 'Sunil D\'Souza (MD & CEO)', website: 'https://www.tataconsumer.com',
-    description: "FMCG arm of Tata Group. Operates in branded foods, beverages, and food services. Key brands include Tata Tea, Tetley, Tata Salt, Tata Sampann, Eight O'Clock Coffee, Tata Soulfull, and Starbucks India (JV). Merged with Tata Chemicals consumer business.",
+    description: "​FMCG arm of Tata Group. Operates in branded foods, beverages, and food services. Key brands include Tata Tea, Tetley, Tata Salt, Tata Sampann, Eight O'Clock Coffee, Tata Soulfull, and Starbucks India (JV). Merged with Tata Chemicals consumer business. In FY25 the company reported revenue of ₹16,800 Cr and net profit of ₹1,550 Cr, at an EBITDA margin of around 14.6%. Its revenue is led by tea & coffee (35% of sales), complemented by salt & staples and ready-to-eat & health foods. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Tea & Coffee (Tata Tea, Tetley)', revenueShare: 35, description: 'India and international tea and coffee brands' },
       { name: 'Salt & Staples (Tata Salt, Sampann)', revenueShare: 25, description: 'Branded salt, pulses, spices, and ready-to-cook' },
@@ -10181,7 +10182,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'emami', name: 'Emami', industry: 'fmcg', ticker: 'EMAMILTD',
     founded: 1974, headquarters: 'Kolkata, West Bengal', employees: '3,200+', marketCap: '₹25,000 Cr',
     ceo: 'Harsha V. Agarwal (Vice Chairman & MD)', website: 'https://www.emamiltd.in',
-    description: "Leading Indian FMCG company focused on personal care and healthcare. Key brands include BoroPlus, Navratna Oil, Zandu Balm, Fair and Handsome, Kesh King, and Mentho Plus. Strong in winter care and male grooming segments.",
+    description: "​Leading Indian FMCG company focused on personal care and healthcare. Key brands include BoroPlus, Navratna Oil, Zandu Balm, Fair and Handsome, Kesh King, and Mentho Plus. Strong in winter care and male grooming segments. In FY25 the company reported revenue of ₹3,900 Cr and net profit of ₹720 Cr, at an EBITDA margin of around 26.9%. Its revenue is led by healthcare (28% of sales), complemented by skin care and hair care. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Healthcare (Zandu, Mentho Plus)', revenueShare: 28, description: 'Ayurvedic balms, pain relief, and OTC healthcare' },
       { name: 'Skin Care (BoroPlus, Fair and Handsome)', revenueShare: 25, description: 'Antiseptic cream, winter care, and men fairness' },
@@ -10239,7 +10240,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'patanjali-foods', name: 'Patanjali Foods', industry: 'fmcg', ticker: 'PATANJALI',
     founded: 1986, headquarters: 'Haridwar, Uttarakhand', employees: '8,500+', marketCap: '₹42,000 Cr',
     ceo: 'Ram Bharat (MD)', website: 'https://www.patanjalifoods.com',
-    description: "Formerly Ruchi Soya Industries, acquired and rebranded by Patanjali Ayurved. One of India's largest edible oil companies. Portfolio spans edible oils (Ruchi Gold, Mahakosh), food products, and Nutrela brand of soya chunks and wellness products.",
+    description: "​Formerly Ruchi Soya Industries, acquired and rebranded by Patanjali Ayurved. One of India's largest edible oil companies. Portfolio spans edible oils (Ruchi Gold, Mahakosh), food products, and Nutrela brand of soya chunks and wellness products. In FY25 the company reported revenue of ₹32,000 Cr and net profit of ₹1,200 Cr, at an EBITDA margin of around 5.9%. Its revenue is led by edible oils (55% of sales), complemented by nutrela and food products. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Edible Oils (Ruchi Gold, Mahakosh)', revenueShare: 55, description: 'Soybean, mustard, sunflower, and palm oils' },
       { name: 'Nutrela (Soya Products)', revenueShare: 18, description: 'Soya chunks, granules, and high-protein foods' },
@@ -10297,7 +10298,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'adani-wilmar', name: 'Adani Wilmar', industry: 'fmcg', ticker: 'AWL',
     founded: 1999, headquarters: 'Ahmedabad, Gujarat', employees: '5,500+', marketCap: '₹35,000 Cr',
     ceo: 'Angshu Mallick (MD & CEO)', website: 'https://www.adaniwilmar.com',
-    description: "JV between Adani Group and Wilmar International (Singapore). India's largest edible oil company by volume. Flagship brand Fortune is India's #1 edible oil brand. Also operates in wheat flour, rice, sugar, pulses, and ready-to-cook segments.",
+    description: "​JV between Adani Group and Wilmar International (Singapore). India's largest edible oil company by volume. Flagship brand Fortune is India's #1 edible oil brand. Also operates in wheat flour, rice, sugar, pulses, and ready-to-cook segments. In FY25 the company reported revenue of ₹51,000 Cr and net profit of ₹650 Cr, at an EBITDA margin of around 3.3%. Its revenue is led by edible oils (60% of sales), complemented by wheat flour & rice and industry essentials. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Edible Oils (Fortune)', revenueShare: 60, description: 'Soybean, sunflower, mustard, rice bran, and blended oils' },
       { name: 'Wheat Flour & Rice (Fortune)', revenueShare: 15, description: 'Branded atta, rice, and sugar' },
@@ -10355,7 +10356,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'parle-products', name: 'Parle Products', industry: 'fmcg', ticker: 'Unlisted',
     founded: 1929, headquarters: 'Mumbai, Maharashtra', employees: '15,000+', marketCap: 'Unlisted (Private)',
     ceo: 'Mayank Shah (VP)', website: 'https://www.parleproducts.com',
-    description: "India's largest biscuit manufacturer by volume and one of the world's largest. Iconic brand Parle-G is the world's best-selling biscuit. Portfolio includes Parle-G, Hide & Seek, Milano, KrackJack, Melody, and Frooti (via Parle Agro partnership heritage).",
+    description: "​India's largest biscuit manufacturer by volume and one of the world's largest. Iconic brand Parle-G is the world's best-selling biscuit. Portfolio includes Parle-G, Hide & Seek, Milano, KrackJack, Melody, and Frooti (via Parle Agro partnership heritage). In FY25 the company reported revenue of ₹20,500 Cr and net profit of ₹1,850 Cr, at an EBITDA margin of around 14.6%. Its revenue is led by glucose biscuits (40% of sales), complemented by premium biscuits and snacks & namkeen. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Glucose Biscuits (Parle-G)', revenueShare: 40, description: "World's #1 selling biscuit brand by volume" },
       { name: 'Premium Biscuits (Hide & Seek, Milano)', revenueShare: 20, description: 'Chocolate chip cookies and premium range' },
@@ -10413,7 +10414,7 @@ const mockCompanies: CompanySnapshot[] = [
     id: 'amul-gcmmf', name: 'Amul / GCMMF', industry: 'fmcg', ticker: 'Unlisted (Cooperative)',
     founded: 1946, headquarters: 'Anand, Gujarat', employees: '36,000+', marketCap: 'Unlisted (Cooperative)',
     ceo: 'Jayen Mehta (MD, GCMMF)', website: 'https://www.amul.com',
-    description: "India's largest food products organization and world's 8th largest dairy cooperative. Gujarat Cooperative Milk Marketing Federation (GCMMF) markets Amul brand dairy products. Network of 3.6 million milk producers across 18,700 village cooperatives. Revenue exceeds Rs 72,000 Cr.",
+    description: "​India's largest food products organization and world's 8th largest dairy cooperative. Gujarat Cooperative Milk Marketing Federation (GCMMF) markets Amul brand dairy products. Network of 3.6 million milk producers across 18,700 village cooperatives. Revenue exceeds Rs 72,000 Cr. In FY25 the company reported revenue of ₹72,000 Cr and net profit of ₹1,050 Cr, at an EBITDA margin of around 4.9%. Its revenue is led by liquid milk & milk products (40% of sales), complemented by butter, cheese & ghee and milk powder & infant food. Established FMCG player with strong brands, deep distribution, and consistent growth in India consumption story. Pan-India distribution reaching 10M+ retail outlets.",
     products: [
       { name: 'Liquid Milk & Milk Products', revenueShare: 40, description: 'Pasteurized milk, buttermilk, lassi, and flavored milk' },
       { name: 'Butter, Cheese & Ghee', revenueShare: 25, description: 'Iconic Amul Butter, cheese slices, and pure ghee' },
@@ -10469,8 +10470,11 @@ const mockCompanies: CompanySnapshot[] = [
   },
 ]
 
+// Combine base companies with the additional (newer-industry) companies
+const allCompanies: CompanySnapshot[] = [...mockCompanies, ...ADDITIONAL_COMPANIES]
+
 // All suggestions for autocomplete
-const allSuggestions: CompanySuggestion[] = mockCompanies.map(c => ({
+const allSuggestions: CompanySuggestion[] = allCompanies.map(c => ({
   id: c.id, name: c.name, industry: c.industry, ticker: c.ticker
 }))
 
@@ -10478,8 +10482,15 @@ function filterSuggestions(query: string, currentIndustry: IndustryId): CompanyS
   const q = query.toLowerCase().trim()
   if (q.length < 1) return []
 
-  return allSuggestions
+  const matches = allSuggestions
     .filter(c => c.name.toLowerCase().includes(q) || c.ticker.toLowerCase().includes(q))
+
+  // Scope results to the current industry when it has matching companies.
+  // This keeps each dashboard's snapshot search focused on its own sector.
+  const inIndustry = matches.filter(c => c.industry === currentIndustry)
+  const source = inIndustry.length > 0 ? inIndustry : matches
+
+  return source
     .sort((a, b) => {
       const aMatch = a.industry === currentIndustry ? 0 : 1
       const bMatch = b.industry === currentIndustry ? 0 : 1
@@ -10502,7 +10513,7 @@ export const useCompanyStore = create<CompanyStoreState>((set) => ({
   },
 
   selectCompany: (companyId, currentIndustry) => {
-    const company = mockCompanies.find(c => c.id === companyId) || null
+    const company = allCompanies.find(c => c.id === companyId) || null
     const hasMismatch = company ? company.industry !== currentIndustry : false
     set({ selectedCompany: company, hasMismatch, mismatchDismissed: false, suggestions: [] })
   },

@@ -4,9 +4,10 @@ import {
   FileText, Car, Circle, Building2, Shirt, CandyOff,
   Cpu, ShoppingCart, LogOut, Shield, User, Hammer,
   Wrench, Pill, Landmark, Plane, Rocket, Hotel,
-  ChevronRight, Building, Factory
+  ChevronRight, Building, Factory, FlaskConical, HardHat, Sprout, Trophy, BookOpen
 } from 'lucide-react'
 import AnimatedCounter from '../components/AnimatedCounter'
+import { getIndustryOwners } from '../data/industryOwners'
 
 const industries = [
   {
@@ -59,7 +60,7 @@ const industries = [
     sparkline: [70, 68, 72, 75, 78, 82, 85, 88]
   },
   {
-    id: 'sugar', name: 'Sugar', icon: CandyOff, brandColor: '#059669',
+    id: 'sugar', name: 'Sugar', icon: Factory, brandColor: '#059669',
     description: 'Sugar mills, ethanol blending, cogeneration',
     metric: '27.5 MT', growth: '+4.2%', rank: '#2 Global', riskScore: 6.2,
     topCompany: 'Bajaj Hindusthan', featured: true, category: 'Agriculture',
@@ -114,6 +115,27 @@ const industries = [
     topCompany: 'Indian Hotels (Taj)', featured: true, category: 'Services',
     sparkline: [80, 25, 40, 65, 78, 85, 90, 95]
   },
+  {
+    id: 'chemical', name: 'Chemical', icon: FlaskConical, brandColor: '#7c2d12',
+    description: 'Petrochemicals, specialty, agrochemicals, dyes',
+    metric: '$220B Market', growth: '+11.2%', rank: '#6 Global', riskScore: 7.8,
+    topCompany: 'Reliance Industries', featured: true, category: 'Manufacturing',
+    sparkline: [55, 60, 68, 75, 80, 85, 90, 95]
+  },
+  {
+    id: 'infrastructure', name: 'Infrastructure', icon: HardHat, brandColor: '#334155',
+    description: 'Roads, metro, power, ports, urban development',
+    metric: '$143B Capex', growth: '+9.5%', rank: '#3 Global', riskScore: 7.0,
+    topCompany: 'Larsen & Toubro', featured: true, category: 'Infrastructure',
+    sparkline: [60, 62, 68, 74, 80, 86, 92, 98]
+  },
+  {
+    id: 'fertilizer', name: 'Fertilizer', icon: Sprout, brandColor: '#15803d',
+    description: 'Ammonia/urea, phosphatic, complex & specialty',
+    metric: '65 MT Consumption', growth: '+3.5%', rank: '#2 Global', riskScore: 7.5,
+    topCompany: 'IFFCO', featured: true, category: 'Agriculture',
+    sparkline: [70, 72, 73, 74, 75, 76, 78, 80]
+  },
 ]
 
 const categories = ['All']
@@ -131,9 +153,32 @@ export default function IndustryHub() {
       'tyre': '/tyre', 'textile': '/textile', 'sugar': '/sugar',
       'electronics': '/electronics', 'fmcg': '/fmcg', 'pharma': '/pharma',
       'bfsi': '/bfsi', 'aviation': '/aviation', 'startups': '/startups',
-      'hospitality': '/hospitality',
+      'hospitality': '/hospitality', 'chemical': '/chemical',
+      'infrastructure': '/infrastructure', 'fertilizer': '/fertilizer',
     }
     navigate(routeMap[id] || `/dashboard/${id}`)
+  }
+
+  // Industry-specific full-bleed photographic backgrounds for each card.
+  const cardImages: Record<string, string> = {
+    'steel': 'photo-1513828583688-c52646db42da',
+    'cement': 'photo-1503387762-592deb58ef4e',
+    'paper': 'photo-1607166452427-7e4477079cb9',
+    'automobile-oem': 'photo-1492144534655-ae79c964c9d7',
+    'auto-ancillary': 'photo-1487754180451-c456f719a1fc',
+    'tyre': 'photo-1449965408869-eaa3f722e40d',
+    'textile': 'photo-1528459801416-a9e53bbf4e17',
+    'sugar': 'photo-1500382017468-9049fed747ef',
+    'electronics': 'photo-1518770660439-4636190af475',
+    'fmcg': 'photo-1578916171728-46686eac8d58',
+    'pharma': 'photo-1582719478250-c89cae4dc85b',
+    'bfsi': 'photo-1486406146926-c627a92ad1ab',
+    'aviation': 'photo-1436491865332-7a61a109cc05',
+    'startups': 'photo-1522071820081-009f0129c71c',
+    'hospitality': 'photo-1566073771259-6a8506099945',
+    'chemical': 'photo-1532187863486-abf9dbad1b69',
+    'infrastructure': 'photo-1545459720-aac8509eb02c',
+    'fertilizer': 'photo-1500382017468-9049fed747ef',
   }
 
   return (
@@ -151,16 +196,20 @@ export default function IndustryHub() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={() => navigate('/quiz')} className="group relative flex items-center gap-2.5 px-5 py-2.5 bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 text-white rounded-xl text-xs font-extrabold hover:from-amber-500 hover:via-orange-600 hover:to-red-600 transition-all shadow-lg hover:shadow-xl active:scale-[0.96] overflow-hidden">
-              <span className="absolute inset-0 bg-white/10 group-hover:bg-white/20 transition-all"></span>
-              <span className="relative flex items-center gap-2">
-                <span className="text-lg animate-bounce">🏆</span>
-                <span className="flex flex-col items-start leading-tight">
-                  <span className="text-[11px] tracking-wide">Industry IQ Quiz</span>
-                  <span className="text-[8px] font-medium opacity-80">Test Your Knowledge →</span>
-                </span>
-              </span>
+            <button onClick={() => navigate('/library')} className="flex items-center gap-2 px-4 py-2 bg-white text-navy border border-gray-200 rounded-lg text-xs font-semibold hover:bg-gray-50 transition-colors">
+              <BookOpen size={14} strokeWidth={1.75} />
+              <span>Library</span>
             </button>
+            <button onClick={() => navigate('/quiz')} className="flex items-center gap-2 px-4 py-2 bg-navy text-white rounded-lg text-xs font-semibold hover:bg-navy/90 transition-colors">
+              <Trophy size={14} strokeWidth={1.75} />
+              <span>Industry IQ Quiz</span>
+            </button>
+            {role === 'admin' && (
+              <button onClick={() => navigate('/admin')} className="flex items-center gap-2 px-4 py-2 bg-maroon text-white rounded-lg text-xs font-bold hover:bg-maroon/90 transition-colors">
+                <Shield size={14} strokeWidth={1.75} />
+                <span>Admin</span>
+              </button>
+            )}
             <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">
               {role === 'admin' ? <Shield size={13} className="text-maroon" /> : <User size={13} className="text-gray-600" />}
               <span className="text-xs font-bold text-gray-700">{username}</span>
@@ -175,80 +224,71 @@ export default function IndustryHub() {
       <main className="max-w-7xl mx-auto px-6 py-6">
         {/* KPI Summary Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
-          <div className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
-            <div className="text-xl font-black text-green-600"><AnimatedCounter end={15} /></div>
-            <div className="text-[9px] font-semibold text-gray-500 mt-0.5">Live Sectors</div>
+          <div className="bg-white rounded-xl p-4 border border-gray-100 text-center">
+            <div className="text-2xl font-bold text-navy"><AnimatedCounter end={18} /></div>
+            <div className="text-[10px] font-medium text-gray-500 mt-1 uppercase tracking-wide">Live Sectors</div>
           </div>
-          <div className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
-            <div className="text-xl font-black text-gray-800"><AnimatedCounter end={500} suffix="+" /></div>
-            <div className="text-[9px] font-semibold text-gray-500 mt-0.5">Companies</div>
+          <div className="bg-white rounded-xl p-4 border border-gray-100 text-center">
+            <div className="text-2xl font-bold text-navy"><AnimatedCounter end={500} suffix="+" /></div>
+            <div className="text-[10px] font-medium text-gray-500 mt-1 uppercase tracking-wide">Companies</div>
           </div>
-          <div className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
-            <div className="text-xl font-black text-blue-700">$<AnimatedCounter end={4.8} decimals={1} />T</div>
-            <div className="text-[9px] font-semibold text-gray-500 mt-0.5">Market Size</div>
+          <div className="bg-white rounded-xl p-4 border border-gray-100 text-center">
+            <div className="text-2xl font-bold text-navy">$<AnimatedCounter end={4.8} decimals={1} />T</div>
+            <div className="text-[10px] font-medium text-gray-500 mt-1 uppercase tracking-wide">Market Size</div>
           </div>
-          <div className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
-            <div className="text-xl font-black text-orange-600"><AnimatedCounter end={8.5} decimals={1} />%</div>
-            <div className="text-[9px] font-semibold text-gray-500 mt-0.5">Avg Growth</div>
+          <div className="bg-white rounded-xl p-4 border border-gray-100 text-center">
+            <div className="text-2xl font-bold text-navy"><AnimatedCounter end={8.5} decimals={1} />%</div>
+            <div className="text-[10px] font-medium text-gray-500 mt-1 uppercase tracking-wide">Avg Growth</div>
           </div>
-          <div className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
-            <div className="text-xl font-black text-red-600"><AnimatedCounter end={6.8} decimals={1} /></div>
-            <div className="text-[9px] font-semibold text-gray-500 mt-0.5">Risk Score</div>
-          </div>
-        </div>
-
-        {/* Quiz Banner — Top CTA */}
-        <div onClick={() => navigate('/quiz')} className="mb-6 cursor-pointer group">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 p-5 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-0.5">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
-            <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4"></div>
-            <div className="relative flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20">
-                  <span className="text-2xl">🏆</span>
-                </div>
-                <div>
-                  <h3 className="text-lg font-extrabold text-white tracking-tight">Industry IQ Challenge</h3>
-                  <p className="text-xs text-white/80 mt-0.5">Test your knowledge across 10 industries • 20 questions • Timed • Lifelines</p>
-                </div>
-              </div>
-              <div className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-white rounded-xl text-indigo-700 font-extrabold text-sm shadow-md group-hover:bg-indigo-50 group-hover:scale-105 transition-all">
-                Play Now <span className="text-base ml-1 group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
+          <div className="bg-white rounded-xl p-4 border border-gray-100 text-center">
+            <div className="text-2xl font-bold text-navy"><AnimatedCounter end={6.8} decimals={1} /></div>
+            <div className="text-[10px] font-medium text-gray-500 mt-1 uppercase tracking-wide">Risk Score</div>
           </div>
         </div>
 
-        {/* Sector Grid — Visually Rich */}
-        <h2 className="text-lg font-bold text-gray-800 mb-4">Explore Industries</h2>
+        {/* Sector Grid */}
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-gray-800">Explore Industries</h2>
+          <p className="text-xs text-gray-500 mt-1">Click any industry to view its full profile — overview, key players, risk analysis, news, and company details.</p>
+        </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {industries.map((industry) => {
-            const emojiMap: Record<string, string> = {
-              'steel': '🏗️', 'cement': '🧱', 'paper': '📄', 'automobile-oem': '🚗', 'auto-ancillary': '⚙️',
-              'tyre': '🛞', 'textile': '👕', 'sugar': '🍬', 'electronics': '📱', 'fmcg': '🛒',
-              'pharma': '💊', 'bfsi': '🏦', 'aviation': '✈️', 'startups': '🚀', 'hospitality': '🏨',
-            }
+            const Icon = industry.icon
             return (
               <button
                 key={industry.id}
                 onClick={() => handleNavigate(industry.id)}
-                className="group relative bg-white rounded-2xl p-5 text-center overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-transparent"
+                className="group relative rounded-xl overflow-hidden text-left h-44 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 focus:outline-none"
+                style={{ backgroundColor: industry.brandColor }}
               >
-                {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" style={{ background: `linear-gradient(135deg, ${industry.brandColor}08, ${industry.brandColor}15)` }}></div>
-                {/* Top color bar */}
-                <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl transition-all duration-300 opacity-60 group-hover:opacity-100" style={{ backgroundColor: industry.brandColor }}></div>
-                
-                <div className="relative">
-                  {/* Large Emoji */}
-                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">
-                    {emojiMap[industry.id] || '📊'}
+                {/* Full-bleed industry photo */}
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  style={{ backgroundImage: `url(https://images.unsplash.com/${cardImages[industry.id] || 'photo-1513828583688-c52646db42da'}?w=600&q=70&auto=format&fit=crop)` }}
+                />
+                {/* Strong dark gradient overlay for clear legibility */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/40 group-hover:from-black/90 transition-colors" />
+                {/* Top brand accent bar */}
+                <div className="absolute top-0 left-0 right-0 h-1" style={{ backgroundColor: industry.brandColor }} />
+
+                {/* Content */}
+                <div className="relative h-full flex flex-col justify-end p-4">
+                  <div
+                    className="w-10 h-10 mb-2 rounded-lg flex items-center justify-center shadow-md"
+                    style={{ backgroundColor: industry.brandColor }}
+                  >
+                    <Icon size={20} strokeWidth={2} className="text-white" />
                   </div>
-                  {/* Industry Name */}
-                  <h3 className="text-sm font-bold text-gray-900 group-hover:text-gray-900 leading-tight">{industry.name}</h3>
-                  {/* Subtle arrow on hover */}
-                  <div className="mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: `${industry.brandColor}15`, color: industry.brandColor }}>Explore →</span>
+                  <h3 className="text-sm font-bold text-white leading-tight drop-shadow-md">{industry.name}</h3>
+                  <p className="text-[10px] text-white/85 mt-1 leading-snug line-clamp-2 drop-shadow">{industry.description}</p>
+                  {getIndustryOwners(industry.id).length > 0 && (
+                    <div className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-semibold text-white/95 drop-shadow">
+                      <User size={11} className="shrink-0 opacity-90" />
+                      <span className="truncate">{getIndustryOwners(industry.id).join(' & ')}</span>
+                    </div>
+                  )}
+                  <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-white group-hover:gap-1.5 transition-all">
+                    View profile <span className="group-hover:translate-x-0.5 transition-transform">→</span>
                   </div>
                 </div>
               </button>

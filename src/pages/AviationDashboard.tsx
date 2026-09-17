@@ -5,19 +5,27 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2, Plane
+  CloudRain, Zap, Calendar, Tag, Building2, Plane, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, LabelList
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { AVIATION_GAME } from '../components/process-game/data/aviationGame'
+import BusinessModel from '../components/BusinessModel'
+import { AVIATION_BUSINESS } from '../data/businessModels/aviationBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import HealthGauge from '../components/HealthGauge'
+import AviationRiskAnalysis from '../components/risk-analysis/AviationRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#0c4a6e', '#B02A30', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722', '#1e3a5f']
 
-type AvTab = 'overview' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type AvTab = 'overview' | 'business' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== DATA =====
 const segmentData = [
@@ -103,23 +111,27 @@ export default function AviationDashboard() {
   const isAdmin = role === 'admin'
   const tabs: { id: AvTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Industry Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50"><div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between"><div className="flex items-center gap-4"><button onClick={() => navigate('/hub')} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition"><ArrowLeft size={14} /> Back to Hub</button><div className="h-6 w-px bg-gray-200"></div><div className="flex items-center gap-3"><img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" /><div><h1 className="text-sm font-extrabold text-navy">Aviation & Aerospace</h1><p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p></div></div></div><div className="flex items-center gap-3">{isAdmin && <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-bold"><Settings size={13} /> Admin</button>}<button onClick={() => window.print()} className="flex items-center gap-1 px-3 py-1.5 bg-navy/5 text-navy rounded-lg text-xs font-semibold hover:bg-navy/10 transition"><Download size={13} /> Export</button><div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">{isAdmin ? <Shield size={13} className="text-maroon" /> : <User size={13} className="text-navy" />}<span className="text-xs font-bold">{username}</span></div></div></div></header>
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
+      <DashboardHeader title="Aviation & Aerospace" />
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={AVIATION_BUSINESS} />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
-        {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="fmcg" />}
+        {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="aviation" />}
+        {activeTab === 'game' && <ProcessGame data={AVIATION_GAME} />}
       </main>
       <footer className="bg-navy text-white py-3 fixed bottom-0 left-0 right-0 z-30"><div className="max-w-[1920px] mx-auto px-6 flex items-center justify-between"><p className="text-xs opacity-80">ICICI Lombard General Insurance Company Ltd.</p><p className="text-xs text-amber-300 font-semibold">For Internal Use Only</p><p className="text-xs opacity-80">Designed by <span className="font-bold">Deepak Arora</span></p></div></footer>
     </div>
@@ -183,6 +195,39 @@ function OverviewTab() {
 
 // ===== PLAYERS TAB =====
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => {
+    const d = playerDetails[p.name]
+    return {
+      rank: p.rank,
+      name: p.name,
+      revenue: p.revenue,
+      type: p.type,
+      primary: p.fleet,
+      segment: p.type === 'LCC' ? 'Low-Cost Carrier' : p.type === 'FSC' ? 'Full-Service Carrier' : p.type,
+      hq: d?.hq,
+      founded: d?.founded,
+      target: d?.expansion,
+      highlight: d?.moat,
+      extra: [
+        { label: 'Domestic Share', value: String(p.share) },
+        { label: 'Routes', value: String(p.routes) },
+      ],
+    }
+  })
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Aviation',
+        primaryLabel: 'Fleet Size',
+        primaryUnit: ' aircraft',
+        donutTitle: 'LCC vs FSC Split',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const selected = selectedPlayer ? playerDetails[selectedPlayer] : null
   return (
@@ -199,6 +244,10 @@ function PlayersTab() {
 
 // ===== RISK TAB =====
 function RiskTab() {
+  return <AviationRiskAnalysis />
+}
+
+function RiskTabLegacy() {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'bestpractices'>('insurable')
   const [selectedCase, setSelectedCase] = useState<number | null>(null)
   const caseStudies = [
@@ -254,22 +303,19 @@ function GeographyTab() {
   )
 }
 
+// ===== NEWS DATA =====
+const newsData = [
+  { title: 'IndiGo Orders Additional A350 Wide-body Aircraft for International Expansion', source: 'Airbus Press Release', date: '2026-08-12', summary: 'The wide-body order marks IndiGo\'s push into long-haul international markets. Routes to Europe, North America, and Australia are planned. The deal signals a strategic shift beyond the carrier\'s narrow-body core.', sentiment: 'Positive' },
+  { title: 'Navi Mumbai Airport Ramps Up Operations as Mumbai\'s Second Hub', source: 'Ministry of Civil Aviation', date: '2026-07-21', summary: 'Phase 1 adds substantial passenger capacity to relieve congestion at the existing airport. The Adani-operated hub features a full cargo terminal. Metro connectivity is being developed to improve access.', sentiment: 'Positive' },
+  { title: 'Air India Completes Vistara Merger — Single Full-Service Carrier', source: 'Economic Times', date: '2026-06-16', summary: 'Vistara has been folded into Air India to create a larger full-service airline. The combined fleet exceeds 200 aircraft. Singapore Airlines retains a strategic stake in the enlarged entity.', sentiment: 'Positive' },
+  { title: 'DGCA Grounds SpiceJet Aircraft Over Safety Concerns', source: 'DGCA Order', date: '2026-05-28', summary: 'The regulator cited maintenance non-compliance and overdue airworthiness directives. The grounding has reduced the carrier\'s operational fleet. SpiceJet faces added pressure on capacity and finances.', sentiment: 'Negative' },
+  { title: 'ATF Prices Climb — Airlines Warn of Fare Hikes', source: 'Reuters', date: '2026-04-18', summary: 'Jet fuel prices rose to multi-month highs, squeezing airline margins. Carriers renewed demands to bring ATF under GST. Fare increases are likely if the trend persists.', sentiment: 'Negative' },
+  { title: 'India MRO Market on Track to Reach $5B by 2030', source: 'MoCA Report', date: '2026-03-24', summary: 'A reduced GST rate on MRO services is boosting domestic maintenance activity. Air India is developing a major MRO hub in Delhi. The push aims to repair a far larger share of the fleet within India.', sentiment: 'Positive' },
+  { title: 'Akasa Air Scales Fleet Rapidly — Among Fastest-Growing Indian Airlines', source: 'Akasa Press Release', date: '2026-03-05', summary: 'The airline continues to expand its fleet and route network at pace. It is steadily gaining domestic market share. A large Boeing 737 MAX order underpins future growth.', sentiment: 'Positive' },
+  { title: 'Drone Policy 2.0 — BVLOS Operations Approved for Multiple Sectors', source: 'MoCA / DGCA', date: '2026-02-14', summary: 'Beyond Visual Line of Sight flights are now permitted for agriculture, mining, delivery, and surveys. A PLI scheme is supporting domestic drone manufacturing. Thousands of drone pilots have been certified.', sentiment: 'Positive' },
+]
+
 // ===== NEWS TAB =====
 function NewsTab() {
-  const news = [
-    { title: 'IndiGo Orders 30 A350 Wide-body Aircraft for International Expansion', source: 'Airbus Press Release', date: 'Jun 2025', summary: 'First wide-body order in IndiGo history. London, New York, Sydney routes planned from 2027. $10B+ deal at list price.', sentiment: 'Positive' },
-    { title: 'Navi Mumbai Airport (NMIA) Inaugurated - Second Airport for Mumbai', source: 'MoCA', date: 'May 2025', summary: 'Phase 1: 20M PAX capacity. Adani operates. Relieves congestion at CSIA. Full cargo terminal. Metro connectivity planned.', sentiment: 'Positive' },
-    { title: 'Air India Completes Vistara Merger - Single Full-Service Carrier', source: 'Economic Times', date: 'Nov 2024', summary: 'Vistara (Tata-Singapore Airlines JV) merged into Air India. Combined fleet 200+ aircraft. SIA holds 25.1% in Air India.', sentiment: 'Positive' },
-    { title: 'DGCA Grounds 20 SpiceJet Aircraft Over Safety Concerns', source: 'DGCA Order', date: 'Mar 2025', summary: 'Non-compliance on maintenance checks, overdue AD (airworthiness directive) compliance. SpiceJet fleet reduced to 20 operational aircraft.', sentiment: 'Negative' },
-    { title: 'ATF Prices Rise 15% - Airlines Warn of Fare Hikes', source: 'Reuters', date: 'Apr 2025', summary: 'Jet fuel at Rs 1.1 Lakh/KL (highest in 18 months). Airlines demand GST inclusion (currently outside GST, taxed at 30%+). IATA calls India ATF pricing anti-competitive.', sentiment: 'Negative' },
-    { title: 'India MRO Market to Reach $5B by 2030 - Government Push', source: 'MoCA Report', date: 'Feb 2025', summary: 'GST on MRO reduced to 5% (from 18%). Air India setting up Delhi MRO hub. Target: repair 80% of fleet domestically (currently only 20%).', sentiment: 'Positive' },
-    { title: 'Akasa Air Reaches 30 Aircraft in 2 Years - Fastest Indian Airline Growth', source: 'Akasa Press Release', date: 'Jan 2025', summary: 'Rakesh Jhunjhunwala-founded airline hits milestone. 22 destinations. 5% market share. Plans for 72 Boeing 737 MAX by 2027.', sentiment: 'Positive' },
-    { title: 'Drone Policy 2.0 - BVLOS Operations Approved for 8 Sectors', source: 'MoCA/DGCA', date: 'Mar 2025', summary: 'Beyond Visual Line of Sight drone flights approved for agriculture, mining, delivery, survey. PLI scheme for drone manufacturing. 10,000+ drone pilots certified.', sentiment: 'Positive' },
-  ]
-  return (
-    <div className="space-y-4">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"><h3 className="text-sm font-bold text-navy">Latest Aviation & Aerospace News</h3><p className="text-xs text-gray-500">Sources: DGCA, MoCA, IATA, CAPA, Company Filings</p></div>
-      {news.map((n, i) => (<div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition"><div className="flex items-center justify-between mb-2"><h4 className="text-sm font-bold text-navy flex-1">{n.title}</h4><span className={`text-[9px] px-2 py-0.5 rounded-full font-semibold ml-2 ${n.sentiment === 'Positive' ? 'bg-green-100 text-green-700' : n.sentiment === 'Negative' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}`}>{n.sentiment}</span></div><p className="text-xs text-gray-600 mb-2">{n.summary}</p><div className="flex items-center gap-3 text-[10px] text-gray-400"><span className="font-semibold">{n.source}</span><span>•</span><span>{n.date}</span></div></div>))}
-    </div>
-  )
+  return <NewsFeed title="Aviation Industry News & Developments" items={newsData} />
 }

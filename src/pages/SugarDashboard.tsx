@@ -5,19 +5,27 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2, CandyOff
+  CloudRain, Zap, Calendar, Tag, Building2, CandyOff, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, LabelList
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { SUGAR_GAME } from '../components/process-game/data/sugarGame'
+import BusinessModel from '../components/BusinessModel'
+import { SUGAR_BUSINESS } from '../data/businessModels/sugarBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import HealthGauge from '../components/HealthGauge'
+import SugarRiskAnalysis from '../components/risk-analysis/SugarRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#059669', '#B02A30', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722', '#0369a1']
 
-type SugarTab = 'overview' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type SugarTab = 'overview' | 'business' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== DATA =====
 const segmentData = [
@@ -97,14 +105,14 @@ const geographyData = [
 ]
 
 const newsData = [
-  { title: 'Government raises ethanol procurement price 4-5% for 2024-25 season; B-heavy route at Rs 65.61/liter', date: '2025-01-20', sentiment: 'positive', source: 'Ministry of Food (DFPD)' },
-  { title: 'India bans sugar exports for 2024-25 season amid lower production estimates of 27.5 MT', date: '2025-01-15', sentiment: 'negative', source: 'DGFT Notification' },
-  { title: 'UP farmers demand FRP increase to Rs 400/quintal; current FRP Rs 340 for 2024-25', date: '2025-01-10', sentiment: 'neutral', source: 'Hindustan Times' },
-  { title: 'Balrampur Chini commissions 400 KLPD grain-based ethanol plant; total capacity 1,460 KLPD', date: '2024-12-28', sentiment: 'positive', source: 'BSE Filing' },
-  { title: 'E20 blending achieved at 14.6% nationally; target 20% by 2025-26 deadline extended', date: '2024-12-20', sentiment: 'neutral', source: 'Ministry of Petroleum' },
-  { title: 'Maharashtra cooperative mills face Rs 4,000 Cr cane arrears; political pressure mounts', date: '2024-12-15', sentiment: 'negative', source: 'Economic Times' },
-  { title: 'Shree Renuka to expand ethanol capacity to 2,500 KLPD with Wilmar funding', date: '2024-12-08', sentiment: 'positive', source: 'Moneycontrol' },
-  { title: 'Sugar MSP unchanged at Rs 31/kg for 4th year; industry demands Rs 38/kg minimum', date: '2024-12-01', sentiment: 'negative', source: 'ISMA Press Release' },
+  { title: 'Government raises ethanol procurement price 4-5% for 2025-26 season; B-heavy route at Rs 65.61/liter', date: '2026-08-11', sentiment: 'positive', source: 'Ministry of Food (DFPD)', summary: 'The revised procurement prices improve mill economics for diverting cane juice and B-heavy molasses to ethanol. Higher realisations support cash flows and help clear cane payment arrears. The move reinforces the government\'s biofuel blending push.' },
+  { title: 'India extends curbs on sugar exports for 2025-26 season amid lower production estimates of 27.5 MT', date: '2026-07-24', sentiment: 'negative', source: 'DGFT Notification', summary: 'Export restrictions aim to keep domestic sugar prices stable and ensure adequate supply. Lower cane yields in key states drove the cautious estimate. Millers with export exposure face pressure on inventory monetisation.' },
+  { title: 'UP farmers demand FRP increase to Rs 400/quintal; current FRP Rs 340 for 2025-26', date: '2026-06-16', sentiment: 'neutral', source: 'Hindustan Times', summary: 'Farmer bodies are pressing for a higher Fair and Remunerative Price citing rising input costs. Any hike would squeeze mill margins already strained by capped sugar MSP. The demand adds political sensitivity ahead of the crushing season.' },
+  { title: 'Balrampur Chini commissions 400 KLPD grain-based ethanol plant; total capacity 1,460 KLPD', date: '2026-05-28', sentiment: 'positive', source: 'BSE Filing', summary: 'The grain-based capacity diversifies feedstock away from cane, improving year-round plant utilisation. It positions Balrampur Chini as a leading ethanol supplier under the blending programme. The investment supports the company\'s shift toward distillery-led earnings.' },
+  { title: 'E20 blending achieved at 18.5% nationally; 20% target on track for 2026', date: '2026-04-20', sentiment: 'neutral', source: 'Ministry of Petroleum', summary: 'Ethanol blending has climbed steadily on expanded distillery capacity and OMC procurement. Reaching 20% would cut crude imports and support sugarcane farmers. Feedstock availability remains the key variable in surplus and deficit years.' },
+  { title: 'Maharashtra cooperative mills face Rs 4,000 Cr cane arrears; political pressure mounts', date: '2026-03-22', sentiment: 'negative', source: 'Economic Times', summary: 'Delayed sugar sales and depressed realisations have widened arrears owed to farmers. Cooperative mills are seeking soft loans and interest subvention to bridge payments. The issue carries significant political weight in the cane belt.' },
+  { title: 'Shree Renuka to expand ethanol capacity to 2,500 KLPD with Wilmar funding', date: '2026-03-05', sentiment: 'positive', source: 'Moneycontrol', summary: 'Backed by parent Wilmar, the expansion targets a larger share of the ethanol supply chain. The scale-up leverages both cane and grain routes for feedstock flexibility. It underscores growing investor appetite for biofuel-linked assets.' },
+  { title: 'Sugar MSP unchanged at Rs 31/kg for 5th year; industry demands Rs 38/kg minimum', date: '2026-02-16', sentiment: 'negative', source: 'ISMA Press Release', summary: 'The static minimum sale price has failed to keep pace with rising production and cane costs. Producers argue a revision is essential to protect financial viability. The industry body has escalated the demand to the government.' },
 ]
 
 const riskData = {
@@ -134,23 +142,27 @@ export default function SugarDashboard() {
   const isAdmin = role === 'admin'
   const tabs: { id: SugarTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Industry Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50"><div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between"><div className="flex items-center gap-4"><button onClick={() => navigate('/hub')} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition"><ArrowLeft size={14} /> Back to Hub</button><div className="h-6 w-px bg-gray-200"></div><div className="flex items-center gap-3"><img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" /><div><h1 className="text-sm font-extrabold text-navy">Sugar Industry</h1><p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p></div></div></div><div className="flex items-center gap-3">{isAdmin && <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-bold"><Settings size={13} /> Admin</button>}<button onClick={() => window.print()} className="flex items-center gap-1 px-3 py-1.5 bg-navy/5 text-navy rounded-lg text-xs font-semibold hover:bg-navy/10 transition"><Download size={13} /> Export</button><div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">{isAdmin ? <Shield size={13} className="text-maroon" /> : <User size={13} className="text-navy" />}<span className="text-xs font-bold">{username}</span></div></div></div></header>
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
+      <DashboardHeader title="Sugar Industry Dashboard" />
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={SUGAR_BUSINESS} />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
         {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="sugar" />}
+        {activeTab === 'game' && <ProcessGame data={SUGAR_GAME} />}
       </main>
       <footer className="bg-navy text-white py-3 fixed bottom-0 left-0 right-0 z-30"><div className="max-w-[1920px] mx-auto px-6 flex items-center justify-between"><p className="text-xs opacity-80">ICICI Lombard General Insurance Company Ltd.</p><p className="text-xs text-amber-300 font-semibold">For Internal Use Only</p><p className="text-xs opacity-80">Designed by <span className="font-bold">Deepak Arora</span></p></div></footer>
     </div>
@@ -220,6 +232,29 @@ function OverviewTab() {
 
 // ===== PLAYERS TAB =====
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => ({
+    rank: p.rank,
+    name: p.name,
+    revenue: p.revenue,
+    type: 'Sugar Mill',
+    segment: p.state,
+    extra: [
+      { label: 'Crushing (TCD)', value: String(p.tcd) },
+      { label: 'Ethanol', value: String(p.ethanol) },
+    ],
+  }))
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Sugar',
+        donutTitle: 'Category Split',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const selected = selectedPlayer ? playerDetails[selectedPlayer] : null
   return (
@@ -237,6 +272,10 @@ function PlayersTab() {
 
 // ===== RISK TAB =====
 function RiskTab() {
+  return <SugarRiskAnalysis />
+}
+
+function RiskTabLegacy() {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'cases'>('insurable')
   const [selectedCase, setSelectedCase] = useState<number | null>(null)
   return (
@@ -304,12 +343,5 @@ function GeographyTab() {
 
 // ===== NEWS TAB =====
 function NewsTab() {
-  return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-bold text-navy mb-4">Latest Sugar & Ethanol Industry News</h3>
-        <div className="space-y-3">{newsData.map((n, i) => (<div key={i} className="flex items-start gap-4 p-4 border border-gray-100 rounded-xl hover:shadow-sm transition"><div className={`w-2 h-2 rounded-full mt-2 shrink-0 ${n.sentiment === 'positive' ? 'bg-green-500' : n.sentiment === 'negative' ? 'bg-red-500' : 'bg-amber-500'}`}></div><div className="flex-1"><h4 className="text-sm font-bold text-navy">{n.title}</h4><div className="flex items-center gap-3 mt-1"><span className="text-[10px] text-gray-500">{n.date}</span><span className="text-[10px] font-semibold text-gray-400">|</span><span className="text-[10px] font-semibold text-emerald-700">{n.source}</span></div></div><span className={`text-[9px] px-2 py-1 rounded-full font-bold shrink-0 ${n.sentiment === 'positive' ? 'bg-green-50 text-green-700' : n.sentiment === 'negative' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700'}`}>{n.sentiment}</span></div>))}</div>
-      </div>
-    </div>
-  )
+  return <NewsFeed title="Sugar Industry News & Developments" items={newsData} />
 }

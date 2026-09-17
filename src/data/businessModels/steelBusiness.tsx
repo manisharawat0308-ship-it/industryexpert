@@ -1,0 +1,120 @@
+import type { BusinessModelData } from '../../components/BusinessModel'
+import {
+  SteelProcessDiagram, IconRawMaterials, IconPrep, IconIronmaking,
+  IconSteelmaking, IconCasting, IconRolling, IconFinishing,
+} from './steelProcessDiagram'
+
+export const STEEL_BUSINESS: BusinessModelData = {
+  industryName: 'Steel',
+  brandColor: '#B02A30',
+  industryKey: 'steel',
+  tagline: 'Turning iron ore into the backbone of construction, autos and infrastructure.',
+  intro:
+    'The steel industry converts iron ore into steel — the most widely used structural metal on earth. It is a heavy, capital-intensive, cyclical business: a few large integrated players run giant plants (blast furnaces or electric arc furnaces) near raw-material sources, and sell to construction, autos, and infrastructure. Profitability swings with global steel prices and the cost of iron ore and coking coal.',
+  stats: [
+    { label: 'India Capacity', value: '~200 MTPA' },
+    { label: 'World Rank', value: '#2 producer' },
+    { label: 'Key Cost', value: 'Ore + coking coal' },
+    { label: 'Nature', value: 'Cyclical, capital-heavy' },
+  ],
+  rawMaterials: [
+    { name: 'Iron Ore', note: 'The primary iron source. India is largely self-sufficient; leaders like Tata & SAIL own captive mines (a big cost advantage).', source: 'Domestic' },
+    { name: 'Coking Coal', note: 'Baked into coke — the fuel and reductant in blast furnaces. India imports most of it (mainly from Australia), so global coal prices hit margins.', source: 'Imported' },
+    { name: 'Limestone / Fluxes', note: 'Added to remove impurities as slag. Sourced domestically near plants.', source: 'Domestic' },
+    { name: 'Steel Scrap', note: 'Melted in electric arc furnaces (EAF/mini-mills). India imports a share of scrap; recycling is rising.', source: 'Mixed' },
+    { name: 'Ferro Alloys & Additives', note: 'Manganese, chrome, nickel etc. that give steel specific properties (e.g. stainless, alloy steel).', source: 'Mixed' },
+  ],
+  processIntro: 'The modern steelmaking journey in seven stages, following the two main routes — the integrated Blast-Furnace/BOF route and the scrap-or-DRI Electric-Arc-Furnace route. Study the flow diagram below, then explore each stage.',
+  processDiagram: SteelProcessDiagram,
+  processDiagramCaption: 'Steelmaking process flow — structure based on the World Steel Association framework; diagram redrawn for this primer.',
+  diagramInfo: {
+    'iron-ore': { label: 'Iron Ore', info: 'The primary raw material — a rock rich in iron oxide. It is the main source of iron; India is largely self-sufficient, and mills with captive ore mines (Tata, SAIL) enjoy a big cost advantage. Fine ore is first turned into sinter or pellets before use.' },
+    'coke': { label: 'Coke', info: 'Coking coal baked in coke ovens (~1,100°C) into a hard, porous carbon fuel. In the blast furnace, coke does two jobs: it burns to generate the intense heat, and its carbon chemically strips the oxygen out of the iron ore (reduction). India imports most of its coking coal, so its price heavily affects steel margins.' },
+    'limestone': { label: 'Limestone', info: 'Added to the furnace as a "flux". It reacts with impurities (silica, alumina) in the ore and coke, capturing them into a molten slag that floats on top of the iron and is skimmed off — keeping the metal clean.' },
+    'scrap': { label: 'Recycled Steel (Scrap)', info: 'Old steel collected for recycling. It is melted in an Electric Arc Furnace (EAF) instead of making iron from ore — a lower-carbon, more flexible route. Steel is infinitely recyclable, so scrap is a key, growing feedstock.' },
+    'blast-furnace': { label: 'Blast Furnace', info: 'A giant furnace where iron ore, coke and limestone are charged and blasted with hot air. The coke burns and reduces the ore into molten "hot metal" (pig iron, ~4% carbon) at the bottom, with slag floating above. This is the heart of the integrated (Route A) process.' },
+    'bof': { label: 'Basic Oxygen Furnace (BOF)', info: 'Converts molten hot metal from the blast furnace into steel. Pure oxygen is blown through the metal, burning off the excess carbon and impurities in about 20 minutes. This is the dominant steelmaking route worldwide.' },
+    'eaf': { label: 'Electric Arc Furnace (EAF)', info: 'Melts steel scrap and/or directly-reduced iron using powerful electric arcs. More flexible and lower-capex than the blast-furnace route, and much lower-carbon when run on clean electricity — the basis of "mini-mills".' },
+    'caster': { label: 'Continuous Caster', info: 'Solidifies the refined liquid steel into semi-finished shapes in one continuous strand, which is then cut to length. Far more efficient and consistent than the old ingot-and-mould method.' },
+    'bloom': { label: 'Bloom', info: 'A large square/rectangular semi-finished section cast from steel. Blooms are later rolled into long products such as beams, rails and heavy sections.' },
+    'billet': { label: 'Billet', info: 'A smaller square semi-finished section. Billets are rolled into long products like TMT bars, wire rod and small sections used in construction.' },
+    'slab': { label: 'Slab', info: 'A wide, flat semi-finished section. Slabs are rolled into flat products — hot-rolled and cold-rolled coil, plate and sheet — used in autos, appliances and pipes.' },
+    'finished': { label: 'Finished Products', info: 'The end steel sold to customers: long products (rails, bars, rebar, wire rod) and flat products (coils, plate, galvanised and coated sheet). These feed construction, infrastructure, autos, appliances and packaging.' },
+  },
+  process: [
+    {
+      step: '1. Input Raw Materials',
+      keyFact: 'Route-dependent',
+      output: 'Ore, coal, scrap, gas, fluxes',
+      icon: IconRawMaterials,
+      detail: 'The inputs depend on the chosen route. The integrated route uses iron ore, coking coal and limestone; the electric route uses steel scrap and/or directly-reduced iron (DRI), powered by electricity plus natural gas or alternative fuels. This choice sets the plant\'s cost, quality and carbon footprint.',
+    },
+    {
+      step: '2. Raw Materials Preparation',
+      keyFact: 'Coke oven + Sinter/Pellet plant',
+      output: 'Coke, sinter, pellets',
+      icon: IconPrep,
+      detail: 'Fine iron ore is agglomerated into sinter (sinter plant) or pellets (pellet plant) so furnace gases can flow through it. In parallel, coking coal is baked in coke ovens into hard, porous coke that serves as both the fuel and the chemical reducing agent. Limestone is prepared as a flux to trap impurities.',
+    },
+    {
+      step: '3. Ironmaking',
+      keyFact: 'Blast furnace / Direct reduction',
+      output: 'Molten iron or DRI',
+      icon: IconIronmaking,
+      detail: 'Iron is separated from the oxygen in the ore. In the blast furnace, coke and a hot air blast reduce the ore to molten "hot metal" (pig iron, ~4% carbon). In the alternative direct-reduction route, natural gas reduces ore into solid DRI (sponge iron) at lower temperature — the feed for electric furnaces.',
+    },
+    {
+      step: '4. Steelmaking (two routes)',
+      keyFact: 'BOF or EAF → refining',
+      output: 'Liquid steel',
+      icon: IconSteelmaking,
+      detail: 'Two routes turn iron into steel. In the Basic Oxygen Furnace (BOF), oxygen is blown through molten hot metal to burn off excess carbon. In the Electric Arc Furnace (EAF), scrap and/or DRI are melted with powerful electric arcs. Both then pass to ladle refining, where alloys are added and the chemistry is fine-tuned to the exact grade.',
+    },
+    {
+      step: '5. Casting → Semi-finished',
+      keyFact: 'Continuous casting',
+      output: 'Blooms, billets, slabs',
+      icon: IconCasting,
+      detail: 'Refined liquid steel is solidified in a continuous caster into semi-finished shapes — blooms and billets (for long products) and slabs (for flat products). Continuous casting is far more efficient and consistent than the old ingot-and-mould method.',
+    },
+    {
+      step: '6. Hot-Rolled Products',
+      keyFact: 'Hot rolling',
+      output: 'Long & flat products',
+      icon: IconRolling,
+      detail: 'Semi-finished steel is reheated and hot-rolled into shape. Long products include rails, structural shapes, wire rods, bars and rebar; flat products include hot-rolled coils and plate. These are the workhorse steel products used across construction and industry.',
+    },
+    {
+      step: '7. Finishing Operations',
+      keyFact: 'Cold rolling · coating · painting',
+      output: 'Finished steel to market',
+      icon: IconFinishing,
+      detail: 'Flat steel is further processed by cold rolling (thinner, smoother sheet), then metal coating (galvanising) and painting to resist corrosion — for autos, appliances and roofing. The finished, value-added steel is inspected, packed and dispatched. Co-products such as slag and process gases are recovered and reused in cement, fertilisers and power.',
+    },
+  ],
+  products: [
+    { name: 'Flat Products (HR/CR coil, plate, galvanised)', note: 'Rolled flat sheet — used in autos, appliances, pipes and packaging. Higher value-add.' },
+    { name: 'Long Products (TMT bars, wire rod, beams)', note: 'Used mainly in construction and infrastructure — the largest volume segment.' },
+    { name: 'Coated & Special Steel', note: 'Galvanised, colour-coated, electrical (CRGO), and alloy/stainless steel — premium, higher-margin grades.' },
+    { name: 'Semi-finished (slabs, billets)', note: 'Sold to re-rollers or traded when a plant lacks downstream rolling.' },
+  ],
+  customers: [
+    { name: 'Construction & Real Estate', note: 'TMT bars and structural steel for buildings, homes and commercial projects.', share: 40 },
+    { name: 'Infrastructure', note: 'Highways, bridges, railways, ports — driven by government capex.', share: 22 },
+    { name: 'Automobiles', note: 'High-quality flat/coated steel for car bodies and components.', share: 15 },
+    { name: 'Engineering & Capital Goods', note: 'Machinery, equipment and industrial fabrication.', share: 12 },
+    { name: 'Consumer Durables & Packaging', note: 'Appliances, tin plate, and steel packaging.', share: 11 },
+  ],
+  drivers: [
+    { factor: 'Iron Ore & Coking Coal Prices', effect: 'The biggest cost inputs. Coking-coal import prices especially swing margins sharply.', type: 'cost' },
+    { factor: 'Global Steel Prices', effect: 'Steel is a globally traded commodity; Chinese output and exports set the world price and pressure Indian realisations.', type: 'external' },
+    { factor: 'Construction & Infra Cycle', effect: 'Most demand is construction-led, so it tracks GDP growth, real estate and government capex.', type: 'demand' },
+    { factor: 'Import Duties & Trade Policy', effect: 'Safeguard duties / anti-dumping actions protect domestic mills from cheap imports.', type: 'policy' },
+    { factor: 'Captive Raw Material', effect: 'Players with own iron ore mines (Tata, SAIL) enjoy a structural cost edge in downturns.', type: 'cost' },
+    { factor: 'Carbon & Green Transition', effect: 'Steel is carbon-heavy; carbon rules and the shift to green (hydrogen/EAF) steel raise future capex.', type: 'policy' },
+  ],
+  economics:
+    'Steel is a commodity spread business: profit ≈ steel selling price − (iron ore + coking coal + energy + conversion) cost. Margins are thin and volatile, so scale, cost leadership (captive ore, efficient plants), and a value-added product mix decide who wins. It is highly capital-intensive — a new integrated plant costs tens of thousands of crores and takes years to build.',
+  insurerNote:
+    'Steel plants are among the highest-value, highest-hazard industrial risks: blast furnaces, molten metal, high-pressure gas, and large captive power. Key exposures are fire/explosion, machinery breakdown (furnace/rolling mill), and business interruption from a single big-loss event — making property, MB and BI cover, plus marine cover on imported coking coal, central to underwriting.',
+}

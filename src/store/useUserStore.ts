@@ -87,6 +87,40 @@ interface UserState {
 
 const STORAGE_KEY = 'employeeUsers'
 const LOG_KEY = 'loginLog'
+const SEED_VERSION_KEY = 'employeeUsersSeedVersion'
+// Bump this whenever the built-in roster changes. On load, if the browser's
+// stored seed version is older, the current roster is re-merged so every
+// built-in account (incl. admin) is guaranteed present even on stale caches
+// (e.g. a device that opened an older deploy). Admin-created custom users are
+// preserved.
+const SEED_VERSION = '2'
+
+function mergeSeed(existing: EmployeeUser[]): EmployeeUser[] {
+  const seeded = seedUsers()
+  // Match built-in accounts by EMAIL (always unique) rather than username,
+  // because two people can share a first name (e.g. two "Deepak"s) and thus
+  // the same username — matching by username would drop/overwrite one of them.
+  const byEmail = new Map(existing.map((u) => [u.email.toLowerCase(), u]))
+
+  const result = [...existing]
+  for (const s of seeded) {
+    const eKey = s.email.toLowerCase()
+    const already = byEmail.get(eKey)
+    if (already) {
+      // Repair a built-in account that may be stale/broken in the cache:
+      // ensure it has the correct password, role, and is not left locked.
+      already.password = s.password
+      already.username = s.username
+      already.fullName = s.fullName
+      already.role = s.role
+      already.isLocked = false
+    } else {
+      result.push(s)
+      byEmail.set(eKey, s)
+    }
+  }
+  return result
+}
 
 function loadUsers(): EmployeeUser[] {
   if (typeof window === 'undefined') return seedUsers()
@@ -95,6 +129,7 @@ function loadUsers(): EmployeeUser[] {
 
   if (!raw) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded))
+    localStorage.setItem(SEED_VERSION_KEY, SEED_VERSION)
     return seeded
   }
 
@@ -102,15 +137,29 @@ function loadUsers(): EmployeeUser[] {
   try {
     existing = JSON.parse(raw) as EmployeeUser[]
   } catch {
+    // Corrupted cache — reset to a clean seed.
     localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded))
+    localStorage.setItem(SEED_VERSION_KEY, SEED_VERSION)
     return seeded
   }
 
-  // Self-heal: merge in any seed users missing from an older/stale browser copy
-  // (e.g. a teammate who opened the app before these accounts existed), without
-  // removing any accounts an admin created manually.
-  const haveUsernames = new Set(existing.map((u) => u.username.toLowerCase()))
-  const missing = seeded.filter((s) => !haveUsernames.has(s.username.toLowerCase()))
+  // If the stored copy predates the current roster version, or if it's empty/
+  // invalid, re-merge the full built-in roster (repairing built-in accounts and
+  // adding any missing) while keeping admin-created custom users.
+  const storedVersion = localStorage.getItem(SEED_VERSION_KEY)
+  const needsReseed = storedVersion !== SEED_VERSION || !Array.isArray(existing) || existing.length === 0
+
+  if (needsReseed) {
+    const merged = mergeSeed(Array.isArray(existing) ? existing : [])
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
+    localStorage.setItem(SEED_VERSION_KEY, SEED_VERSION)
+    return merged
+  }
+
+  // Same version: still self-heal any missing built-in users defensively,
+  // matching by unique email (not username) so same-first-name users are kept.
+  const haveEmails = new Set(existing.map((u) => u.email.toLowerCase()))
+  const missing = seeded.filter((s) => !haveEmails.has(s.email.toLowerCase()))
   if (missing.length > 0) {
     const merged = [...existing, ...missing]
     localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))

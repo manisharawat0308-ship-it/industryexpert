@@ -5,19 +5,27 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Building2, Rocket
+  CloudRain, Building2, Rocket, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, LabelList
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { STARTUPS_GAME } from '../components/process-game/data/startupsGame'
+import BusinessModel from '../components/BusinessModel'
+import { STARTUPS_BUSINESS } from '../data/businessModels/startupsBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import HealthGauge from '../components/HealthGauge'
+import StartupsRiskAnalysis from '../components/risk-analysis/StartupsRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#B02A30', '#005B75', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722', '#607D8B']
 
-type StartupTab = 'overview' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type StartupTab = 'overview' | 'business' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== SOURCE METADATA =====
 const DATA_META = {
@@ -64,11 +72,11 @@ const segmentData = [
 
 // ===== PLAYERS DATA =====
 const topStartups = [
-  { name: 'Flipkart', hq: 'Bangalore', ceo: 'Kalyan Krishnamurthy', founded: 2007, valuation: '$40B', investors: 'Walmart, SoftBank, Tiger Global', moat: 'India\'s largest e-commerce â€” 500M+ users, marketplace + supply chain dominance' },
+  { name: 'Flipkart', hq: 'Bangalore', ceo: 'Kalyan Krishnamurthy', founded: 2007, valuation: '$40B', investors: 'Walmart, SoftBank, Tiger Global', moat: 'India\'s largest e-commerce — 500M+ users, marketplace + supply chain dominance' },
   { name: 'PhonePe', hq: 'Bangalore', ceo: 'Sameer Nigam', founded: 2015, valuation: '$12B', investors: 'Walmart, General Atlantic, Tiger Global', moat: '48% UPI market share, 550M users, insurance & wealth super-app' },
-  { name: "BYJU'S", hq: 'Bangalore', ceo: 'Byju Raveendran', founded: 2011, valuation: '<$1B (was $22B)', investors: 'Prosus, Tiger Global, Sequoia', moat: 'Cautionary tale â€” governance collapse, NCLT insolvency proceedings' },
+  { name: "BYJU'S", hq: 'Bangalore', ceo: 'Byju Raveendran', founded: 2011, valuation: '<$1B (was $22B)', investors: 'Prosus, Tiger Global, Sequoia', moat: 'Cautionary tale — governance collapse, NCLT insolvency proceedings' },
   { name: 'Swiggy', hq: 'Bangalore', ceo: 'Sriharsha Majety', founded: 2014, valuation: '$11.3B', investors: 'SoftBank, Prosus, Accel', moat: 'Food + quick commerce (Instamart), 250K+ restaurant partners' },
-  { name: 'Ola', hq: 'Bangalore', ceo: 'Bhavish Aggarwal', founded: 2010, valuation: '$5B', investors: 'SoftBank, Temasek, Tiger Global', moat: 'EV transition â€” #1 electric scooter maker, gigafactory in TN' },
+  { name: 'Ola', hq: 'Bangalore', ceo: 'Bhavish Aggarwal', founded: 2010, valuation: '$5B', investors: 'SoftBank, Temasek, Tiger Global', moat: 'EV transition — #1 electric scooter maker, gigafactory in TN' },
   { name: 'Razorpay', hq: 'Bangalore', ceo: 'Harshil Mathur', founded: 2014, valuation: '$7.5B', investors: 'Sequoia, GIC, Tiger Global, Y Combinator', moat: 'India\'s #1 payment gateway, 10M+ businesses, profitable since FY24' },
   { name: 'CRED', hq: 'Bangalore', ceo: 'Kunal Shah', founded: 2018, valuation: '$6.4B', investors: 'DST Global, Tiger Global, Sequoia', moat: 'Premium credit card users community, fintech services, brand trust' },
   { name: 'Zerodha', hq: 'Bangalore', ceo: 'Nithin Kamath', founded: 2010, valuation: '$3.6B', investors: 'Bootstrapped (zero external funding)', moat: 'India\'s largest broker by active users (12M+), profitable since day 1' },
@@ -92,12 +100,12 @@ const insurableRisks = [
 ]
 
 const insuranceProducts = [
-  { product: 'Directors & Officers (D&O)', coverage: 'Protects founders/board from personal liability for management decisions', avgPremium: 'â‚¹5-25L/year', relevance: 'Critical for all funded startups' },
-  { product: 'Cyber Insurance', coverage: 'Data breach costs, ransomware, regulatory fines, business interruption', avgPremium: 'â‚¹3-50L/year', relevance: 'Essential for tech/data companies' },
-  { product: 'Key Person Insurance', coverage: 'Compensates company if key founder/CTO becomes unavailable', avgPremium: 'â‚¹2-10L/year', relevance: 'Critical for founder-led startups' },
-  { product: 'Errors & Omissions (E&O)', coverage: 'Protection against claims of inadequate work or negligent actions', avgPremium: 'â‚¹2-15L/year', relevance: 'SaaS, fintech, healthtech companies' },
-  { product: 'Product Liability', coverage: 'Claims arising from product defects, data errors, algorithm bias', avgPremium: 'â‚¹3-20L/year', relevance: 'Consumer-facing tech products' },
-  { product: 'Employment Practices Liability', coverage: 'Wrongful termination, discrimination, harassment claims during layoffs', avgPremium: 'â‚¹2-8L/year', relevance: 'High during mass layoff cycles' },
+  { product: 'Directors & Officers (D&O)', coverage: 'Protects founders/board from personal liability for management decisions', avgPremium: '₹5-25L/year', relevance: 'Critical for all funded startups' },
+  { product: 'Cyber Insurance', coverage: 'Data breach costs, ransomware, regulatory fines, business interruption', avgPremium: '₹3-50L/year', relevance: 'Essential for tech/data companies' },
+  { product: 'Key Person Insurance', coverage: 'Compensates company if key founder/CTO becomes unavailable', avgPremium: '₹2-10L/year', relevance: 'Critical for founder-led startups' },
+  { product: 'Errors & Omissions (E&O)', coverage: 'Protection against claims of inadequate work or negligent actions', avgPremium: '₹2-15L/year', relevance: 'SaaS, fintech, healthtech companies' },
+  { product: 'Product Liability', coverage: 'Claims arising from product defects, data errors, algorithm bias', avgPremium: '₹3-20L/year', relevance: 'Consumer-facing tech products' },
+  { product: 'Employment Practices Liability', coverage: 'Wrongful termination, discrimination, harassment claims during layoffs', avgPremium: '₹2-8L/year', relevance: 'High during mass layoff cycles' },
 ]
 
 const caseStudies = [
@@ -108,25 +116,25 @@ const caseStudies = [
 
 // ===== GEOGRAPHY DATA =====
 const geographyData = [
-  { city: 'Bangalore', share: 35, startups: 38000, reason: 'India\'s Silicon Valley â€” 50+ unicorns, densest VC concentration, deep tech talent from IISc/IIMs, HSR Layout & Koramangala startup neighborhoods. Global tech companies provide talent pipeline.' },
+  { city: 'Bangalore', share: 35, startups: 38000, reason: 'India\'s Silicon Valley — 50+ unicorns, densest VC concentration, deep tech talent from IISc/IIMs, HSR Layout & Koramangala startup neighborhoods. Global tech companies provide talent pipeline.' },
   { city: 'Delhi NCR', share: 25, startups: 20000, reason: 'Proximity to government (policy access), 30M+ consumer market, Gurgaon Cyber City for consumer internet, strong angel investor network, Noida gaming & e-commerce clusters.' },
-  { city: 'Mumbai', share: 20, startups: 22000, reason: 'Financial capital â€” access to capital markets, investment banks, HNI angels. BKC is the VC hub. Strong D2C ecosystem. Pune IT corridor for SaaS. Stock market proximity helps fintech.' },
+  { city: 'Mumbai', share: 20, startups: 22000, reason: 'Financial capital — access to capital markets, investment banks, HNI angels. BKC is the VC hub. Strong D2C ecosystem. Pune IT corridor for SaaS. Stock market proximity helps fintech.' },
   { city: 'Hyderabad', share: 8, startups: 12000, reason: 'T-Hub (India\'s largest incubator), pro-startup state government with TS-iPASS, HITEC City infrastructure, lower costs vs Bangalore, growing SaaS & healthtech ecosystem.' },
   { city: 'Pune', share: 5, startups: 8000, reason: 'IT corridor (Hinjewadi) for SaaS startups, strong engineering talent pool, lower operational costs, proximity to Mumbai VC ecosystem, growing B2B tech cluster.' },
-  { city: 'Chennai', share: 4, startups: 9500, reason: 'India\'s SaaS capital â€” Freshworks ($3.5B), Zoho ($1B+ revenue), Chargebee, Kissflow all HQ\'d here. IIT Madras incubator is top-rated. OMR is the SaaS corridor.' },
-  { city: 'Others', share: 3, startups: 10500, reason: 'Emerging hubs: Kerala (fintech), Jaipur (CarDekho), Ahmedabad (GIFT City fintech), Kolkata, Indore â€” driven by Startup India and state policies.' },
+  { city: 'Chennai', share: 4, startups: 9500, reason: 'India\'s SaaS capital — Freshworks ($3.5B), Zoho ($1B+ revenue), Chargebee, Kissflow all HQ\'d here. IIT Madras incubator is top-rated. OMR is the SaaS corridor.' },
+  { city: 'Others', share: 3, startups: 10500, reason: 'Emerging hubs: Kerala (fintech), Jaipur (CarDekho), Ahmedabad (GIFT City fintech), Kolkata, Indore — driven by Startup India and state policies.' },
 ]
 
 // ===== NEWS DATA =====
 const newsData = [
-  { id: 1, title: "Flipkart files DRHP for mega IPO â€” targets $40B+ valuation, India's largest startup listing", date: '2025-05-01', sentiment: 'positive', source: 'Moneycontrol' },
-  { id: 2, title: "PhonePe crosses $15B monthly GMV â€” files for IPO at $12B+ valuation on Indian exchanges", date: '2025-04-22', sentiment: 'positive', source: 'LiveMint' },
-  { id: 3, title: "AI/DeepTech startups raise $2B in H1 2025 â€” India emerges as global AI talent hub", date: '2025-06-01', sentiment: 'positive', source: 'NASSCOM' },
-  { id: 4, title: "Startup India 2.0 announced â€” â‚¹10,000 Cr fund-of-funds, angel tax abolished, ESOP reforms", date: '2025-03-01', sentiment: 'positive', source: 'Startup India' },
-  { id: 5, title: "BYJU'S NCLT insolvency proceedings â€” creditors seek liquidation of once $22B edtech giant", date: '2025-02-15', sentiment: 'negative', source: 'Economic Times' },
-  { id: 6, title: "Mass layoffs continue â€” 15,000+ startup employees let go in Q1 2025 across 80+ companies", date: '2025-04-01', sentiment: 'negative', source: 'Inc42' },
-  { id: 7, title: "Quick commerce war intensifies â€” Blinkit, Zepto, Instamart collectively burning $50M/month", date: '2025-01-25', sentiment: 'neutral', source: 'Mint' },
-  { id: 8, title: "SEBI proposes stricter pre-IPO norms â€” 3 years audited financials mandatory for startup listings", date: '2025-05-15', sentiment: 'neutral', source: 'SEBI' },
+  { id: 1, title: "Flipkart files DRHP for mega IPO, targets $40B+ valuation in India's largest startup listing", date: '2026-08-11', sentiment: 'positive', source: 'Moneycontrol', summary: 'The e-commerce major\'s draft prospectus sets the stage for a landmark public listing. Strong marketplace and logistics scale underpin the valuation ambition. A successful IPO would mark a milestone for the Indian startup ecosystem.' },
+  { id: 2, title: "PhonePe crosses record monthly GMV; files for IPO on Indian exchanges", date: '2026-07-22', sentiment: 'positive', source: 'LiveMint', summary: 'The payments leader continues to scale transaction volumes across UPI and merchant services. A domestic listing signals confidence in Indian public markets. Diversification into lending and insurance is expanding its revenue base.' },
+  { id: 3, title: "AI and DeepTech startups raise $2B in H1 2026; India emerges as a global AI talent hub", date: '2026-06-15', sentiment: 'positive', source: 'NASSCOM', summary: 'Funding into AI, machine learning, and deep-tech ventures accelerated sharply. India\'s engineering talent pool is drawing global investor interest. The momentum is spawning new enterprise and applied-AI startups.' },
+  { id: 4, title: "Startup India 2.0 announced: Rs 10,000 Cr fund-of-funds, angel tax abolished, ESOP reforms", date: '2026-05-28', sentiment: 'positive', source: 'Startup India', summary: 'The policy package aims to ease capital access and simplify compliance for founders. Abolishing angel tax removes a long-standing pain point for early-stage funding. ESOP reforms are intended to help startups attract and retain talent.' },
+  { id: 5, title: "BYJU'S insolvency proceedings advance; creditors seek resolution of the edtech giant", date: '2026-04-18', sentiment: 'negative', source: 'Economic Times', summary: 'The once high-flying edtech company faces creditor-led insolvency action. Governance and cash-flow concerns have eroded its valuation. The case has become a cautionary tale on aggressive scaling.' },
+  { id: 6, title: "Startup layoffs persist; thousands of employees let go in H1 2026 across the ecosystem", date: '2026-03-24', sentiment: 'negative', source: 'Inc42', summary: 'Funding discipline and a focus on profitability are driving workforce reductions. Late-stage and consumer-internet firms are among the most affected. The trend reflects a shift from growth-at-all-costs to sustainable unit economics.' },
+  { id: 7, title: "Quick commerce war intensifies; Blinkit, Zepto, Instamart burn cash to win share", date: '2026-03-05', sentiment: 'neutral', source: 'Mint', summary: 'Rapid-delivery platforms are spending heavily on dark stores and discounts. The battle for market share is pressuring margins across the segment. Investors are watching for signs of a path to profitability.' },
+  { id: 8, title: "SEBI proposes stricter pre-IPO norms; multi-year audited financials mandatory for startup listings", date: '2026-02-14', sentiment: 'neutral', source: 'SEBI', summary: 'The regulator wants tighter disclosure and governance ahead of startup public offerings. Mandatory audited financials aim to protect retail investors. The move could lengthen IPO timelines for some new-age companies.' },
 ]
 
 // ===== MAIN COMPONENT =====
@@ -138,51 +146,22 @@ export default function StartupsDashboard() {
 
   const tabs: { id: StartupTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Industry Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
 
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
       {/* Header */}
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/hub')}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition">
-              <ArrowLeft size={16} /> Back to Hub
-            </button>
-            <div className="h-8 w-px bg-gray-200"></div>
-            <div className="flex items-center gap-2">
-              <img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" />
-              <div>
-                <h1 className="text-lg font-bold text-navy">Startups & Tech Industry Dashboard</h1>
-                <p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {isAdmin && (
-              <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-semibold">
-                <Settings size={14} /> Admin
-              </button>
-            )}
-            <button onClick={() => window.print()} className="flex items-center gap-1 px-3 py-1.5 bg-navy/5 text-navy rounded-lg text-xs font-semibold hover:bg-navy/10 transition">
-              <Download size={13} /> Export
-            </button>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">
-              {isAdmin ? <Shield size={14} className="text-maroon" /> : <User size={14} className="text-navy" />}
-              <span className="text-xs font-semibold">{username}</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader title="Startups & Tech" />
 
       {/* Tab Navigation */}
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm">
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm">
         <div className="max-w-[1920px] mx-auto px-6">
           <div className="flex items-center gap-1 py-2 overflow-x-auto">
             {tabs.map((tab) => (
@@ -200,11 +179,13 @@ export default function StartupsDashboard() {
       {/* Content */}
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={STARTUPS_BUSINESS} />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
-        {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry={"fmcg" as any} />}
+        {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="startups" />}
+        {activeTab === 'game' && <ProcessGame data={STARTUPS_GAME} />}
       </main>
 
       {/* Footer */}
@@ -233,8 +214,8 @@ function OverviewTab() {
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setSelectedSegment(null)}>
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-navy">{selectedSegment.segment} â€” Top Startups</h3>
-              <button onClick={() => setSelectedSegment(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold">Ã—</button>
+              <h3 className="text-lg font-bold text-navy">{selectedSegment.segment} — Top Startups</h3>
+              <button onClick={() => setSelectedSegment(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold">×</button>
             </div>
             <div className="p-4 bg-maroon/5 rounded-xl mb-3">
               <p className="text-2xl font-bold text-maroon">{selectedSegment.share}%</p>
@@ -287,7 +268,7 @@ function OverviewTab() {
 
       {/* Global Comparison */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-bold text-navy mb-4">Unicorn Count â€” Global Comparison</h3>
+        <h3 className="text-lg font-bold text-navy mb-4">Unicorn Count — Global Comparison</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={globalComparison} layout="vertical">
             <CartesianGrid strokeDasharray="3 3" />
@@ -307,7 +288,7 @@ function OverviewTab() {
 
       {/* Unicorn Timeline */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-bold text-navy mb-2">India Unicorn Growth Timeline (2010 â†’ 2030)</h3>
+        <h3 className="text-lg font-bold text-navy mb-2">India Unicorn Growth Timeline (2010 → 2030)</h3>
         <p className="text-xs text-gray-500 mb-4">From 0 unicorns in 2010 to 200+ target by 2030</p>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={unicornTimeline}>
@@ -323,7 +304,7 @@ function OverviewTab() {
         <SourceFooter source="DPIIT, NASSCOM, Startup India" />
       </div>
 
-      {/* Segment Pie Chart â€” Clickable */}
+      {/* Segment Pie Chart — Clickable */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h3 className="text-lg font-bold text-navy mb-2">Startup Segment Split</h3>
         <p className="text-xs text-gray-500 mb-4">Click any segment to see top startups in that category</p>
@@ -362,7 +343,7 @@ function OverviewTab() {
           </div>
           <div className="p-4 bg-orange-50 rounded-xl border border-orange-100">
             <div className="flex items-center gap-2 mb-2"><TrendingUp size={16} className="text-orange-600" /><span className="font-semibold text-sm text-navy">Funding Winter Recovery</span></div>
-            <p className="text-xs text-gray-600">After 75% decline from CY21 peak ($42B â†’ $9.6B in CY23), funding recovering to $10B+ in 2024. Profitability focus now mandatory for growth-stage.</p>
+            <p className="text-xs text-gray-600">After 75% decline from CY21 peak ($42B → $9.6B in CY23), funding recovering to $10B+ in 2024. Profitability focus now mandatory for growth-stage.</p>
           </div>
           <div className="p-4 bg-blue-50 rounded-xl border border-blue-100">
             <div className="flex items-center gap-2 mb-2"><Rocket size={16} className="text-blue-600" /><span className="font-semibold text-sm text-navy">IPO Pipeline</span></div>
@@ -380,7 +361,42 @@ function OverviewTab() {
 }
 
 // ===== TAB 2: PLAYERS & OWNERSHIP =====
+function parseValuationToCr(text: string): number {
+  const t = String(text)
+  const num = parseFloat(t.replace(/[^0-9.]/g, '')) || 0
+  if (/b/i.test(t)) return Math.round(num * 8300)   // $B -> ₹ Cr (approx)
+  if (/m/i.test(t)) return Math.round(num * 8.3)    // $M -> ₹ Cr (approx)
+  return Math.round(num)
+}
+
 function PlayersTab() {
+  const rows: PlayerRow[] = topStartups.map((s, i) => ({
+    rank: i + 1,
+    name: s.name,
+    revenue: parseValuationToCr(s.valuation),
+    type: /listed/i.test(s.valuation) ? 'Listed' : 'Private (Startup)',
+    hq: s.hq,
+    founded: s.founded,
+    highlight: s.moat,
+    extra: [
+      { label: 'Valuation', value: String(s.valuation) },
+      { label: 'Key Investors', value: s.investors },
+    ],
+  }))
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Startups',
+        revenueUnit: '₹ Cr',
+        donutTitle: 'Listed vs Private',
+        marketShareNote: 'Share of tracked startups by valuation (converted to ₹ Cr, approx).',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<typeof topStartups[0] | null>(null)
 
   return (
@@ -391,7 +407,7 @@ function PlayersTab() {
           <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-navy">{selectedPlayer.name}</h3>
-              <button onClick={() => setSelectedPlayer(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold">Ã—</button>
+              <button onClick={() => setSelectedPlayer(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold">×</button>
             </div>
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div className="p-3 bg-gray-50 rounded-lg">
@@ -463,6 +479,10 @@ function PlayersTab() {
 
 // ===== TAB 3: RISK ANALYSIS =====
 function RiskTab() {
+  return <StartupsRiskAnalysis />
+}
+
+function RiskTabLegacy() {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'casestudies'>('insurable')
   const [selectedCase, setSelectedCase] = useState<typeof caseStudies[0] | null>(null)
 
@@ -474,7 +494,7 @@ function RiskTab() {
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-maroon">{selectedCase.title}</h3>
-              <button onClick={() => setSelectedCase(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold">Ã—</button>
+              <button onClick={() => setSelectedCase(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold">×</button>
             </div>
             <div className="space-y-4">
               <div className="p-4 bg-gray-50 rounded-xl">
@@ -578,7 +598,7 @@ function RiskTab() {
                     <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold">{cs.year}</span>
                   </div>
                   <p className="text-sm text-gray-600 mb-2">{cs.summary}</p>
-                  <p className="text-xs text-maroon font-semibold">Click to view full analysis â†’</p>
+                  <p className="text-xs text-maroon font-semibold">Click to view full analysis →</p>
                 </div>
               ))}
             </div>
@@ -602,7 +622,7 @@ function GeographyTab() {
           <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-navy">Why {selectedCity.city}?</h3>
-              <button onClick={() => setSelectedCity(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold">Ã—</button>
+              <button onClick={() => setSelectedCity(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold">×</button>
             </div>
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div className="p-3 bg-maroon/5 rounded-lg text-center">
@@ -624,7 +644,7 @@ function GeographyTab() {
 
       {/* Geography Bar Chart */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-bold text-navy mb-2">Startup Hub Distribution â€” City-wise</h3>
+        <h3 className="text-lg font-bold text-navy mb-2">Startup Hub Distribution — City-wise</h3>
         <p className="text-xs text-gray-500 mb-4">Click any bar to see why that city is a startup hub</p>
         <ResponsiveContainer width="100%" height={350}>
           <BarChart data={geographyData} layout="vertical"
@@ -682,36 +702,5 @@ function GeographyTab() {
 
 // ===== TAB 5: NEWS =====
 function NewsTab() {
-  const getSentimentBadge = (sentiment: string) => {
-    if (sentiment === 'positive') return 'text-green-700 bg-green-100'
-    if (sentiment === 'negative') return 'text-red-700 bg-red-100'
-    return 'text-gray-700 bg-gray-100'
-  }
-
-  const getSentimentLabel = (sentiment: string) => {
-    if (sentiment === 'positive') return 'â–² Positive'
-    if (sentiment === 'negative') return 'â–¼ Negative'
-    return 'â— Neutral'
-  }
-
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-navy flex items-center gap-2"><Newspaper size={18} className="text-navy" /> Latest Startup News & Sentiment</h3>
-        <span className="text-[10px] text-gray-400 font-medium">Updated: {DATA_META.lastUpdated}</span>
-      </div>
-      <div className="space-y-4">
-        {newsData.map((n) => (
-          <div key={n.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:border-maroon/20 transition">
-            <div className="flex justify-between items-start mb-2">
-              <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${getSentimentBadge(n.sentiment)}`}>{getSentimentLabel(n.sentiment)}</span>
-              <span className="text-xs text-gray-500">{n.date} | {n.source}</span>
-            </div>
-            <h4 className="font-bold text-navy mb-2">{n.title}</h4>
-          </div>
-        ))}
-      </div>
-      <SourceFooter source="Inc42, YourStory, Economic Times, Mint, NASSCOM, SEBI" />
-    </div>
-  )
+  return <NewsFeed title="Startups Industry News & Developments" items={newsData} />
 }

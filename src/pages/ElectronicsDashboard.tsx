@@ -5,19 +5,27 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2, Cpu
+  CloudRain, Zap, Calendar, Tag, Building2, Cpu, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, LabelList
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { ELECTRONICS_GAME } from '../components/process-game/data/electronicsGame'
+import BusinessModel from '../components/BusinessModel'
+import { ELECTRONICS_BUSINESS } from '../data/businessModels/electronicsBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import HealthGauge from '../components/HealthGauge'
+import ElectronicsRiskAnalysis from '../components/risk-analysis/ElectronicsRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#dc2626', '#B02A30', '#F99D27', '#4CAF50', '#9C27B0', '#0369a1', '#1e3a5f']
 
-type ElecTab = 'overview' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type ElecTab = 'overview' | 'business' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== DATA =====
 const segmentData = [
@@ -92,14 +100,14 @@ const geographyData = [
 ]
 
 const newsData = [
-  { title: 'Tata Electronics breaks ground on India\'s first semiconductor fab in Dholera, Gujarat ($11B)', date: '2025-01-22', sentiment: 'positive', source: 'MeitY / Economic Times' },
-  { title: 'Apple achieves $14B iPhone production in India in CY2024; targets $25B in CY2025', date: '2025-01-15', sentiment: 'positive', source: 'Bloomberg / Mint' },
-  { title: 'PLI Electronics: 130+ companies approved, Rs 2.4 Lakh Cr production achieved in 3 years', date: '2025-01-10', sentiment: 'positive', source: 'MeitY Annual Report' },
-  { title: 'Global chip shortage eases but India still imports 85% of semiconductors; $8B annual chip import bill', date: '2024-12-28', sentiment: 'negative', source: 'ICEA / Business Standard' },
-  { title: 'Nvidia exploring AI chip assembly partnerships in India; meets Tata Electronics, Dixon', date: '2024-12-20', sentiment: 'positive', source: 'Reuters' },
-  { title: 'Dixon Technologies revenue crosses Rs 17,500 Cr; targets Rs 30,000 Cr by FY27', date: '2024-12-15', sentiment: 'positive', source: 'BSE Filing' },
-  { title: 'India electronics exports cross $29B in FY24; $100B target by 2030 per ICEA roadmap', date: '2024-12-08', sentiment: 'positive', source: 'ICEA / DGFT' },
-  { title: 'Micron inaugurates OSAT facility in Sanand, Gujarat; first 200 engineers hired for chip packaging', date: '2024-11-28', sentiment: 'positive', source: 'Micron / PIB' },
+  { title: 'Tata Electronics advances India\'s first semiconductor fab in Dholera, Gujarat ($11B)', date: '2026-08-13', sentiment: 'positive', source: 'MeitY / Economic Times', summary: 'Construction is progressing on the mega fab that will produce mature-node chips for automotive, power, and display applications. The project anchors India\'s ambition to build a domestic semiconductor ecosystem. Talent development and supplier localisation are running in parallel.' },
+  { title: 'Apple crosses $25B iPhone production in India; targets deeper local value addition', date: '2026-07-21', sentiment: 'positive', source: 'Bloomberg / Mint', summary: 'Contract manufacturers have scaled iPhone assembly sharply, making India a key global export base. Component localisation is rising though high-value parts remain imported. The expansion is generating large-scale manufacturing employment.' },
+  { title: 'PLI Electronics: 130+ companies approved, production milestones surpassed in FY26', date: '2026-06-17', sentiment: 'positive', source: 'MeitY Annual Report', summary: 'The incentive scheme has catalysed large mobile and component manufacturing investments. Value addition and exports are climbing as ecosystems mature. Policymakers are now targeting deeper component and semiconductor localisation.' },
+  { title: 'India still imports the bulk of semiconductors; annual chip import bill remains elevated', date: '2026-05-28', sentiment: 'negative', source: 'ICEA / Business Standard', summary: 'Despite fab announcements, near-term chip demand is met largely by imports. The import bill weighs on the trade balance and exposes supply-chain risk. Domestic fabs will take several years to move the needle materially.' },
+  { title: 'Nvidia deepens AI compute partnerships in India; works with Tata Electronics and Dixon', date: '2026-04-19', sentiment: 'positive', source: 'Reuters', summary: 'Collaborations aim to localise AI server assembly and data-centre hardware. Rising domestic AI demand is drawing global chip leaders to India. The tie-ups could seed advanced electronics manufacturing capability.' },
+  { title: 'Dixon Technologies revenue crosses Rs 30,000 Cr; targets further scale by FY28', date: '2026-03-24', sentiment: 'positive', source: 'BSE Filing', summary: 'The contract manufacturer continues rapid growth across mobiles, appliances, and IT hardware. New client wins and component backward-integration are lifting margins. Dixon is emerging as a bellwether for Indian electronics manufacturing.' },
+  { title: 'India electronics exports climb toward $40B; $100B target by 2030 reaffirmed', date: '2026-03-05', sentiment: 'positive', source: 'ICEA / DGFT', summary: 'Smartphone exports remain the largest contributor to electronics shipments. Broadening into IT hardware and wearables is diversifying the base. The roadmap hinges on scaling components and design capability.' },
+  { title: 'Micron ramps OSAT facility in Sanand, Gujarat; chip packaging output expands', date: '2026-02-15', sentiment: 'positive', source: 'Micron / PIB', summary: 'The assembly, test, and packaging plant marks a key step in India\'s semiconductor value chain. Local hiring and supplier development are scaling with the ramp. It complements front-end fab plans elsewhere in Gujarat.' },
 ]
 
 const riskData = {
@@ -129,23 +137,27 @@ export default function ElectronicsDashboard() {
   const isAdmin = role === 'admin'
   const tabs: { id: ElecTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Industry Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50"><div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between"><div className="flex items-center gap-4"><button onClick={() => navigate('/hub')} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition"><ArrowLeft size={14} /> Back to Hub</button><div className="h-6 w-px bg-gray-200"></div><div className="flex items-center gap-3"><img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" /><div><h1 className="text-sm font-extrabold text-navy">Electronics & Semiconductor</h1><p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p></div></div></div><div className="flex items-center gap-3">{isAdmin && <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-bold"><Settings size={13} /> Admin</button>}<button onClick={() => window.print()} className="flex items-center gap-1 px-3 py-1.5 bg-navy/5 text-navy rounded-lg text-xs font-semibold hover:bg-navy/10 transition"><Download size={13} /> Export</button><div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">{isAdmin ? <Shield size={13} className="text-maroon" /> : <User size={13} className="text-navy" />}<span className="text-xs font-bold">{username}</span></div></div></div></header>
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
+      <DashboardHeader title="Electronics & Semiconductor" />
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={ELECTRONICS_BUSINESS} />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
         {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="electronics" />}
+        {activeTab === 'game' && <ProcessGame data={ELECTRONICS_GAME} />}
       </main>
       <footer className="bg-navy text-white py-3 fixed bottom-0 left-0 right-0 z-30"><div className="max-w-[1920px] mx-auto px-6 flex items-center justify-between"><p className="text-xs opacity-80">ICICI Lombard General Insurance Company Ltd.</p><p className="text-xs text-amber-300 font-semibold">For Internal Use Only</p><p className="text-xs opacity-80">Designed by <span className="font-bold">Deepak Arora</span></p></div></footer>
     </div>
@@ -211,6 +223,36 @@ function OverviewTab() {
 
 // ===== PLAYERS TAB =====
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => {
+    const d = playerDetails[p.name]
+    return {
+      rank: p.rank,
+      name: p.name,
+      revenue: p.revenue,
+      type: d?.type || 'ESDM',
+      segment: p.segment,
+      hq: d?.hq,
+      founded: d?.founded,
+      target: d?.expansion,
+      highlight: d?.moat,
+      extra: [
+        { label: 'PLI', value: String(p.pli) },
+        { label: 'Location', value: p.location },
+      ],
+    }
+  })
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Electronics',
+        donutTitle: 'Ownership Type Split',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const selected = selectedPlayer ? playerDetails[selectedPlayer] : null
   return (
@@ -228,6 +270,10 @@ function PlayersTab() {
 
 // ===== RISK TAB =====
 function RiskTab() {
+  return <ElectronicsRiskAnalysis />
+}
+
+function RiskTabLegacy() {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'cases'>('insurable')
   const [selectedCase, setSelectedCase] = useState<number | null>(null)
   return (
@@ -296,12 +342,5 @@ function GeographyTab() {
 
 // ===== NEWS TAB =====
 function NewsTab() {
-  return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-bold text-navy mb-4">Latest Electronics & Semiconductor Industry News</h3>
-        <div className="space-y-3">{newsData.map((n, i) => (<div key={i} className="flex items-start gap-4 p-4 border border-gray-100 rounded-xl hover:shadow-sm transition"><div className={`w-2 h-2 rounded-full mt-2 shrink-0 ${n.sentiment === 'positive' ? 'bg-green-500' : n.sentiment === 'negative' ? 'bg-red-500' : 'bg-amber-500'}`}></div><div className="flex-1"><h4 className="text-sm font-bold text-navy">{n.title}</h4><div className="flex items-center gap-3 mt-1"><span className="text-[10px] text-gray-500">{n.date}</span><span className="text-[10px] font-semibold text-gray-400">|</span><span className="text-[10px] font-semibold text-red-700">{n.source}</span></div></div><span className={`text-[9px] px-2 py-1 rounded-full font-bold shrink-0 ${n.sentiment === 'positive' ? 'bg-green-50 text-green-700' : n.sentiment === 'negative' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700'}`}>{n.sentiment}</span></div>))}</div>
-      </div>
-    </div>
-  )
+  return <NewsFeed title="Electronics Industry News & Developments" items={newsData} />
 }

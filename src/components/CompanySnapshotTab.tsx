@@ -7,7 +7,31 @@ import { useCompanyStore, IndustryId } from '../store/useCompanyStore'
 const INDUSTRY_LABELS: Record<IndustryId, string> = {
   steel: 'Steel', cement: 'Cement', paper: 'Paper', sugar: 'Sugar',
   automobile: 'Automobile', tyre: 'Tyre', textile: 'Textile',
-  electronics: 'Electronics', fmcg: 'FMCG',
+  electronics: 'Electronics', fmcg: 'FMCG', pharma: 'Pharma & Healthcare',
+  bfsi: 'Financial Services', aviation: 'Aviation & Aerospace',
+  startups: 'Startups & Tech', hospitality: 'Hospitality & Tourism',
+  chemical: 'Chemical', infrastructure: 'Infrastructure', fertilizer: 'Fertilizer',
+}
+
+// Example company names shown in the search placeholder, per industry
+const INDUSTRY_EXAMPLES: Record<IndustryId, string> = {
+  steel: 'Tata Steel, JSW Steel, SAIL',
+  cement: 'UltraTech, Ambuja, Shree Cement',
+  paper: 'ITC Paperboards, JK Paper, West Coast',
+  sugar: 'Balrampur Chini, Bajaj Hindusthan, Dwarikesh',
+  automobile: 'Maruti Suzuki, Tata Motors, M&M',
+  tyre: 'MRF, Apollo Tyres, CEAT',
+  textile: 'Aditya Birla Fashion, Raymond, Vardhman',
+  electronics: 'Dixon, Havells, Voltas',
+  fmcg: 'HUL, ITC, Nestle India',
+  pharma: 'Sun Pharma, Cipla, Dr. Reddy\'s',
+  bfsi: 'HDFC Bank, ICICI Bank, SBI',
+  aviation: 'IndiGo, Air India, SpiceJet',
+  startups: 'Flipkart, Zomato, Paytm',
+  hospitality: 'Indian Hotels (Taj), EIH (Oberoi), Lemon Tree',
+  chemical: 'Reliance, Pidilite, SRF',
+  infrastructure: 'L&T, GMR, IRB Infrastructure',
+  fertilizer: 'IFFCO, Coromandel, Chambal',
 }
 
 export default function CompanySnapshotTab({ currentIndustry }: { currentIndustry: IndustryId }) {
@@ -56,7 +80,7 @@ export default function CompanySnapshotTab({ currentIndustry }: { currentIndustr
               value={searchQuery}
               onChange={handleInputChange}
               onFocus={() => { if (suggestions.length > 0) setShowDropdown(true) }}
-              placeholder="Search company by name or ticker (e.g. Tata Steel, MARUTI, UltraTech)..."
+              placeholder={`Search ${INDUSTRY_LABELS[currentIndustry]} companies (e.g. ${INDUSTRY_EXAMPLES[currentIndustry]})...`}
               className="flex-1 text-sm outline-none placeholder:text-gray-400"
             />
             {searchQuery && (
@@ -413,8 +437,8 @@ export default function CompanySnapshotTab({ currentIndustry }: { currentIndustr
       {!selectedCompany && (
         <div className="text-center py-20 text-gray-400">
           <Building2 size={48} className="mx-auto mb-4 opacity-50" />
-          <p className="text-lg font-medium text-gray-500">Search for a company to view its snapshot</p>
-          <p className="text-sm mt-2">Try: "Tata Steel", "UltraTech", "Maruti", "Bajaj Hindusthan", "Balrampur Chini"</p>
+          <p className="text-lg font-medium text-gray-500">Search for a {INDUSTRY_LABELS[currentIndustry]} company to view its snapshot</p>
+          <p className="text-sm mt-2">Try: {INDUSTRY_EXAMPLES[currentIndustry].split(', ').map((n) => `"${n}"`).join(', ')}</p>
         </div>
       )}
     </div>

@@ -5,21 +5,29 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2, Car
+  CloudRain, Zap, Calendar, Tag, Building2, Car, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer,
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, LabelList
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { AUTO_GAME } from '../components/process-game/data/autoGame'
+import BusinessModel from '../components/BusinessModel'
+import { AUTO_BUSINESS } from '../data/businessModels/autoBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import LiveTicker from '../components/LiveTicker'
 import HealthGauge from '../components/HealthGauge'
+import AutoRiskAnalysis from '../components/risk-analysis/AutoRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#B02A30', '#005B75', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722', '#00BCD4', '#795548']
 
-type AutoTab = 'overview' | 'production' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type AutoTab = 'overview' | 'business' | 'production' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== OVERVIEW DATA =====
 const segmentData = [
@@ -188,12 +196,14 @@ export default function AutoDashboard() {
 
   const tabs: { id: AutoTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'production', label: 'Production', icon: Factory },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
 
   const tickerItems = [
@@ -213,32 +223,9 @@ export default function AutoDashboard() {
 
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/hub')} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition">
-              <ArrowLeft size={14} /> Back to Hub
-            </button>
-            <div className="h-6 w-px bg-gray-200"></div>
-            <div className="flex items-center gap-3">
-              <img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" />
-              <div>
-                <h1 className="text-sm font-extrabold text-navy">Automobile OEMs Dashboard</h1>
-                <p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {isAdmin && <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-bold"><Settings size={13} /> Admin</button>}
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">
-              {isAdmin ? <Shield size={13} className="text-maroon" /> : <User size={13} className="text-navy" />}
-              <span className="text-xs font-bold">{username}</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader title="Automobile OEMs Dashboard" />
 
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm">
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm">
         <div className="max-w-[1920px] mx-auto px-6">
           <div className="flex items-center gap-1 py-2 overflow-x-auto">
             {tabs.map((tab) => (
@@ -253,12 +240,14 @@ export default function AutoDashboard() {
 
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={AUTO_BUSINESS} />}
         {activeTab === 'production' && <ProductionTab />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab isAdmin={isAdmin} />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
         {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="automobile" />}
+        {activeTab === 'game' && <ProcessGame data={AUTO_GAME} />}
       </main>
 
       <footer className="bg-navy text-white py-3 fixed bottom-0 left-0 right-0 z-30"><div className="max-w-[1920px] mx-auto px-6 flex items-center justify-between"><p className="text-xs opacity-80">ICICI Lombard General Insurance Company Ltd.</p><p className="text-xs text-amber-300 font-semibold">For Internal Use Only</p><p className="text-xs opacity-80">Designed by <span className="font-bold">Deepak Arora</span></p></div></footer>
@@ -509,6 +498,39 @@ function ProductionTab() {
 
 // ===== PLAYERS TAB =====
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => {
+    const d = playerDetails[p.name]
+    return {
+      rank: p.rank,
+      name: p.name,
+      revenue: p.revenue,
+      type: d?.type || 'OEM',
+      segment: p.products,
+      primary: p.capacity,
+      hq: d?.hq,
+      founded: d?.founded,
+      target: d?.expansion,
+      highlight: d?.moat,
+      extra: [
+        { label: 'Market Share', value: `${p.share}%` },
+        { label: 'Powertrain', value: String(p.route) },
+      ],
+    }
+  })
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Automobile',
+        primaryLabel: 'Capacity (M units)',
+        primaryUnit: ' M units',
+        donutTitle: 'Ownership Type Split',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const selected = selectedPlayer ? playerDetails[selectedPlayer] : null
 
@@ -624,6 +646,10 @@ function PlayersTab() {
 
 // ===== RISK TAB =====
 function RiskTab({ isAdmin }: { isAdmin: boolean }) {
+  return <AutoRiskAnalysis />
+}
+
+function RiskTabLegacy({ isAdmin }: { isAdmin: boolean }) {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'framework' | 'emerging' | 'bestpractices'>('insurable')
 
   const aogRisks = [
@@ -951,39 +977,19 @@ function GeographyTab() {
   )
 }
 
+// ===== NEWS DATA =====
+const newsData = [
+  { title: 'Maruti Suzuki Kharkhoda Plant Phase 1 Commissioned', source: 'Economic Times', date: '2026-08-12', summary: 'First 250K unit capacity from the mega Kharkhoda factory is operational. Total investment of Rs 18,000 Cr targets 1M units by FY28. The plant strengthens Maruti\'s northern manufacturing base amid rising demand.', sentiment: 'Positive' },
+  { title: 'Tata Motors EV Sales Cross 1 Lakh Units in Single Quarter', source: 'Business Standard', date: '2026-07-21', summary: 'Nexon EV, Punch EV, and Curvv EV drove record volumes for the quarter. Tata retained a dominant share in the passenger EV segment. Expanding charging tie-ups and new launches supported the momentum.', sentiment: 'Positive' },
+  { title: 'Hyundai India Stock Extends Gains Well Above IPO Price', source: 'Moneycontrol', date: '2026-06-16', summary: 'The stock continues to trade above its listing price on strong fundamentals. Robust SUV demand and export momentum underpin investor confidence. Hyundai remains among the top passenger-vehicle players in India.', sentiment: 'Positive' },
+  { title: 'FAME III Subsidy Reduced by 25% — EV Prices to Rise', source: 'LiveMint', date: '2026-05-28', summary: 'The government is trimming EV subsidies to push OEMs toward cost reduction. Industry bodies warn of a premature withdrawal denting adoption. Near-term EV prices may edge higher across segments.', sentiment: 'Negative' },
+  { title: 'BYD India Plans Rs 3,000 Cr Hyderabad Plant amid Geopolitical Scrutiny', source: 'Reuters India', date: '2026-04-18', summary: 'The Chinese EV maker is pursuing local manufacturing to serve the Indian market. Security clearance remains pending amid heightened cross-border sensitivities. A local plant could sharpen competition in the mass EV segment.', sentiment: 'Neutral' },
+  { title: 'Mahindra Born Electric Platform — 5 EVs by FY27', source: 'Autocar India', date: '2026-03-24', summary: 'XUV.e8, XUV.e9, BE.05, BE.07, and BE.09 are confirmed on the new platform. A Rs 12,000 Cr investment backs the Chakan EV line. The VW MEB-derived architecture underpins the electric roadmap.', sentiment: 'Positive' },
+  { title: 'India Auto Exports Soften on Africa Slowdown', source: 'SIAM Report', date: '2026-03-05', summary: 'Forex constraints in African markets, a major export destination, dented shipments. Two-wheeler makers such as Bajaj, TVS, and Hero were most affected. ASEAN is emerging as an alternative growth market.', sentiment: 'Negative' },
+  { title: 'Toyota Innova HyCross Waiting Period Crosses 12 Months', source: 'Team-BHP', date: '2026-02-14', summary: 'Strong hybrid demand continues to outstrip supply at the single Bidadi plant. Hybrids miss FAME subsidy but benefit from favourable running costs. Toyota is weighing capacity additions to ease the backlog.', sentiment: 'Neutral' },
+]
+
 // ===== NEWS TAB =====
 function NewsTab() {
-  const news = [
-    { title: 'Maruti Suzuki Kharkhoda Plant Phase 1 Commissioned', source: 'Economic Times', date: 'Jun 2025', summary: 'First 250K unit capacity from mega Kharkhoda factory operational. Total investment ₹18,000 Cr for 1M units by FY28.', sentiment: 'Positive' },
-    { title: 'Tata Motors EV Sales Cross 1 Lakh Units in Single Quarter', source: 'Business Standard', date: 'May 2025', summary: 'Nexon EV, Punch EV, Curvv EV drive volumes. Market share maintained at 63% in EV segment.', sentiment: 'Positive' },
-    { title: 'Hyundai India IPO — Stock Surges 15% Post Listing', source: 'Moneycontrol', date: 'Oct 2024', summary: 'India\'s largest IPO of 2024 at ₹27,000 Cr. Strong institutional demand signals confidence in India auto growth.', sentiment: 'Positive' },
-    { title: 'FAME III Subsidy Reduced by 25% — EV Prices to Rise', source: 'LiveMint', date: 'Apr 2025', summary: 'Government reducing EV subsidies to encourage cost reduction by OEMs. Industry pushes back citing premature withdrawal.', sentiment: 'Negative' },
-    { title: 'BYD India Plans ₹3,000 Cr Hyderabad Plant — Geopolitical Concerns', source: 'Reuters India', date: 'Mar 2025', summary: 'Chinese EV giant BYD plans local manufacturing. Security clearance pending from Home Ministry amid India-China tensions.', sentiment: 'Neutral' },
-    { title: 'Mahindra Born Electric Platform — 5 EVs by FY27', source: 'Autocar India', date: 'Feb 2025', summary: 'XUV.e8, XUV.e9, BE.05, BE.07, BE.09 confirmed. ₹12,000 Cr investment in Chakan EV line. VW MEB-derived platform.', sentiment: 'Positive' },
-    { title: 'India Auto Exports Decline 8% — Africa Slowdown', source: 'SIAM Report', date: 'Jan 2025', summary: 'Africa markets (30% of exports) facing forex issues. Bajaj, TVS, Hero most impacted. ASEAN growing as alternative.', sentiment: 'Negative' },
-    { title: 'Toyota Innova HyCross Waiting Period Crosses 12 Months', source: 'Team-BHP', date: 'Jun 2025', summary: 'Strong hybrid demand exceeds supply. Single Bidadi plant constraint. Hybrid = no FAME subsidy but 43% GST vs 48%.', sentiment: 'Neutral' },
-  ]
-
-  return (
-    <div className="space-y-4">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-        <h3 className="text-sm font-bold text-navy">Latest Auto Industry News & Developments</h3>
-        <p className="text-xs text-gray-500">Curated from SIAM, industry publications, and company filings</p>
-      </div>
-      {news.map((n, i) => (
-        <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition">
-          <div className="flex items-center justify-between mb-2">
-            <h4 className="text-sm font-bold text-navy flex-1">{n.title}</h4>
-            <span className={`text-[9px] px-2 py-0.5 rounded-full font-semibold ml-2 ${n.sentiment === 'Positive' ? 'bg-green-100 text-green-700' : n.sentiment === 'Negative' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}`}>{n.sentiment}</span>
-          </div>
-          <p className="text-xs text-gray-600 mb-2">{n.summary}</p>
-          <div className="flex items-center gap-3 text-[10px] text-gray-400">
-            <span className="font-semibold">{n.source}</span>
-            <span>•</span>
-            <span>{n.date}</span>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
+  return <NewsFeed title="Automobile Industry News & Developments" items={newsData} />
 }

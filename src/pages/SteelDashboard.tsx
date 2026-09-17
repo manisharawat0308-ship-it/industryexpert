@@ -1,11 +1,11 @@
 ﻿import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuthStore } from '../store/useAuthStore'
 import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2
+  CloudRain, Zap, Calendar, Tag, Building2, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -13,14 +13,22 @@ import {
   AreaChart, Area, ComposedChart, LabelList,
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
+import BusinessModel from '../components/BusinessModel'
+import { STEEL_BUSINESS } from '../data/businessModels/steelBusiness'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { STEEL_GAME } from '../components/process-game/data/steelGame'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import LiveTicker from '../components/LiveTicker'
 import HealthGauge from '../components/HealthGauge'
+import DashboardHeader from '../components/DashboardHeader'
+import SteelRiskAnalysis from '../components/risk-analysis/SteelRiskAnalysis'
 
 const COLORS = ['#B02A30', '#005B75', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722']
 
-type SteelTab = 'combined' | 'ownership' | 'risk' | 'players' | 'geography' | 'news' | 'snapshot'
+type SteelTab = 'combined' | 'business' | 'ownership' | 'risk' | 'players' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== STEEL DATA (embedded) =====
 const overviewData = {
@@ -151,14 +159,14 @@ const riskData = {
 }
 
 const playersData = [
-  { rank: 1, name: 'Tata Steel', capacity: 34.6, revenue: 229518, route: 'BF-BOF', products: 'Flat + Long' },
-  { rank: 2, name: 'JSW Steel', capacity: 30.4, revenue: 177889, route: 'BF-BOF + EAF', products: 'Flat + Long' },
-  { rank: 3, name: 'SAIL', capacity: 21.4, revenue: 99468, route: 'BF-BOF', products: 'Flat + Long + Rails' },
-  { rank: 4, name: 'AMNS India', capacity: 18.0, revenue: 85000, route: 'BF-BOF + EAF', products: 'Flat (HR, CR)' },
-  { rank: 5, name: 'JSPL', capacity: 12.5, revenue: 52874, route: 'BF-BOF + DRI-EAF', products: 'Long + Flat' },
-  { rank: 6, name: 'RINL', capacity: 7.3, revenue: 18200, route: 'BF-BOF', products: 'Long Products' },
-  { rank: 7, name: 'Shyam Metalics', capacity: 5.7, revenue: 14200, route: 'IF + EAF', products: 'Long + Ferro' },
-  { rank: 8, name: 'APL Apollo', capacity: 4.0, revenue: 18500, route: 'ERW', products: 'Structural Tubes' },
+  { rank: 1, name: 'Tata Steel', capacity: 34.6, revenue: 229518, route: 'BF-BOF', products: 'Flat + Long', type: 'Private', ownership: 'Private', utilization: 88, costPerT: 42000, ebitdaMargin: 15, target: '40 MTPA by FY30', concentration: 'Low', highlight: 'India\'s #1 by revenue. Captive iron ore (100% India need) makes Jamshedpur among the world\'s lowest-cost plants. Premium branded mix (Tiscon, Pravesh).' },
+  { rank: 2, name: 'JSW Steel', capacity: 30.4, revenue: 177889, route: 'BF-BOF + EAF', products: 'Flat + Long', type: 'Private', ownership: 'Private', utilization: 85, costPerT: 43500, ebitdaMargin: 14, target: '50 MTPA by FY31', concentration: 'Low', highlight: 'Most aggressive expander. Vijayanagar is India\'s single-largest plant. Strong flat-product/auto exposure; scaling greenfield + acquisitions.' },
+  { rank: 3, name: 'SAIL', capacity: 21.4, revenue: 99468, route: 'BF-BOF', products: 'Flat + Long + Rails', type: 'PSU', ownership: 'PSU', utilization: 78, costPerT: 46000, ebitdaMargin: 9, target: '35 MTPA by FY31', concentration: 'Low', highlight: 'Largest PSU steelmaker, 5 integrated plants. Dominant in rails (Indian Railways) and plates. Legacy cost base but huge captive ore.' },
+  { rank: 4, name: 'AMNS India', capacity: 18.0, revenue: 85000, route: 'BF-BOF + EAF', products: 'Flat (HR, CR)', type: 'JV', ownership: 'Private (JV)', utilization: 90, costPerT: 43000, ebitdaMargin: 14, target: '24 MTPA (Hazira)', concentration: 'High', highlight: 'ArcelorMittal + Nippon Steel JV. Shore-based Hazira with port access for imports/exports. Aggressive 24 MTPA brownfield expansion.' },
+  { rank: 5, name: 'JSPL', capacity: 12.5, revenue: 52874, route: 'BF-BOF + DRI-EAF', products: 'Long + Flat', type: 'Private', ownership: 'Private', utilization: 84, costPerT: 44000, ebitdaMargin: 16, target: '~16 MTPA', concentration: 'Medium', highlight: 'O.P. Jindal group. Strong in rails, plates and long products; Angul is a large DRI-EAF complex moving toward greener routes.' },
+  { rank: 6, name: 'RINL', capacity: 7.3, revenue: 18200, route: 'BF-BOF', products: 'Long Products', type: 'PSU', ownership: 'PSU', utilization: 65, costPerT: 48000, ebitdaMargin: 4, target: 'Under review (disinvestment)', concentration: 'High', highlight: 'India\'s first shore-based plant (Vizag). No captive iron ore — structurally high-cost; strategic disinvestment under discussion.' },
+  { rank: 7, name: 'Shyam Metalics', capacity: 5.7, revenue: 14200, route: 'IF + EAF', products: 'Long + Ferro', type: 'Private', ownership: 'Private', utilization: 82, costPerT: 44500, ebitdaMargin: 13, target: '~14 MTPA', concentration: 'Medium', highlight: 'Fast-growing integrated secondary producer (long products + ferro alloys). Backward-integrated with power and pellets.' },
+  { rank: 8, name: 'APL Apollo', capacity: 4.0, revenue: 18500, route: 'ERW', products: 'Structural Tubes', type: 'Private', ownership: 'Private', utilization: 75, costPerT: 47000, ebitdaMargin: 8, target: '~5 MTPA', concentration: 'Medium', highlight: 'India\'s largest structural-steel-tube maker (not a primary steelmaker). Strong brand and pan-India distribution in value-added tubes.' },
 ]
 
 const geographyData = [
@@ -174,12 +182,12 @@ const geographyData = [
 ]
 
 const newsData = [
-  { id: 1, title: 'Tata Steel Kalinganagar Phase 2 commissioned, adds 5 MTPA', date: '2025-03-15', region: 'East', category: 'Business Wins' },
-  { id: 2, title: 'AMNS India gets EC for 24 MTPA Hazira expansion', date: '2025-02-28', region: 'West', category: 'Business Wins' },
-  { id: 3, title: 'Gas leak at SAIL Bhilai coke oven battery, 3 workers hospitalized', date: '2025-02-10', region: 'Central', category: 'Accidents' },
-  { id: 4, title: 'Govt extends anti-dumping duty on Chinese steel for 5 years', date: '2025-01-22', region: 'National', category: 'Policy' },
-  { id: 5, title: 'JSW Steel Angul plant starts trial production at 5 MTPA', date: '2025-01-10', region: 'East', category: 'Business Wins' },
-  { id: 6, title: "JSPL commissions India's first hydrogen-injection BF trial", date: '2025-03-05', region: 'East', category: 'Business Wins' },
+  { id: 1, title: 'Tata Steel Kalinganagar Phase 2 commissioned, adds 5 MTPA', date: '2026-08-12', region: 'East', category: 'Business Wins', source: 'Business Standard', summary: 'The second phase at Kalinganagar lifts the plant to 8 MTPA and strengthens Tata Steel\'s flat-products footprint in eastern India. The expansion targets automotive and appliance-grade steel demand. Ramp-up to full capacity is expected over the next few quarters.' },
+  { id: 2, title: 'AMNS India gets EC for 24 MTPA Hazira expansion', date: '2026-07-20', region: 'West', category: 'Business Wins', source: 'Economic Times', summary: 'Environmental clearance paves the way for one of India\'s largest single-site steel expansions at Hazira in Gujarat. The brownfield project will roughly treble existing capacity over the decade. It anchors ArcelorMittal Nippon Steel\'s ambition to reach 40 MTPA in India.' },
+  { id: 3, title: 'Gas leak at SAIL Bhilai coke oven battery, 3 workers hospitalized', date: '2026-06-18', region: 'Central', category: 'Accidents', source: 'PTI', summary: 'A gas leak during maintenance at the Bhilai coke oven battery led to the hospitalisation of three workers, all reported stable. Operations at the affected battery were briefly suspended for safety checks. The incident renews focus on hazardous-gas monitoring at legacy integrated plants.' },
+  { id: 4, title: 'Govt extends anti-dumping duty on Chinese steel for 5 years', date: '2026-05-28', region: 'National', category: 'Policy', source: 'Ministry of Commerce', summary: 'The extension covers several flat-steel categories where cheap imports had pressured domestic realisations. Producers welcomed the move as protection against dumping amid a global oversupply. The duty is intended to safeguard capacity utilisation at Indian mills.' },
+  { id: 5, title: 'JSW Steel Angul plant starts trial production at 5 MTPA', date: '2026-04-15', region: 'East', category: 'Business Wins', source: 'Mint', summary: 'Trial production at the Angul facility marks JSW\'s entry into large-scale steelmaking in Odisha. The plant leverages nearby iron ore and coal linkages to lower input costs. Commercial output is slated to follow after stabilisation of the blast furnace.' },
+  { id: 6, title: "JSPL commissions India's first hydrogen-injection BF trial", date: '2026-03-05', region: 'East', category: 'Business Wins', source: 'Business Standard', summary: 'Jindal Steel & Power has begun injecting hydrogen into a blast furnace to cut coke consumption and carbon intensity. The trial positions the company at the forefront of green-steel technology in India. Success could accelerate decarbonisation roadmaps across the sector.' },
 ]
 
 const capacityPipeline = [
@@ -192,19 +200,28 @@ const capacityPipeline = [
   ]
 
 export default function SteelDashboard() {
-  const [activeTab, setActiveTab] = useState<SteelTab>('combined')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const initialTab = (searchParams.get('tab') as SteelTab) || 'combined'
+  const [activeTab, setActiveTabState] = useState<SteelTab>(initialTab)
+  // keep the active tab in the URL (?tab=...) so a refresh stays on the same tab
+  const setActiveTab = (t: SteelTab) => {
+    setActiveTabState(t)
+    setSearchParams((prev) => { const p = new URLSearchParams(prev); p.set('tab', t); return p }, { replace: true })
+  }
   const navigate = useNavigate()
   const { role, username } = useAuthStore()
   const isAdmin = role === 'admin'
 
   const tabs: { id: SteelTab; label: string; icon: any }[] = [
     { id: 'combined', label: 'Industry Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'ownership', label: 'Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'players', label: 'Players', icon: TrendingUp },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
 
   const steelTickerItems = [
@@ -222,39 +239,10 @@ export default function SteelDashboard() {
 
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      {/* Header */}
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/hub')}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition">
-              <ArrowLeft size={16} /> Back to Hub
-            </button>
-            <div className="h-8 w-px bg-gray-200"></div>
-            <div className="flex items-center gap-2">
-              <img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" />
-              <div>
-                <h1 className="text-lg font-bold text-navy">Steel Industry Dashboard</h1>
-                <p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {isAdmin && (
-              <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-semibold">
-                <Settings size={14} /> Admin
-              </button>
-            )}
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">
-              {isAdmin ? <Shield size={14} className="text-maroon" /> : <User size={14} className="text-navy" />}
-              <span className="text-xs font-semibold">{username}</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader title="Steel Industry Dashboard" />
 
       {/* Tab Navigation */}
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm">
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm">
         <div className="max-w-[1920px] mx-auto px-6">
           <div className="flex items-center gap-1 py-2 overflow-x-auto">
             {tabs.map((tab) => (
@@ -272,12 +260,14 @@ export default function SteelDashboard() {
       {/* Content */}
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'combined' && <CombinedOverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={STEEL_BUSINESS} />}
         {activeTab === 'ownership' && <OwnershipTab />}
         {activeTab === 'risk' && <RiskTab isAdmin={isAdmin} />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
         {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="steel" />}
+        {activeTab === 'game' && <ProcessGame data={STEEL_GAME} />}
       </main>
 
       {/* Footer */}
@@ -293,6 +283,52 @@ function CombinedOverviewTab() {
   const [tradePopup, setTradePopup] = useState<'exports' | 'imports' | null>(null)
 
   const d = overviewData
+
+  // Detailed info shown when a product segment slice is clicked
+  const segmentInfo: Record<string, { share: string; production: string; desc: string; subProducts: { name: string; note: string }[]; players: string; endUse: string }> = {
+    'Flat Products': {
+      share: '48.2% of production', production: '~69.6 MTPA',
+      desc: 'Rolled steel in sheet/coil form. The highest-value, most technology-intensive segment — dominated by integrated (BF-BOF) producers. Key demand from automotive, appliances, and construction.',
+      subProducts: [
+        { name: 'Hot Rolled Coil (HRC)', note: 'Base flat product; structural, pipes, re-rolling' },
+        { name: 'Cold Rolled Coil (CRC)', note: 'Auto bodies, appliances, precision uses' },
+        { name: 'Galvanized / Coated (GI/GL/PPGI)', note: 'Corrosion-resistant roofing, auto, appliances' },
+        { name: 'Electrical / CRGO-CRNO', note: 'Transformers & EV motors (largely imported)' },
+      ],
+      players: 'Tata Steel, JSW Steel, AMNS India, SAIL', endUse: 'Automotive (~35%), Construction, Appliances, Packaging',
+    },
+    'Long Products': {
+      share: '40.5% of production', production: '~58.4 MTPA',
+      desc: 'Bars, rods, and structural sections — the backbone of construction and infrastructure. Produced by both integrated mills and secondary (induction/EAF) producers.',
+      subProducts: [
+        { name: 'TMT Bars / Rebar', note: 'Reinforced concrete — housing & infra' },
+        { name: 'Wire Rods', note: 'Fasteners, wires, springs, welding' },
+        { name: 'Structural Sections', note: 'Beams, channels, angles for construction' },
+        { name: 'Rails', note: 'Railways (SAIL is the primary supplier)' },
+      ],
+      players: 'SAIL, JSW Steel, JSPL, Rathi, secondary producers', endUse: 'Construction & Infrastructure (~65%), Railways',
+    },
+    'Stainless Steel': {
+      share: '7.8% of production', production: '~11.3 MTPA',
+      desc: 'Corrosion-resistant alloy steel (chromium/nickel). Higher value-add; India is among the top global producers. Growing with kitchenware, ART (architecture, building, construction), and railways.',
+      subProducts: [
+        { name: 'SS Flat Products', note: 'Coils/sheets for kitchenware, ART, process' },
+        { name: 'SS Long Products', note: 'Bars, wires for fasteners & auto' },
+        { name: 'Specialty Grades', note: 'Duplex/austenitic for chemical, pharma, defence' },
+      ],
+      players: 'Jindal Stainless (market leader), others', endUse: 'Kitchenware, ART, Railways, Auto, Process industry',
+    },
+    'Alloy Steel': {
+      share: '3.5% of production', production: '~5.0 MTPA',
+      desc: 'Steel with added elements (Cr, Ni, Mo, V) for strength/hardness. Critical for automotive powertrains, bearings, tools, and defence — a strategic, high-value niche.',
+      subProducts: [
+        { name: 'Bearing & Spring Steel', note: 'Auto, industrial machinery' },
+        { name: 'Tool & Die Steel', note: 'Manufacturing tooling' },
+        { name: 'Defence / Special Alloys', note: 'Armour, aerospace (e.g. MIDHANI)' },
+      ],
+      players: 'Kalyani Steels, MIDHANI, Sunflag, JSW', endUse: 'Automotive, Bearings, Tools, Defence & Aerospace',
+    },
+  }
 
   const globalComparison = [
     { country: 'China', production: 1005 },
@@ -465,7 +501,39 @@ function CombinedOverviewTab() {
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setSegmentPopup(null)}>
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4"><h3 className="text-lg font-bold text-navy">{segmentPopup}</h3><button onClick={() => setSegmentPopup(null)} className="text-gray-400 hover:text-gray-600 text-xl font-bold">×</button></div>
-            <p className="text-sm text-gray-600">See the Overview tab for detailed sub-product breakdown with share percentages for each segment.</p>
+            {segmentInfo[segmentPopup] ? (
+              <div className="space-y-4">
+                {(() => { const info = segmentInfo[segmentPopup]; return (
+                <>
+                <div className="flex items-center gap-2 -mt-2">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-maroon/10 text-maroon">{info.share}</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-navy/5 text-navy">{info.production}</span>
+                </div>
+                <p className="text-sm text-gray-700 leading-relaxed">{info.desc}</p>
+                <div>
+                  <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-2">Key Sub-Products</h4>
+                  <div className="space-y-2">
+                    {info.subProducts.map((sp, i) => (
+                      <div key={i} className="flex items-start gap-2 p-2.5 bg-gray-50 rounded-lg">
+                        <span className="text-maroon font-bold text-xs mt-0.5">▸</span>
+                        <div>
+                          <div className="text-xs font-bold text-navy">{sp.name}</div>
+                          <div className="text-[11px] text-gray-500">{sp.note}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 gap-2">
+                  <div className="p-3 bg-gray-50 rounded-lg"><div className="text-[10px] font-bold text-gray-500 uppercase">Key Players</div><div className="text-xs text-gray-700 mt-0.5">{info.players}</div></div>
+                  <div className="p-3 bg-gray-50 rounded-lg"><div className="text-[10px] font-bold text-gray-500 uppercase">Main End-Uses</div><div className="text-xs text-gray-700 mt-0.5">{info.endUse}</div></div>
+                </div>
+                </>
+                )})()}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600">Detailed breakdown for this segment is available in the Overview charts.</p>
+            )}
           </div>
         </div>
       )}
@@ -776,6 +844,10 @@ function TimelineTab() {
 
 
 function RiskTab({ isAdmin }: { isAdmin: boolean }) {
+  return <SteelRiskAnalysis />
+}
+
+function RiskTabLegacy({ isAdmin }: { isAdmin: boolean }) {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'bestpractices'>('insurable')
   const [segmentFilter, setSegmentFilter] = useState<'All' | 'Blast Furnace' | 'EAF' | 'Rolling Mill'>('All')
   const [hoveredStrategy, setHoveredStrategy] = useState<string | null>(null)
@@ -1259,6 +1331,42 @@ function RiskTab({ isAdmin }: { isAdmin: boolean }) {
 
 
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => ({
+    rank: p.rank,
+    name: p.name,
+    revenue: p.revenue,
+    type: p.ownership || p.type,
+    segment: p.products,
+    primary: p.capacity,
+    secondary: p.utilization,
+    compete: p.costPerT,
+    target: p.target,
+    concentration: p.concentration as 'Low' | 'Medium' | 'High' | undefined,
+    highlight: p.highlight,
+    extra: [
+      { label: 'Route', value: String(p.route) },
+      { label: 'EBITDA %', value: `${p.ebitdaMargin}%` },
+    ],
+  }))
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Steel',
+        primaryLabel: 'Capacity (MTPA)',
+        primaryUnit: ' MT',
+        secondaryLabel: 'Utilisation',
+        secondaryUnit: '%',
+        competeLabel: 'Cost / Tonne (₹)',
+        competeLowerIsBetter: true,
+        competePrefix: '₹',
+        donutTitle: 'Private vs PSU Split',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
 
   const playerDetails: Record<string, { hq: string; ceo: string; founded: string; type: string; plants: string; expansion: string; moat: string }> = {
@@ -1539,42 +1647,5 @@ function GeographyTab() {
 }
 
 function NewsTab() {
-  const [regionFilter, setRegionFilter] = useState('All')
-  const regions = ['All', 'East', 'West', 'South', 'Central', 'National']
-
-  const filtered = regionFilter === 'All' ? newsData : newsData.filter(n => n.region === regionFilter)
-
-  const getCatColor = (c: string) => c === 'Business Wins' ? 'bg-green-100 text-green-800' : c === 'Accidents' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
-
-  return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-        <div className="flex gap-2">
-          {regions.map((r) => (
-            <button key={r} onClick={() => setRegionFilter(r)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
-                regionFilter === r ? 'bg-navy text-white border-navy' : 'bg-white text-gray-600 border-gray-300 hover:border-navy'
-              }`}>{r}</button>
-          ))}
-        </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filtered.map((item) => (
-          <div key={item.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition">
-            <div className="flex items-start justify-between mb-2">
-              <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getCatColor(item.category)}`}>{item.category}</span>
-              <div className="flex items-center gap-1 text-xs text-gray-400">
-                <Calendar size={12} />
-                {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-              </div>
-            </div>
-            <h4 className="font-bold text-navy text-sm">{item.title}</h4>
-            <div className="mt-2 flex items-center gap-1 text-xs text-gray-400">
-              <MapPin size={10} /> {item.region}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+  return <NewsFeed title="Steel Industry News & Developments" items={newsData} />
 }

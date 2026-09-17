@@ -5,19 +5,27 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Zap, Calendar, Tag, Building2, Shirt
+  CloudRain, Zap, Calendar, Tag, Building2, Shirt, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, LabelList
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { TEXTILE_GAME } from '../components/process-game/data/textileGame'
+import BusinessModel from '../components/BusinessModel'
+import { TEXTILE_BUSINESS } from '../data/businessModels/textileBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import HealthGauge from '../components/HealthGauge'
+import TextileRiskAnalysis from '../components/risk-analysis/TextileRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#7c3aed', '#B02A30', '#F99D27', '#4CAF50', '#0369a1', '#FF5722', '#1e3a5f']
 
-type TextileTab = 'overview' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot'
+type TextileTab = 'overview' | 'business' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== DATA =====
 const segmentData = [
@@ -91,14 +99,14 @@ const geographyData = [
 ]
 
 const newsData = [
-  { title: 'PLI Scheme for textiles: Rs 10,683 Cr approved, 40+ companies invest in MMF & technical textiles', date: '2025-01-18', sentiment: 'positive', source: 'Ministry of Textiles' },
-  { title: 'Cotton prices surge 15% on lower crop estimates; spinning mills squeezed on margins', date: '2025-01-12', sentiment: 'negative', source: 'Cotton Association of India' },
-  { title: 'Tirupur garment exports cross Rs 35,000 Cr milestone; China+1 orders accelerate', date: '2024-12-28', sentiment: 'positive', source: 'TEA (Tirupur Exporters)' },
-  { title: 'India mandates sustainability compliance for textile exports to EU under CBAM alignment', date: '2024-12-20', sentiment: 'neutral', source: 'DGFT Notification' },
-  { title: 'Reliance-Shein JV to disrupt India fast fashion market; local sourcing from Surat/Tirupur', date: '2024-12-15', sentiment: 'positive', source: 'Economic Times' },
-  { title: 'Bangladesh political crisis diverts $2B garment orders to India; Noida and Bangalore gain', date: '2024-12-10', sentiment: 'positive', source: 'AEPC' },
-  { title: 'Water scarcity in Tamil Nadu dyeing clusters forces 200+ units to reduce capacity 30%', date: '2024-12-05', sentiment: 'negative', source: 'Business Standard' },
-  { title: 'Technical textiles market crosses $25B; geotextiles mandatory in all NHAI road projects', date: '2024-11-28', sentiment: 'positive', source: 'NHAI/MoT' },
+  { title: 'PLI Scheme for textiles: Rs 10,683 Cr approved, 40+ companies invest in MMF & technical textiles', date: '2026-08-13', sentiment: 'positive', source: 'Ministry of Textiles', summary: 'The Production Linked Incentive scheme is channelling large investments into man-made fibre and technical textiles, segments where India has lagged. Approved companies are setting up integrated units to move up the value chain. The push aims to reduce import dependence and lift export competitiveness.' },
+  { title: 'Cotton prices surge 15% on lower crop estimates; spinning mills squeezed on margins', date: '2026-07-21', sentiment: 'negative', source: 'Cotton Association of India', summary: 'A weaker cotton crop has tightened supply and driven up raw material costs for spinners. Yarn makers are struggling to pass on the increase amid soft downstream demand. Margin pressure is most acute for mid-sized mills with limited pricing power.' },
+  { title: 'Tirupur garment exports cross Rs 35,000 Cr milestone; China+1 orders accelerate', date: '2026-06-18', sentiment: 'positive', source: 'TEA (Tirupur Exporters)', summary: 'The knitwear hub of Tirupur is winning orders as global buyers diversify sourcing away from China. Capacity additions and compliance upgrades have improved buyer confidence. Sustained order flow is boosting employment and ancillary units in the cluster.' },
+  { title: 'India aligns textile export norms with EU sustainability and CBAM requirements', date: '2026-05-27', sentiment: 'neutral', source: 'DGFT Notification', summary: 'New compliance guidance helps exporters prepare for tighter EU environmental and carbon rules. Firms must document traceability, chemical use, and emissions across the chain. Early adopters may gain preferred-supplier status in premium markets.' },
+  { title: 'Reliance-Shein JV expands India fast fashion; local sourcing from Surat and Tirupur', date: '2026-04-19', sentiment: 'positive', source: 'Economic Times', summary: 'The joint venture is ramping local manufacturing and quick-turn sourcing from domestic clusters. It brings scale and technology to India\'s fast-fashion supply chain. Local vendors stand to benefit from steady, high-volume order books.' },
+  { title: 'Bangladesh supply disruption diverts $2B garment orders to India; Noida and Bengaluru gain', date: '2026-03-24', sentiment: 'positive', source: 'AEPC', summary: 'Disruptions in a competing sourcing hub have redirected sizeable garment orders to Indian units. Apparel clusters in the north and south are scaling to absorb the demand. Exporters see a window to lock in longer-term buyer relationships.' },
+  { title: 'Water scarcity in Tamil Nadu dyeing clusters forces 200+ units to cut capacity 30%', date: '2026-03-06', sentiment: 'negative', source: 'Business Standard', summary: 'Acute water shortages have curtailed operations at dyeing and processing units. Zero Liquid Discharge mandates add to the strain on water-intensive processes. The disruption is delaying order fulfilment during peak season.' },
+  { title: 'Technical textiles market crosses $25B; geotextiles mandatory in NHAI road projects', date: '2026-02-15', sentiment: 'positive', source: 'NHAI / Ministry of Textiles', summary: 'Rising infrastructure spending is driving demand for geotextiles, agrotextiles, and medical textiles. Mandatory use in highway projects provides a stable demand anchor. The segment offers higher margins than conventional textiles.' },
 ]
 
 const riskData = {
@@ -128,23 +136,27 @@ export default function TextileDashboard() {
   const isAdmin = role === 'admin'
   const tabs: { id: TextileTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Industry Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50"><div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between"><div className="flex items-center gap-4"><button onClick={() => navigate('/hub')} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition"><ArrowLeft size={14} /> Back to Hub</button><div className="h-6 w-px bg-gray-200"></div><div className="flex items-center gap-3"><img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" /><div><h1 className="text-sm font-extrabold text-navy">Textile & Apparel</h1><p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p></div></div></div><div className="flex items-center gap-3">{isAdmin && <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-bold"><Settings size={13} /> Admin</button>}<button onClick={() => window.print()} className="flex items-center gap-1 px-3 py-1.5 bg-navy/5 text-navy rounded-lg text-xs font-semibold hover:bg-navy/10 transition"><Download size={13} /> Export</button><div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">{isAdmin ? <Shield size={13} className="text-maroon" /> : <User size={13} className="text-navy" />}<span className="text-xs font-bold">{username}</span></div></div></div></header>
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
+      <DashboardHeader title="Textile Industry Dashboard" />
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm"><div className="max-w-[1920px] mx-auto px-6"><div className="flex items-center gap-1 py-2 overflow-x-auto">{tabs.map((tab) => (<button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-maroon text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}><tab.icon size={14} /> {tab.label}</button>))}</div></div></nav>
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={TEXTILE_BUSINESS} />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
         {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="textile" />}
+        {activeTab === 'game' && <ProcessGame data={TEXTILE_GAME} />}
       </main>
       <footer className="bg-navy text-white py-3 fixed bottom-0 left-0 right-0 z-30"><div className="max-w-[1920px] mx-auto px-6 flex items-center justify-between"><p className="text-xs opacity-80">ICICI Lombard General Insurance Company Ltd.</p><p className="text-xs text-amber-300 font-semibold">For Internal Use Only</p><p className="text-xs opacity-80">Designed by <span className="font-bold">Deepak Arora</span></p></div></footer>
     </div>
@@ -209,6 +221,36 @@ function OverviewTab() {
 
 // ===== PLAYERS TAB =====
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => {
+    const d = playerDetails[p.name]
+    return {
+      rank: p.rank,
+      name: p.name,
+      revenue: p.revenue,
+      type: 'Textile',
+      segment: p.segment,
+      hq: d?.hq,
+      founded: d?.founded,
+      target: d?.expansion,
+      highlight: d?.moat,
+      extra: [
+        { label: 'Exports', value: String(p.exports) },
+        { label: 'Brands', value: p.brands },
+      ],
+    }
+  })
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Textile',
+        donutTitle: 'Category Split',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const selected = selectedPlayer ? playerDetails[selectedPlayer] : null
   return (
@@ -226,6 +268,10 @@ function PlayersTab() {
 
 // ===== RISK TAB =====
 function RiskTab() {
+  return <TextileRiskAnalysis />
+}
+
+function RiskTabLegacy() {
   const [riskSubTab, setRiskSubTab] = useState<'insurable' | 'cases'>('insurable')
   const [selectedCase, setSelectedCase] = useState<number | null>(null)
   return (
@@ -293,12 +339,5 @@ function GeographyTab() {
 
 // ===== NEWS TAB =====
 function NewsTab() {
-  return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-bold text-navy mb-4">Latest Textile & Apparel Industry News</h3>
-        <div className="space-y-3">{newsData.map((n, i) => (<div key={i} className="flex items-start gap-4 p-4 border border-gray-100 rounded-xl hover:shadow-sm transition"><div className={`w-2 h-2 rounded-full mt-2 shrink-0 ${n.sentiment === 'positive' ? 'bg-green-500' : n.sentiment === 'negative' ? 'bg-red-500' : 'bg-amber-500'}`}></div><div className="flex-1"><h4 className="text-sm font-bold text-navy">{n.title}</h4><div className="flex items-center gap-3 mt-1"><span className="text-[10px] text-gray-400">{n.date}</span><span className="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full font-medium">{n.source}</span><span className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${n.sentiment === 'positive' ? 'bg-green-50 text-green-700' : n.sentiment === 'negative' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700'}`}>{n.sentiment}</span></div></div></div>))}</div>
-      </div>
-    </div>
-  )
+  return <NewsFeed title="Textile Industry News & Developments" items={newsData} />
 }

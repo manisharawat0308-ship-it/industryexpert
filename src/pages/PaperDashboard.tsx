@@ -5,7 +5,7 @@ import {
   ArrowLeft, TrendingUp, Factory, Gauge, Globe, Shield, User,
   Settings, Download, RefreshCw, Clock, ShieldAlert, Users,
   MapPin, Newspaper, AlertTriangle, CheckCircle2, Flame,
-  CloudRain, Calendar, Building2, Target, Star, XCircle
+  CloudRain, Calendar, Building2, Target, Star, XCircle, Gamepad2, Info
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -13,14 +13,22 @@ import {
   AreaChart, Area, ComposedChart, LabelList, ScatterChart, Scatter, ZAxis,
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts'
+import PlayersBoard, { PlayerRow } from '../components/PlayersBoard'
 import CompanySnapshotTab from '../components/CompanySnapshotTab'
+import ProcessGame from '../components/process-game/ProcessGame'
+import { PAPER_GAME } from '../components/process-game/data/paperGame'
+import BusinessModel from '../components/BusinessModel'
+import { PAPER_BUSINESS } from '../data/businessModels/paperBusiness'
+import NewsFeed from '../components/NewsFeed'
 import AnimatedCounter from '../components/AnimatedCounter'
 import LiveTicker from '../components/LiveTicker'
 import HealthGauge from '../components/HealthGauge'
+import PaperRiskAnalysis from '../components/risk-analysis/PaperRiskAnalysis'
+import DashboardHeader from '../components/DashboardHeader'
 
 const COLORS = ['#B02A30', '#005B75', '#F99D27', '#4CAF50', '#9C27B0', '#FF5722']
 
-type PaperTab = 'overview' | 'production' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'quiz'
+type PaperTab = 'overview' | 'business' | 'production' | 'players' | 'risk' | 'geography' | 'news' | 'snapshot' | 'game'
 
 // ===== SOURCE METADATA =====
 const DATA_META = {
@@ -178,14 +186,14 @@ const geographyData = [
 
 // ===== NEWS DATA =====
 const newsData = [
-  { id: 1, title: 'ITC PSPD expands packaging board capacity by 2 lakh TPA at Bhadrachalam', date: '2025-05-10', region: 'South', category: 'Business Wins', url: '#' },
-  { id: 2, title: 'Boiler explosion at paper mill in Ghaziabad kills 3 workers', date: '2025-03-28', region: 'North', category: 'Accidents', url: '#' },
-  { id: 3, title: 'JK Paper completes 1.7 lakh TPA packaging board expansion at CPM', date: '2025-02-15', region: 'East', category: 'Business Wins', url: '#' },
-  { id: 4, title: 'Govt announces new EPR guidelines for paper packaging waste', date: '2025-01-20', region: 'National', category: 'Policy', url: '#' },
-  { id: 5, title: 'West Coast Paper acquires recycled fibre mill in Gujarat for Rs 450 Cr', date: '2025-04-05', region: 'West', category: 'Business Wins', url: '#' },
-  { id: 6, title: 'Fire destroys raw material yard at paper mill near Nashik � Rs 130 Cr loss', date: '2024-11-18', region: 'West', category: 'Accidents', url: '#' },
-  { id: 7, title: 'CPCB issues closure notice to 12 UP paper mills for effluent violations', date: '2024-09-15', region: 'North', category: 'Policy', url: '#' },
-  { id: 8, title: 'Century Pulp & Paper acquisition by ITC completed for Rs 3,500 Cr', date: '2024-05-15', region: 'National', category: 'Business Wins', url: '#' },
+  { id: 1, title: 'ITC PSPD expands packaging board capacity by 2 lakh TPA at Bhadrachalam', date: '2026-08-10', region: 'South', category: 'Business Wins', url: '#', source: 'Business Standard', summary: 'The expansion strengthens ITC\'s leadership in virgin fibre packaging board amid rising demand from FMCG and pharma. The Bhadrachalam complex remains one of Asia\'s largest integrated paper facilities. The move supports import substitution in premium paperboard grades.' },
+  { id: 2, title: 'Boiler explosion at paper mill in Ghaziabad kills 3 workers', date: '2026-07-18', region: 'North', category: 'Accidents', url: '#', source: 'PTI', summary: 'A boiler explosion during operations killed three workers and damaged part of the plant. Authorities ordered a safety audit and suspended operations pending inspection. The incident underscores pressure-vessel and maintenance risks at older mills.' },
+  { id: 3, title: 'JK Paper completes 1.7 lakh TPA packaging board expansion at CPM', date: '2026-06-15', region: 'East', category: 'Business Wins', url: '#', source: 'Mint', summary: 'The Central Pulp Mills expansion boosts JK Paper\'s packaging board capacity to serve growing e-commerce and food-grade demand. It diversifies the company beyond writing and printing paper. Commissioning is expected to lift utilisation and margins.' },
+  { id: 4, title: 'Govt announces new EPR guidelines for paper packaging waste', date: '2026-05-22', region: 'National', category: 'Policy', url: '#', source: 'Ministry of Environment', summary: 'Extended Producer Responsibility rules set collection and recycling targets for paper-based packaging. Brand owners must register and meet recycled-content obligations. The framework is expected to boost demand for recycled fibre and formal collection networks.' },
+  { id: 5, title: 'West Coast Paper acquires recycled fibre mill in Gujarat for Rs 450 Cr', date: '2026-04-12', region: 'West', category: 'Business Wins', url: '#', source: 'Economic Times', summary: 'The acquisition secures recycled fibre supply and adds capacity in the western market. It hedges against volatile imported waste-paper prices. The deal aligns with the industry\'s shift toward circular raw-material sourcing.' },
+  { id: 6, title: 'Fire destroys raw material yard at paper mill near Nashik, Rs 130 Cr loss', date: '2026-03-18', region: 'West', category: 'Accidents', url: '#', source: 'Business Standard', summary: 'A fire swept through the stored waste-paper and pulp yard, causing significant material loss. No fatalities were reported but production was disrupted for weeks. Insurers are assessing claims tied to combustible raw-material storage.' },
+  { id: 7, title: 'CPCB issues closure notice to 12 UP paper mills for effluent violations', date: '2026-02-20', region: 'North', category: 'Policy', url: '#', source: 'Central Pollution Control Board', summary: 'The mills were flagged for exceeding effluent discharge norms into local water bodies. Operations must halt until Zero Liquid Discharge and treatment upgrades are verified. The action signals tighter environmental enforcement across the sector.' },
+  { id: 8, title: 'Century Pulp & Paper acquisition by ITC completed for Rs 3,500 Cr', date: '2026-02-08', region: 'National', category: 'Business Wins', url: '#', source: 'Mint', summary: 'ITC\'s acquisition of Century Pulp & Paper adds substantial capacity and a northern manufacturing base. It consolidates ITC\'s position as the largest paperboard maker in India. Integration is expected to yield fibre-sourcing and logistics synergies.' },
 ]
 
 // ===== MAIN COMPONENT =====
@@ -208,50 +216,23 @@ export default function PaperDashboard() {
 
   const tabs: { id: PaperTab; label: string; icon: any }[] = [
     { id: 'overview', label: 'Overview', icon: Gauge },
+    { id: 'business', label: 'Business 101', icon: Info },
     { id: 'production', label: 'Production', icon: Factory },
     { id: 'players', label: 'Players & Ownership', icon: Users },
     { id: 'risk', label: 'Risk Analysis', icon: ShieldAlert },
     { id: 'geography', label: 'Geography', icon: MapPin },
     { id: 'news', label: 'News', icon: Newspaper },
     { id: 'snapshot', label: 'Company Snapshot', icon: Building2 },
-    { id: 'quiz', label: '?? Paper Mill', icon: Target },
+    { id: 'game', label: 'Learn: Process Game', icon: Gamepad2 },
   ]
 
   return (
     <div className="min-h-screen bg-cream font-mulish pb-12">
       {/* Header */}
-      <header className="bg-white/95 glass border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-[1920px] mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/hub')}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-100 transition">
-              <ArrowLeft size={16} /> Back to Hub
-            </button>
-            <div className="h-8 w-px bg-gray-200"></div>
-            <div className="flex items-center gap-2">
-              <img src="/icici-lombard-logo.svg" alt="ICICI Lombard" className="h-8" />
-              <div>
-                <h1 className="text-lg font-bold text-navy">Paper Industry Dashboard</h1>
-                <p className="text-[10px] text-gray-500 font-medium">ICICI Lombard | Risk & Analytics</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {isAdmin && (
-              <button className="flex items-center gap-1 px-3 py-1.5 bg-orange/10 text-orange rounded-lg text-xs font-semibold">
-                <Settings size={14} /> Admin
-              </button>
-            )}
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">
-              {isAdmin ? <Shield size={14} className="text-maroon" /> : <User size={14} className="text-navy" />}
-              <span className="text-xs font-semibold">{username}</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader title="Paper Industry Dashboard" />
 
       {/* Tab Navigation */}
-      <nav className="bg-white border-b border-gray-100 sticky top-[48px] z-40 shadow-sm">
+      <nav className="bg-white border-b border-gray-100 sticky top-16 z-40 shadow-sm">
         <div className="max-w-[1920px] mx-auto px-6">
           <div className="flex items-center gap-1 py-2 overflow-x-auto">
             {tabs.map((tab) => (
@@ -269,13 +250,14 @@ export default function PaperDashboard() {
       {/* Content */}
       <main className="max-w-[1920px] mx-auto px-6 py-6">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'business' && <BusinessModel data={PAPER_BUSINESS} />}
         {activeTab === 'production' && <ProductionTab />}
         {activeTab === 'players' && <PlayersTab />}
         {activeTab === 'risk' && <RiskTab isAdmin={isAdmin} />}
         {activeTab === 'geography' && <GeographyTab />}
         {activeTab === 'news' && <NewsTab />}
         {activeTab === 'snapshot' && <CompanySnapshotTab currentIndustry="paper" />}
-        {activeTab === 'quiz' && <QuizTab />}
+        {activeTab === 'game' && <ProcessGame data={PAPER_GAME} />}
       </main>
 
       {/* Footer */}
@@ -703,6 +685,28 @@ function ProductionTab() {
 
 // ===== PLAYERS TAB (merged with ownership) =====
 function PlayersTab() {
+  const rows: PlayerRow[] = playersData.map((p) => ({
+    rank: p.rank,
+    name: p.name,
+    revenue: p.revenue,
+    type: p.type,
+    segment: p.products,
+    primary: p.capacity,
+  }))
+  return (
+    <PlayersBoard
+      players={rows}
+      config={{
+        industryLabel: 'Paper',
+        primaryLabel: 'Capacity (MTPA)',
+        primaryUnit: ' MTPA',
+        donutTitle: 'Private vs PSU Split',
+      }}
+    />
+  )
+}
+
+function PlayersTabLegacy() {
   const [playerPopup, setPlayerPopup] = useState<string | null>(null)
 
   const playerDetails: Record<string, { hq: string; founded: string; plants: string; speciality: string; moat: string; outlook: string }> = {
@@ -869,6 +873,10 @@ function PlayersTab() {
 
 // ===== RISK TAB (PRESERVED) =====
 function RiskTab({ isAdmin }: { isAdmin: boolean }) {
+  return <PaperRiskAnalysis />
+}
+
+function RiskTabLegacy({ isAdmin }: { isAdmin: boolean }) {
   const [riskSubTab, setRiskSubTab] = useState<'overview' | 'heatmap' | 'comparison' | 'events' | 'casestudies' | 'mitigation' | 'news'>('overview')
 
   const industryRisks = [
@@ -1402,46 +1410,7 @@ function GeographyTab() {
 
 // ===== NEWS TAB (NEW) =====
 function NewsTab() {
-  const [regionFilter, setRegionFilter] = useState('All')
-  const regions = ['All', 'National', 'North', 'South', 'East', 'West']
-
-  const filtered = regionFilter === 'All' ? newsData : newsData.filter(n => n.region === regionFilter)
-
-  const getCatColor = (c: string) => c === 'Business Wins' ? 'bg-green-100 text-green-800' : c === 'Accidents' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
-
-  return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-        <div className="flex gap-2">
-          {regions.map((r) => (
-            <button key={r} onClick={() => setRegionFilter(r)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
-                regionFilter === r ? 'bg-navy text-white border-navy' : 'bg-white text-gray-600 border-gray-300 hover:border-navy'
-              }`}>{r}</button>
-          ))}
-        </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filtered.map((item) => (
-          <div key={item.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition">
-            <div className="flex items-start justify-between mb-2">
-              <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getCatColor(item.category)}`}>{item.category}</span>
-              <div className="flex items-center gap-1 text-xs text-gray-400">
-                <Calendar size={12} />
-                {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-              </div>
-            </div>
-            <a href={item.url} target="_blank" rel="noopener noreferrer" className="font-bold text-blue-700 text-sm hover:underline cursor-pointer">
-              {item.title}
-            </a>
-            <div className="mt-2 flex items-center gap-1 text-xs text-gray-400">
-              <MapPin size={10} /> {item.region}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+  return <NewsFeed title="Paper Industry News & Developments" items={newsData} />
 }
 
 

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 50" fill="none">
+  <!-- ICICI Lombard Brand Mark -->
+  <!-- The "i" pillar mark in orange -->
+  <rect x="4" y="12" width="7" height="34" rx="2" fill="#f37021"/>
+  <circle cx="7.5" cy="7" r="4" fill="#f37021"/>
+  
+  <!-- Company Name -->
+  <text x="18" y="28" font-family="'Segoe UI', Arial, sans-serif" font-size="18" font-weight="700" fill="#831c1d" letter-spacing="-0.5">ICICI Lombard</text>
+  <text x="18" y="43" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#64748b" font-weight="500">General Insurance Company</text>
+</svg>
